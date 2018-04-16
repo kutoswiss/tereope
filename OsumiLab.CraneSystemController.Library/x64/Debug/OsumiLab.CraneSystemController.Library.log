@@ -1,7 +1,2 @@
-﻿  stdafx.cpp
-  ObstaclesDetection.cpp
-  Obstacle.cpp
-  CraneCameras.cpp
-  CameraHelper.cpp
-  Generating Code...
+﻿  ObstaclesDetection.cpp
   OsumiLab.CraneSystemController.Library.vcxproj -> C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\x64\Debug\OsumiLab.CraneSystemController.Library.lib

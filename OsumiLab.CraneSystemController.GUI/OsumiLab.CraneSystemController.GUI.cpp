@@ -18,7 +18,8 @@ int main()
 
 	CraneCameras cameras;
 	FramePtr guppy_frame, pike1_frame, pike2_frame; 
-	cv::Mat guppy_mat, pike1_mat, pike2_mat, guppy_thresh, guppy_sobel;
+	cv::Mat guppy_mat, pike1_mat, pike2_mat, guppy_thresh, guppy_sobel, guppy_erode, guppy_morph;
+//	cv::Mat element = getStructuringElement(cv::MORPH_CLOSE, cv::Size(2 * 1 + 1, 2 * 1 + 1), cv::Point(3, 3));
 	int threshold_value = 0;
 	const int threshold_max = 255;
 
@@ -43,6 +44,7 @@ int main()
 		cv::threshold(guppy_mat, guppy_thresh, threshold_value, 255, cv::THRESH_BINARY);
 		cv::Sobel(guppy_thresh, guppy_sobel, CV_8U, 1, 1);
 		//cv::erode(guppy_sobel, guppy_sobel, 
+		//cv::morphologyEx(guppy_thresh, guppy_sobel, cv::MORPH_CLOSE, kernel_close);
 		cv::Canny(guppy_thresh, guppy_sobel, threshold_value, 255);
 		
 
