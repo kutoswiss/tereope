@@ -1,10 +1,16 @@
 #include "stdafx.h"
 #include "Obstacle.h"
 
-Obstacle::Obstacle() {
+/// <summary>
+/// 
+/// </summary>
+Obstacle::Obstacle(cv::RotatedRect rotated_rect) {
+	this->rotated_rect_ = rotated_rect;
 }
 
-
+/// <summary>
+/// 
+/// </summary>
 Obstacle::~Obstacle() {
 }
 
@@ -12,38 +18,50 @@ Obstacle::~Obstacle() {
 /// 
 /// </summary>
 /// <returns></returns>
-unsigned int Obstacle::GetDepth() const {
-	return this->depth_;
+uint Obstacle::GetAngle() const {
+	return this->rotated_rect_.angle;
 }
 
 /// <summary>
 /// 
 /// </summary>
 /// <returns></returns>
-unsigned int Obstacle::GetHeight() const {
-	return this->height_;
+cv::Point2f Obstacle::GetCenter() const{
+	return this->rotated_rect_.center;
 }
 
 /// <summary>
 /// 
 /// </summary>
 /// <returns></returns>
-unsigned int Obstacle::GetWidth() const {
-	return this->width_;
+cv::RotatedRect Obstacle::GetRect() const {
+	return this->rotated_rect_;
 }
 
 /// <summary>
 /// 
 /// </summary>
 /// <returns></returns>
-unsigned int Obstacle::GetXOrigin() const {
-	return this->x_origin_;
+std::string Obstacle::ToString() {
+	std::stringstream ss;
+	ss << "Origin: " << (int)this->rotated_rect_.center.x
+		<< "," << (int)this->rotated_rect_.center.y << '\r\n'
+		<< "Angle: " << std::setprecision(2) << this->rotated_rect_.angle << " deg";
+	return ss.str();
 }
 
 /// <summary>
 /// 
 /// </summary>
 /// <returns></returns>
-unsigned int Obstacle::GetYOrigin() const {
-	return this->y_origin_;
+std::vector<cv::Point> Obstacle::ToPoints() {
+	const uint kVerticesSize = 4;
+	cv::Point2f vertices[kVerticesSize];
+	std::vector<cv::Point> pts;
+
+	this->rotated_rect_.points(vertices);
+	for (int i = 0; i < kVerticesSize; i++)
+		pts.push_back(vertices[i]);
+
+	return pts;
 }

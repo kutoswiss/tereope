@@ -3,6 +3,7 @@
 #include "Obstacle.h"
 #include <VimbaCPP.h>
 #include <VimbaSystem.hpp>
+#include <iostream>
 
 using namespace AVT::VmbAPI;
 
@@ -19,9 +20,9 @@ public:
 	/// <summary>
 	/// Private constants
 	/// </summary>
-	static const unsigned int kDefaultMinContourArea = 125;
-	static const unsigned int kObstaclesPolygonTickness = 2;
-	static const unsigned int kBinaryThresholdValue = 25;
+	static const uint kDefaultMinContourArea = 125;
+	static const uint kObstaclesPolygonTickness = 2;
+	static const uint kBinaryThresholdValue = 25;
 	const cv::Scalar kObstaclesPolygonColor = cv::Scalar(0, 255, 0);
 
 	/// <summary>
@@ -43,21 +44,19 @@ private:
 	/// <summary>
 	/// Private methods
 	/// </summary>
-	std::vector<std::vector<cv::Point>> FindContours(
-		unsigned int area_threshold = kDefaultMinContourArea,
-		unsigned int contour_area = kDefaultMinContourArea);
-	
+	std::vector<std::vector<cv::Point>>FindContoursOnFrame(
+		uint area_threshold = kDefaultMinContourArea,
+		uint contour_area = kDefaultMinContourArea);
 	std::vector<cv::RotatedRect> CalcRotatedRects(
 		std::vector<std::vector<cv::Point>> contours);
-
-	void DrawRotatedRects(std::vector<cv::RotatedRect> rects, cv::Mat &frame);
-	void DrawInfo(std::vector<cv::RotatedRect> rects, cv::Mat &frame);
+	void DrawObstaclesOnFrame(std::vector<Obstacle> obstacles, cv::Mat &frame);
+	void DrawInfo(std::vector<Obstacle> obstacles, cv::Mat &frame);
+	std::vector<Obstacle> RectsToObstacles(std::vector<cv::RotatedRect> rects);
 
 	/// <summary>
 	/// Private members
 	/// </summary>
 	std::vector<Obstacle> obstacles_;
-	std::vector<cv::RotatedRect> rotated_rects_;
 	cv::Mat raw_frame_;
 	cv::Mat raw_frame_w_rects_;
 	cv::Mat canny_frame_;

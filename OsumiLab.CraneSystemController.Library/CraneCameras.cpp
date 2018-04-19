@@ -52,7 +52,7 @@ FramePtr CraneCameras::GetFrame(int cam_index) {
 /// </summary>
 void CraneCameras::OpenAllCameras() {
 	std::string name;
-	for (CameraPtrVector::iterator cam = this->cameras_.begin(); cam != this->cameras_.end(); cam++) {
+	for (auto cam = this->cameras_.begin(); cam != this->cameras_.end(); cam++) {
 		if ((*cam)->GetName(name) == VmbErrorSuccess)
 			std::cout << name;
 
@@ -66,7 +66,7 @@ void CraneCameras::OpenAllCameras() {
 /// </summary>
 void CraneCameras::CloseAllCameras() {
 	std::string name;
-	for (CameraPtrVector::iterator cam = this->cameras_.begin(); cam != this->cameras_.end(); cam++) {
+	for (auto cam = this->cameras_.begin(); cam != this->cameras_.end(); cam++) {
 		if ((*cam)->GetName(name) == VmbErrorSuccess)
 			std::cout << name;
 

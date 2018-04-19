@@ -42,7 +42,7 @@ cv::Mat ObstaclesDetection::GetCannyFrame() const {
 /// <returns></returns>
 cv::Mat ObstaclesDetection::GetFrameWithRectangles(bool info) {
 	if (info)
-		this->DrawInfo(this->rotated_rects_, this->raw_frame_w_rects_);
+		this->DrawInfo(this->obstacles_, this->raw_frame_w_rects_);
 
 	return this->raw_frame_w_rects_;
 }
@@ -63,10 +63,10 @@ void ObstaclesDetection::SetRawFrame(cv::Mat &frame) {
 /// </summary>
 /// <returns>Amount of obstacles detected</returns>
 size_t ObstaclesDetection::Detect() {
-	std::vector<std::vector<cv::Point>> contours = this->FindContours();
-	this->rotated_rects_ = this->CalcRotatedRects(contours);
-	this->DrawRotatedRects(this->rotated_rects_, this->raw_frame_w_rects_);
-	return this->rotated_rects_.size();
+	std::vector<std::vector<cv::Point>> contours = this->FindContoursOnFrame();
+	this->obstacles_ = this->RectsToObstacles(this->CalcRotatedRects(contours));
+	this->DrawObstaclesOnFrame(this->obstacles_, this->raw_frame_w_rects_);
+	return this->obstacles_.size();
 }
 
 /// <summary>
@@ -76,18 +76,16 @@ size_t ObstaclesDetection::Detect() {
 /// <param name="contour_area"></param>
 /// <returns></returns>
 std::vector<std::vector<cv::Point>> 
-ObstaclesDetection::FindContours(unsigned int area_threshold, unsigned int contour_area) {
+ObstaclesDetection::FindContoursOnFrame(uint area_threshold, uint contour_area) {
 	std::vector<std::vector<cv::Point>> contours, contours_filtered;
 
 	// Get contours from Sobel input
 	cv::findContours(this->canny_frame_, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
 	// Get obstacles contours
-	for (std::vector<std::vector<cv::Point>>::iterator it = contours.begin();
-		it != contours.end(); it++) {
+	for (auto it = contours.begin(); it != contours.end(); it++) 
 		if (cv::contourArea(*it) > contour_area)
 			contours_filtered.push_back(*it);
-	}
 
 	return contours_filtered;
 }
@@ -102,35 +100,30 @@ ObstaclesDetection::CalcRotatedRects(std::vector<std::vector<cv::Point>> contour
 
 	// Calculate obstacles rotated rectangles
 	std::vector<cv::RotatedRect> obstaclesRotatedRects;
-	for (std::vector<std::vector<cv::Point>>::iterator it = contours.begin();
-		it != contours.end(); it++) {
+	for (auto it = contours.begin(); it != contours.end(); it++) 
 		rotated_rect.push_back(cv::minAreaRect(*it));
-	}
 
 	return rotated_rect;
 }
 
-void ObstaclesDetection::DrawRotatedRects(std::vector<cv::RotatedRect> rects, cv::Mat &frame) {
+/// <summary>
+/// 
+/// </summary>
+/// <param name="obstacles"></param>
+/// <param name="frame"></param>
+void ObstaclesDetection::DrawObstaclesOnFrame(std::vector<Obstacle> obstacles, cv::Mat &frame) {
 	// Get raw frame as matrix reference
 	this->raw_frame_.copyTo(frame);
 
 	// Get points from rotated rectangles
 	std::vector<std::vector<cv::Point>> points;
-	for (std::vector<cv::RotatedRect>::iterator it = rects.begin();
-		it != rects.end(); it++) {
-		cv::Point2f vertices[4];
-		std::vector<cv::Point> pts;
-
-		(*it).points(vertices);
-		for (int i = 0; i < 4; i++) 
-			pts.push_back(vertices[i]);
-
-		points.push_back(pts);
-	}
+	for (auto it = obstacles.begin(); it != obstacles.end(); it++)
+		points.push_back((*it).ToPoints());
 
 	// Draw polylines from points
 	cv::polylines(frame, points,
-		true, kObstaclesPolygonColor, kObstaclesPolygonTickness, CV_AA);
+		true, kObstaclesPolygonColor, 
+		kObstaclesPolygonTickness, CV_AA);
 }
 
 /// <summary>
@@ -138,14 +131,30 @@ void ObstaclesDetection::DrawRotatedRects(std::vector<cv::RotatedRect> rects, cv
 /// </summary>
 /// <param name="rects"></param>
 /// <param name="frame"></param>
-void ObstaclesDetection::DrawInfo(std::vector<cv::RotatedRect> rects, cv::Mat &frame) {
-	for (std::vector<cv::RotatedRect>::iterator it = rects.begin();
-		it != rects.end(); it++) {
-		std::stringstream ss;
-		ss << "Origin: " << (int)((*it).center.x) << "," << (int)((*it).center.y) 
-			<< "; Angle: " << std::setprecision(2) << (*it).angle << " deg.";
+void ObstaclesDetection::DrawInfo(std::vector<Obstacle> obstacles, cv::Mat &frame) {
+	std::stringstream ss;
+	cv::Point origin;
+	cv::RotatedRect rect;
 
-		cv::Point origin((*it).center.x - 10 - (*it).size.height/2, (*it).center.y - 10 - (*it).size.width/2);
-		cv::putText(frame, ss.str(), origin, cv::FONT_HERSHEY_PLAIN, 0.7, cv::Scalar(0, 255, 0));
+	for (auto it = obstacles.begin(); it != obstacles.end(); it++) {
+		rect = (*it).GetRect();
+		origin = cv::Point(rect.center.x - 10 - rect.size.height / 2, 
+			rect.center.y - 10 - rect.size.width / 2);
+
+		cv::putText(frame, (*it).ToString(), origin, 
+			cv::FONT_HERSHEY_PLAIN, 0.7, cv::Scalar(0, 255, 0));
 	}
+}
+
+/// <summary>
+/// Method to converts vector of RotatedRect into a vector of Obstacle
+/// </summary>
+/// <param name="rects">Vector of RotatedRects</param>
+/// <returns>Vector of Obstacle</returns>
+std::vector<Obstacle> 
+ObstaclesDetection::RectsToObstacles(std::vector<cv::RotatedRect> rects) {
+	std::vector<Obstacle> obstacles;
+	for (auto it = rects.begin(); it != rects.end(); it++) 
+		obstacles.push_back(Obstacle((*it)));
+	return obstacles;
 }
