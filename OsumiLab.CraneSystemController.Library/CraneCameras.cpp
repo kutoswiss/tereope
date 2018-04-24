@@ -6,10 +6,10 @@
 /// </summary>
 CraneCameras::CraneCameras()
 {
-	if (this->vimba_system_.Startup() != VmbErrorSuccess)
+	if (this->_vimba_system.Startup() != VmbErrorSuccess)
 		std::cout << "ERROR: Unable to startup Vimba System" << std::endl;
 
-	if (this->vimba_system_.GetCameras(this->cameras_) != VmbErrorSuccess)
+	if (this->_vimba_system.GetCameras(this->_cameras) != VmbErrorSuccess)
 		std::cout << "ERROR: Unable to retrieve Vimba System cameras." << std::endl;
 
 	this->OpenAllCameras();
@@ -22,7 +22,7 @@ CraneCameras::~CraneCameras()
 {
 	this->CloseAllCameras();
 
-	if (this->vimba_system_.Shutdown() != VmbErrorSuccess)
+	if (this->_vimba_system.Shutdown() != VmbErrorSuccess)
 		std::cout << "ERROR: Unable to shutdown Vimba System" << std::endl;
 }
 
@@ -31,7 +31,7 @@ CraneCameras::~CraneCameras()
 /// </summary>
 /// <returns></returns>
 CameraPtrVector CraneCameras::GetCameras() {
-	return this->cameras_;
+	return this->_cameras;
 }
 
 /// <summary>
@@ -41,7 +41,7 @@ CameraPtrVector CraneCameras::GetCameras() {
 /// <returns></returns>
 FramePtr CraneCameras::GetFrame(int cam_index) {
 	FramePtr frame;
-	if (this->cameras_[cam_index]->AcquireSingleImage(frame, this->kAcquireFrameTimeout) != VmbErrorSuccess)
+	if (this->_cameras[cam_index]->AcquireSingleImage(frame, this->kAcquireFrameTimeout) != VmbErrorSuccess)
 		std::cout << "Unable to retrieve frame from camera." << std::endl;
 
 	return frame;
@@ -52,7 +52,7 @@ FramePtr CraneCameras::GetFrame(int cam_index) {
 /// </summary>
 void CraneCameras::OpenAllCameras() {
 	std::string name;
-	for (auto cam = this->cameras_.begin(); cam != this->cameras_.end(); cam++) {
+	for (auto cam = this->_cameras.begin(); cam != this->_cameras.end(); cam++) {
 		if ((*cam)->GetName(name) == VmbErrorSuccess)
 			std::cout << name;
 
@@ -66,7 +66,7 @@ void CraneCameras::OpenAllCameras() {
 /// </summary>
 void CraneCameras::CloseAllCameras() {
 	std::string name;
-	for (auto cam = this->cameras_.begin(); cam != this->cameras_.end(); cam++) {
+	for (auto cam = this->_cameras.begin(); cam != this->_cameras.end(); cam++) {
 		if ((*cam)->GetName(name) == VmbErrorSuccess)
 			std::cout << name;
 

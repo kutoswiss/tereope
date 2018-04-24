@@ -25,7 +25,7 @@ ObstaclesDetection::~ObstaclesDetection() {
 /// </summary>
 /// <returns>Obstacle object</returns>
 std::vector<Obstacle> ObstaclesDetection::GetObstacles() const {
-	return this->obstacles_;
+	return this->_obstacles;
 }
 
 /// <summary>
@@ -33,7 +33,7 @@ std::vector<Obstacle> ObstaclesDetection::GetObstacles() const {
 /// </summary>
 /// <returns></returns>
 cv::Mat ObstaclesDetection::GetCannyFrame() const {
-	return this->canny_frame_;
+	return this->_canny_frame;
 }
 
 /// <summary>
@@ -42,9 +42,9 @@ cv::Mat ObstaclesDetection::GetCannyFrame() const {
 /// <returns></returns>
 cv::Mat ObstaclesDetection::GetFrameWithRectangles(bool info) {
 	if (info)
-		this->DrawInfo(this->obstacles_, this->raw_frame_w_rects_);
+		this->DrawInfo(this->_obstacles, this->_raw_frame_w_rects);
 
-	return this->raw_frame_w_rects_;
+	return this->_raw_frame_w_rects;
 }
 
 /// <summary>
@@ -52,10 +52,10 @@ cv::Mat ObstaclesDetection::GetFrameWithRectangles(bool info) {
 /// </summary>
 /// <param name="frame"></param>
 void ObstaclesDetection::SetRawFrame(cv::Mat &frame) {
-	this->raw_frame_ = frame;
-	cv::threshold(this->raw_frame_, this->binary_frame_,
+	this->_raw_frame = frame;
+	cv::threshold(this->_raw_frame, this->_binary_frame,
 		kBinaryThresholdValue, 255, cv::THRESH_BINARY);
-	cv::Canny(this->binary_frame_, this->canny_frame_, kBinaryThresholdValue, 255);
+	cv::Canny(this->_binary_frame, this->_canny_frame, kBinaryThresholdValue, 255);
 }
 
 /// <summary>
@@ -64,9 +64,9 @@ void ObstaclesDetection::SetRawFrame(cv::Mat &frame) {
 /// <returns>Amount of obstacles detected</returns>
 size_t ObstaclesDetection::Detect() {
 	std::vector<std::vector<cv::Point>> contours = this->FindContoursOnFrame();
-	this->obstacles_ = this->RectsToObstacles(this->CalcRotatedRects(contours));
-	this->DrawObstaclesOnFrame(this->obstacles_, this->raw_frame_w_rects_);
-	return this->obstacles_.size();
+	this->_obstacles = this->RectsToObstacles(this->CalcRotatedRects(contours));
+	this->DrawObstaclesOnFrame(this->_obstacles, this->_raw_frame_w_rects);
+	return this->_obstacles.size();
 }
 
 /// <summary>
@@ -80,7 +80,7 @@ ObstaclesDetection::FindContoursOnFrame(uint area_threshold, uint contour_area) 
 	std::vector<std::vector<cv::Point>> contours, contours_filtered;
 
 	// Get contours from Sobel input
-	cv::findContours(this->canny_frame_, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+	cv::findContours(this->_canny_frame, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
 	// Get obstacles contours
 	for (auto it = contours.begin(); it != contours.end(); it++) 
@@ -113,7 +113,7 @@ ObstaclesDetection::CalcRotatedRects(std::vector<std::vector<cv::Point>> contour
 /// <param name="frame"></param>
 void ObstaclesDetection::DrawObstaclesOnFrame(std::vector<Obstacle> obstacles, cv::Mat &frame) {
 	// Get raw frame as matrix reference
-	this->raw_frame_.copyTo(frame);
+	this->_raw_frame.copyTo(frame);
 
 	// Get points from rotated rectangles
 	std::vector<std::vector<cv::Point>> points;

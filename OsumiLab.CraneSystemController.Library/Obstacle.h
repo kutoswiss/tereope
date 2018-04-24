@@ -28,7 +28,7 @@ private:
 	/// <summary>
 	/// Private members
 	/// </summary>
-	uint height_;
-	cv::RotatedRect rotated_rect_;
+	uint _height;
+	cv::RotatedRect _rotated_rect;
 };
 

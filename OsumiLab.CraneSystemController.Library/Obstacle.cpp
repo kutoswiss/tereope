@@ -5,7 +5,7 @@
 /// 
 /// </summary>
 Obstacle::Obstacle(cv::RotatedRect rotated_rect) {
-	this->rotated_rect_ = rotated_rect;
+	this->_rotated_rect = rotated_rect;
 }
 
 /// <summary>
@@ -19,7 +19,7 @@ Obstacle::~Obstacle() {
 /// </summary>
 /// <returns></returns>
 uint Obstacle::GetAngle() const {
-	return this->rotated_rect_.angle;
+	return this->_rotated_rect.angle;
 }
 
 /// <summary>
@@ -27,7 +27,7 @@ uint Obstacle::GetAngle() const {
 /// </summary>
 /// <returns></returns>
 cv::Point2f Obstacle::GetCenter() const{
-	return this->rotated_rect_.center;
+	return this->_rotated_rect.center;
 }
 
 /// <summary>
@@ -35,7 +35,7 @@ cv::Point2f Obstacle::GetCenter() const{
 /// </summary>
 /// <returns></returns>
 cv::RotatedRect Obstacle::GetRect() const {
-	return this->rotated_rect_;
+	return this->_rotated_rect;
 }
 
 /// <summary>
@@ -44,9 +44,9 @@ cv::RotatedRect Obstacle::GetRect() const {
 /// <returns></returns>
 std::string Obstacle::ToString() {
 	std::stringstream ss;
-	ss << "Origin: " << (int)this->rotated_rect_.center.x
-		<< "," << (int)this->rotated_rect_.center.y << '\r\n'
-		<< "Angle: " << std::setprecision(2) << this->rotated_rect_.angle << " deg";
+	ss << "Origin: " << (int)this->_rotated_rect.center.x
+		<< "," << (int)this->_rotated_rect.center.y << '\r\n'
+		<< "Angle: " << std::setprecision(2) << this->_rotated_rect.angle << " deg";
 	return ss.str();
 }
 
@@ -59,7 +59,7 @@ std::vector<cv::Point> Obstacle::ToPoints() {
 	cv::Point2f vertices[kVerticesSize];
 	std::vector<cv::Point> pts;
 
-	this->rotated_rect_.points(vertices);
+	this->_rotated_rect.points(vertices);
 	for (int i = 0; i < kVerticesSize; i++)
 		pts.push_back(vertices[i]);
 

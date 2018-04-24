@@ -37,7 +37,7 @@ private:
 	/// <summary>
 	/// Private fields
 	/// </summary>
-	VimbaSystem &vimba_system_ = VimbaSystem::GetInstance();
-	CameraPtrVector cameras_;
+	VimbaSystem &_vimba_system = VimbaSystem::GetInstance();
+	CameraPtrVector _cameras;
 };
 

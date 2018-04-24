@@ -56,9 +56,9 @@ private:
 	/// <summary>
 	/// Private members
 	/// </summary>
-	std::vector<Obstacle> obstacles_;
-	cv::Mat raw_frame_;
-	cv::Mat raw_frame_w_rects_;
-	cv::Mat canny_frame_;
-	cv::Mat binary_frame_;
+	std::vector<Obstacle> _obstacles;
+	cv::Mat _raw_frame;
+	cv::Mat _raw_frame_w_rects;
+	cv::Mat _canny_frame;
+	cv::Mat _binary_frame;
 };
