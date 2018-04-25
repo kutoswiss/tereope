@@ -4,8 +4,7 @@
 /// <summary>
 /// Constructor
 /// </summary>
-CraneCameras::CraneCameras()
-{
+CraneCameras::CraneCameras() {
 	if (this->_vimba_system.Startup() != VmbErrorSuccess)
 		std::cout << "ERROR: Unable to startup Vimba System" << std::endl;
 
@@ -18,8 +17,7 @@ CraneCameras::CraneCameras()
 /// <summary>
 /// Destructor
 /// </summary>
-CraneCameras::~CraneCameras()
-{
+CraneCameras::~CraneCameras() {
 	this->CloseAllCameras();
 
 	if (this->_vimba_system.Shutdown() != VmbErrorSuccess)

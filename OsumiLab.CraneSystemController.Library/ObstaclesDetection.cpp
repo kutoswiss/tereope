@@ -40,9 +40,23 @@ cv::Mat ObstaclesDetection::GetCannyFrame() const {
 /// 
 /// </summary>
 /// <returns></returns>
-cv::Mat ObstaclesDetection::GetFrameWithRectangles(bool info) {
+cv::Mat ObstaclesDetection::GetBinaryFrame() const {
+	return this->_binary_frame;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+cv::Mat ObstaclesDetection::GetFrameWithRectangles(bool info, bool origin, bool corners) {
 	if (info)
 		this->DrawInfo(this->_obstacles, this->_raw_frame_w_rects);
+
+	if(origin)
+		this->DrawOrigin(this->_obstacles, this->_raw_frame_w_rects);
+
+	if(corners)
+		this->DrawCorners(this->_obstacles, this->_raw_frame_w_rects);
 
 	return this->_raw_frame_w_rects;
 }
@@ -55,6 +69,20 @@ void ObstaclesDetection::SetRawFrame(cv::Mat &frame) {
 	this->_raw_frame = frame;
 	cv::threshold(this->_raw_frame, this->_binary_frame,
 		kBinaryThresholdValue, 255, cv::THRESH_BINARY);
+
+	cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT,
+		cv::Size(2 * 9 + 1, 2 * 9 + 1), cv::Point(9, 9));
+
+	cv::erode(this->_binary_frame, this->_binary_frame, kernel);
+	cv::dilate(this->_binary_frame, this->_binary_frame, kernel);
+
+	cv::cvtColor(this->_binary_frame, this->_binary_frame, CV_RGB2GRAY);
+
+	cv::threshold(this->_binary_frame, this->_binary_frame,
+		10, 255, cv::THRESH_BINARY);
+	
+	//cv::morphologyEx(this->_binary_frame, this->_binary_frame, cv::MORPH_CLOSE, kernel);
+
 	cv::Canny(this->_binary_frame, this->_canny_frame, kBinaryThresholdValue, 255);
 }
 
@@ -76,7 +104,7 @@ size_t ObstaclesDetection::Detect() {
 /// <param name="contour_area"></param>
 /// <returns></returns>
 std::vector<std::vector<cv::Point>> 
-ObstaclesDetection::FindContoursOnFrame(uint area_threshold, uint contour_area) {
+ObstaclesDetection::FindContoursOnFrame(uint min_contour_area) {
 	std::vector<std::vector<cv::Point>> contours, contours_filtered;
 
 	// Get contours from Sobel input
@@ -84,7 +112,7 @@ ObstaclesDetection::FindContoursOnFrame(uint area_threshold, uint contour_area) 
 
 	// Get obstacles contours
 	for (auto it = contours.begin(); it != contours.end(); it++) 
-		if (cv::contourArea(*it) > contour_area)
+		if (cv::contourArea(*it) > min_contour_area)
 			contours_filtered.push_back(*it);
 
 	return contours_filtered;
@@ -143,6 +171,31 @@ void ObstaclesDetection::DrawInfo(std::vector<Obstacle> obstacles, cv::Mat &fram
 
 		cv::putText(frame, (*it).ToString(), origin, 
 			cv::FONT_HERSHEY_PLAIN, 0.7, cv::Scalar(0, 255, 0));
+	}
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="obstacles"></param>
+/// <param name="frame"></param>
+void ObstaclesDetection::DrawOrigin(std::vector<Obstacle> obstacles, cv::Mat &frame) {
+	for (auto it = obstacles.begin(); it != obstacles.end(); it++) {
+		cv::circle(frame, (*it).GetCenter(), 2, this->kObstaclesOriginColor, 2);
+	}
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="obstacles"></param>
+/// <param name="frame"></param>
+void ObstaclesDetection::DrawCorners(std::vector<Obstacle> obstacles, cv::Mat &frame) {
+	for (auto it = obstacles.begin(); it != obstacles.end(); it++) {
+		cv::circle(frame, (*it).ToPoints()[0], 2, this->kObstaclesCornerColor, 2);
+		cv::circle(frame, (*it).ToPoints()[1], 2, this->kObstaclesCornerColor, 2);
+		cv::circle(frame, (*it).ToPoints()[2], 2, this->kObstaclesCornerColor, 2);
+		cv::circle(frame, (*it).ToPoints()[3], 2, this->kObstaclesCornerColor, 2);
 	}
 }
 

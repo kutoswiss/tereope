@@ -20,10 +20,13 @@ public:
 	/// <summary>
 	/// Private constants
 	/// </summary>
-	static const uint kDefaultMinContourArea = 125;
+	static const uint kDefaultMinContourArea = 100;
 	static const uint kObstaclesPolygonTickness = 2;
 	static const uint kBinaryThresholdValue = 25;
 	const cv::Scalar kObstaclesPolygonColor = cv::Scalar(0, 255, 0);
+	const cv::Scalar kObstaclesOriginColor = cv::Scalar(0, 0, 255);
+	const cv::Scalar kObstaclesCornerColor = cv::Scalar(255, 0, 0);
+
 
 	/// <summary>
 	/// Properties
@@ -31,7 +34,8 @@ public:
 	/// <returns></returns>
 	std::vector<Obstacle> GetObstacles() const;
 	cv::Mat GetCannyFrame() const;
-	cv::Mat GetFrameWithRectangles(bool info = false);
+	cv::Mat GetBinaryFrame() const;
+	cv::Mat GetFrameWithRectangles(bool info = false, bool origin = false, bool corners = false);
 	void SetRawFrame(cv::Mat &frame);
 
 	/// <summary>
@@ -45,12 +49,13 @@ private:
 	/// Private methods
 	/// </summary>
 	std::vector<std::vector<cv::Point>>FindContoursOnFrame(
-		uint area_threshold = kDefaultMinContourArea,
-		uint contour_area = kDefaultMinContourArea);
+		uint min_contour_area = kDefaultMinContourArea);
 	std::vector<cv::RotatedRect> CalcRotatedRects(
 		std::vector<std::vector<cv::Point>> contours);
 	void DrawObstaclesOnFrame(std::vector<Obstacle> obstacles, cv::Mat &frame);
 	void DrawInfo(std::vector<Obstacle> obstacles, cv::Mat &frame);
+	void DrawOrigin(std::vector<Obstacle> obstacles, cv::Mat &frame);
+	void DrawCorners(std::vector<Obstacle> obstacles, cv::Mat &frame);
 	std::vector<Obstacle> RectsToObstacles(std::vector<cv::RotatedRect> rects);
 
 	/// <summary>

@@ -101,12 +101,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\OsumiLab.CraneSystemController.Library;$(OPENCV_DIR)include;C:\Program Files\Allied Vision Technologies\AVTVimba_1.3;C:\Program Files\Allied Vision Technologies\AVTVimba_1.3\VimbaCPP\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\OsumiLab.CraneSystemController.Library;$(OPENCV_DIR)include;C:\Program Files\Allied Vision Technologies\AVTVimba_1.3;C:\Program Files\Allied Vision Technologies\AVTVimba_1.3\VimbaCPP\Include;$(WXWIN)\include;$(WXWIN)\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(OPENCV_DIR)x64\vc14\lib;C:\Program Files\Allied Vision Technologies\AVTVimba_1.3\VimbaCPP\Lib\Win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(WXWIN)\lib\vc_dll;$(WXWIN)\lib\vc_lib;$(OPENCV_DIR)x64\vc14\lib;C:\Program Files\Allied Vision Technologies\AVTVimba_1.3\VimbaCPP\Lib\Win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opencv_world341d.lib;VimbaCPP.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -136,14 +136,14 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\OsumiLab.CraneSystemController.Library;$(OPENCV_DIR)include;C:\Program Files\Allied Vision Technologies\AVTVimba_1.3;C:\Program Files\Allied Vision Technologies\AVTVimba_1.3\VimbaCPP\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\OsumiLab.CraneSystemController.Library;$(OPENCV_DIR)include;C:\Program Files\Allied Vision Technologies\AVTVimba_1.3;C:\Program Files\Allied Vision Technologies\AVTVimba_1.3\VimbaCPP\Include;$(WXWIN)\include;$(WXWIN)\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(OPENCV_DIR)x64\vc14\lib;C:\Program Files\Allied Vision Technologies\AVTVimba_1.3\VimbaCPP\Lib\Win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(WXWIN)\lib\vc_dll;$(WXWIN)\lib\vc_lib;$(OPENCV_DIR)x64\vc14\lib;C:\Program Files\Allied Vision Technologies\AVTVimba_1.3\VimbaCPP\Lib\Win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opencv_world341.lib;VimbaCPP.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
