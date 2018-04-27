@@ -1,3 +1,2 @@
 ﻿  ObstaclesDetection.cpp
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\obstaclesdetection.cpp(170): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   OsumiLab.CraneSystemController.Library.vcxproj -> C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\x64\Debug\OsumiLab.CraneSystemController.Library.lib

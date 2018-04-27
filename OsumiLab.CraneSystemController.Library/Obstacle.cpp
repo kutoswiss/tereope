@@ -5,7 +5,7 @@
 /// 
 /// </summary>
 Obstacle::Obstacle(cv::RotatedRect rotated_rect) {
-	this->_rotated_rect = rotated_rect;
+    this->_rotated_rect = rotated_rect;
 }
 
 /// <summary>
@@ -19,7 +19,7 @@ Obstacle::~Obstacle() {
 /// </summary>
 /// <returns></returns>
 uint Obstacle::GetAngle() const {
-	return this->_rotated_rect.angle;
+    return this->_rotated_rect.angle;
 }
 
 /// <summary>
@@ -27,7 +27,7 @@ uint Obstacle::GetAngle() const {
 /// </summary>
 /// <returns></returns>
 cv::Point2f Obstacle::GetCenter() const{
-	return this->_rotated_rect.center;
+    return this->_rotated_rect.center;
 }
 
 /// <summary>
@@ -35,7 +35,7 @@ cv::Point2f Obstacle::GetCenter() const{
 /// </summary>
 /// <returns></returns>
 cv::RotatedRect Obstacle::GetRect() const {
-	return this->_rotated_rect;
+    return this->_rotated_rect;
 }
 
 /// <summary>
@@ -43,11 +43,11 @@ cv::RotatedRect Obstacle::GetRect() const {
 /// </summary>
 /// <returns></returns>
 std::string Obstacle::ToString() {
-	std::stringstream ss;
-	ss << "Origin: " << (int)this->_rotated_rect.center.x
-		<< "," << (int)this->_rotated_rect.center.y << '\r\n'
-		<< "Angle: " << std::setprecision(2) << this->_rotated_rect.angle << " deg";
-	return ss.str();
+    std::stringstream ss;
+    ss << "Origin: " << (int)this->_rotated_rect.center.x
+        << "," << (int)this->_rotated_rect.center.y
+        << " / Angle: " << std::setprecision(2) << this->_rotated_rect.angle << " deg";
+    return ss.str();
 }
 
 /// <summary>
@@ -55,13 +55,13 @@ std::string Obstacle::ToString() {
 /// </summary>
 /// <returns></returns>
 std::vector<cv::Point> Obstacle::ToPoints() {
-	const uint kVerticesSize = 4;
-	cv::Point2f vertices[kVerticesSize];
-	std::vector<cv::Point> pts;
+    const uint kVerticesSize = 4;
+    cv::Point2f vertices[kVerticesSize];
+    std::vector<cv::Point> pts;
 
-	this->_rotated_rect.points(vertices);
-	for (int i = 0; i < kVerticesSize; i++)
-		pts.push_back(vertices[i]);
+    this->_rotated_rect.points(vertices);
+    for (int i = 0; i < kVerticesSize; i++)
+        pts.push_back(vertices[i]);
 
-	return pts;
+    return pts;
 }
