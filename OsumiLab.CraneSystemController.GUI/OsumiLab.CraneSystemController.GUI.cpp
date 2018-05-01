@@ -5,11 +5,16 @@
 #include "CraneCameras.h"
 #include "ObstaclesDetection.h"
 #include "CameraHelper.h"
+#include "Caio.h"
+#include "CCnt.h"
+
 #include <vector>
 #include <iostream>
 #include <thread>
 #include <mutex>Å@
 #include <condition_variable>Å@
+#include <chrono>    
+
 
 // Sync. primitives
 std::mutex mutex_obsdetection;
@@ -86,18 +91,64 @@ void GuppyBinaryThread(ObstaclesDetection &obstacle_detection) {
     cv::destroyWindow(kWindowTitle);
 }
 
+void CraneTest() {
+	const int kAioChannel = 16;
+	const int kCntChannel = 8;
+
+	short aio_id, cnt_id;
+	float ao_data[kAioChannel];
+	short channel_start[kCntChannel];
+	unsigned long preset_data[kCntChannel];
+
+	AioInit("AIO000", &aio_id);
+	AioResetDevice(aio_id);
+	AioSetAoRangeAll(aio_id, PM10);
+
+	memset(ao_data, 0.0, sizeof(float) * kAioChannel);
+	AioMultiAoEx(aio_id, kAioChannel, &ao_data[0]);
+	for (int i = 7; i <= 11; i++)
+		ao_data[i] = 5.0;
+	AioMultiAoEx(aio_id, kAioChannel, &ao_data[0]);
+
+	CntInit("CNT000", &cnt_id);
+	for (int channel = 0; channel < kCntChannel; channel++) {
+		CntSetZMode(cnt_id, channel, CNT_ZPHASE_NOT_USE);
+		CntSetZLogic(cnt_id, channel, CNT_ZLOGIC_POSITIVE);
+		CntSelectChannelSignal(cnt_id, channel, CNT_ZLOGIC_POSITIVE);
+		CntSetCountDirection(cnt_id, channel, CNT_DIR_UP);
+		CntSetOperationMode(cnt_id, channel, CNT_MODE_2PHASE, CNT_MUL_X4, CNT_CLR_ASYNC);
+		CntSetDigitalFilter(cnt_id, channel, 0);
+		channel_start[channel] = channel;
+		preset_data[channel] = 2000000; 
+	}
+	CntPreset(cnt_id, &channel_start[0], kCntChannel, &preset_data[0]);
+	CntStartCount(cnt_id, &channel_start[0], kCntChannel);
+
+	AioSingleAoEx(aio_id, 3, 0.2);
+	std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+	// Set to 0[V] on AIO
+	memset(ao_data, 0.0, sizeof(float) * kAioChannel);
+	AioMultiAoEx(aio_id, kAioChannel, &ao_data[0]);
+
+	AioExit(aio_id);
+	CntExit(cnt_id);
+}
+
  
 int main() {
-    CraneCameras cameras;
-    ObstaclesDetection obstacle_detection;
+	CraneTest();
 
-    std::thread guppy_cam_thread(GuppyCameraThread, std::ref(cameras), std::ref(obstacle_detection));
-    std::thread guppy_canny_thread(GuppyCannyThread, std::ref(obstacle_detection));
-    std::thread guppy_binary_thread(GuppyBinaryThread, std::ref(obstacle_detection));
+    //CraneCameras cameras;
+    //ObstaclesDetection obstacle_detection;
 
-    guppy_cam_thread.join();
-    guppy_canny_thread.join();
-    guppy_binary_thread.join();
+    //std::thread guppy_cam_thread(GuppyCameraThread, std::ref(cameras), std::ref(obstacle_detection));
+    //std::thread guppy_canny_thread(GuppyCannyThread, std::ref(obstacle_detection));
+    //std::thread guppy_binary_thread(GuppyBinaryThread, std::ref(obstacle_detection));
+
+    //guppy_cam_thread.join();
+    //guppy_canny_thread.join();
+    //guppy_binary_thread.join();
 
     return 0;
 }

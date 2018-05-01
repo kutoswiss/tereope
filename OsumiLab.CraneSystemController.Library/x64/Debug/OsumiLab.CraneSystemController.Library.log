@@ -1,2 +1,4 @@
-﻿  ObstaclesDetection.cpp
+﻿  CraneCameras.cpp
+CCNT.lib(CCNT.DLL) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR already defined in caio.lib(CAIO.DLL); second definition ignored
+CCNT.lib(CCNT.DLL) : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
   OsumiLab.CraneSystemController.Library.vcxproj -> C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\x64\Debug\OsumiLab.CraneSystemController.Library.lib
