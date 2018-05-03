@@ -21,7 +21,11 @@ std::mutex mutex_obsdetection;
 std::mutex mutex_capturedone;
 std::condition_variable cvar_capturedone;
 
-
+/// <summary>
+/// Process to show frame of Guppy cameras with obstacles detection
+/// </summary>
+/// <param name="cameras"></param>
+/// <param name="obstacle_detection"></param>
 void GuppyCameraThread(CraneCameras &cameras, ObstaclesDetection &obstacle_detection) {
     const std::string kWindowTitle = "Guppy camera view";
     FramePtr frame;
@@ -49,6 +53,10 @@ void GuppyCameraThread(CraneCameras &cameras, ObstaclesDetection &obstacle_detec
     cv::destroyWindow(kWindowTitle);
 }
 
+/// <summary>
+/// Process to show frames after Canny operation
+/// </summary>
+/// <param name="obstacle_detection"></param>
 void GuppyCannyThread(ObstaclesDetection &obstacle_detection) {
     // Wait until the initialization of GuppyCameraThread
     {
@@ -70,6 +78,10 @@ void GuppyCannyThread(ObstaclesDetection &obstacle_detection) {
     cv::destroyWindow(kWindowTitle);
 }
 
+/// <summary>
+/// Process to show frames after binary operation
+/// </summary>
+/// <param name="obstacle_detection"></param>
 void GuppyBinaryThread(ObstaclesDetection &obstacle_detection) {
     // Wait until the initialization of GuppyCameraThread
     {
@@ -99,6 +111,7 @@ void CraneTest() {
 	float ao_data[kAioChannel];
 	short channel_start[kCntChannel];
 	unsigned long preset_data[kCntChannel];
+	DWORD count = 0;
 
 	AioInit("AIO000", &aio_id);
 	AioResetDevice(aio_id);
@@ -121,11 +134,13 @@ void CraneTest() {
 		channel_start[channel] = channel;
 		preset_data[channel] = 2000000; 
 	}
-	CntPreset(cnt_id, &channel_start[0], kCntChannel, &preset_data[0]);
-	CntStartCount(cnt_id, &channel_start[0], kCntChannel);
-
-	AioSingleAoEx(aio_id, 3, 0.2);
-	std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	channel_start[0] = 3;
+	CntPreset(cnt_id, channel_start, kCntChannel, preset_data);
+	CntStartCount(cnt_id, channel_start, 1);
+	AioSingleAoEx(aio_id, 1, 0.5);
+	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+	CntStopCount(cnt_id, channel_start, 1);
+	CntReadCount(cnt_id, channel_start, 1, &count);
 
 	// Set to 0[V] on AIO
 	memset(ao_data, 0.0, sizeof(float) * kAioChannel);
