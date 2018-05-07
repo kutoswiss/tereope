@@ -135,7 +135,10 @@
     <ClInclude Include="Caio.h" />
     <ClInclude Include="CameraHelper.h" />
     <ClInclude Include="CCnt.h" />
+    <ClInclude Include="Crane.h" />
+    <ClInclude Include="AbstractCraneAxis.h" />
     <ClInclude Include="CraneCameras.h" />
+    <ClInclude Include="CraneCoarseAxis.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="ObstaclesDetection.h" />
     <ClInclude Include="ObstaclesDraw.h" />
@@ -144,8 +147,11 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AbstractCraneAxis.cpp" />
     <ClCompile Include="CameraHelper.cpp" />
+    <ClCompile Include="Crane.cpp" />
     <ClCompile Include="CraneCameras.cpp" />
+    <ClCompile Include="CraneCoarseAxis.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="ObstaclesDetection.cpp" />
     <ClCompile Include="ObstaclesDraw.cpp" />

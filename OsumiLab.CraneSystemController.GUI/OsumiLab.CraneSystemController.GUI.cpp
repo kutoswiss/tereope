@@ -7,6 +7,8 @@
 #include "CameraHelper.h"
 #include "Caio.h"
 #include "CCnt.h"
+#include "Crane.h"
+#include "AbstractCraneAxis.h"
 
 #include <vector>
 #include <iostream>
@@ -14,7 +16,6 @@
 #include <mutex>Å@
 #include <condition_variable>Å@
 #include <chrono>    
-
 
 // Sync. primitives
 std::mutex mutex_obsdetection;
@@ -104,54 +105,60 @@ void GuppyBinaryThread(ObstaclesDetection &obstacle_detection) {
 }
 
 void CraneTest() {
-	const int kAioChannel = 16;
-	const int kCntChannel = 8;
+	//const int kAioChannel = 16;
+	//const int kCntChannel = 8;
 
-	short aio_id, cnt_id;
-	float ao_data[kAioChannel];
-	short channel_start[kCntChannel];
-	unsigned long preset_data[kCntChannel];
-	DWORD count = 0;
+	//short aio_id, cnt_id;
+	//float ao_data[kAioChannel];
+	//short channel_start[kCntChannel];
+	//unsigned long preset_data[kCntChannel];
+	//DWORD count = 0;
 
-	AioInit("AIO000", &aio_id);
-	AioResetDevice(aio_id);
-	AioSetAoRangeAll(aio_id, PM10);
+	//AioInit("AIO000", &aio_id);
+	//AioResetDevice(aio_id);
+	//AioSetAoRangeAll(aio_id, PM10);
 
-	memset(ao_data, 0.0, sizeof(float) * kAioChannel);
-	AioMultiAoEx(aio_id, kAioChannel, &ao_data[0]);
-	for (int i = 7; i <= 11; i++)
-		ao_data[i] = 5.0;
-	AioMultiAoEx(aio_id, kAioChannel, &ao_data[0]);
+	//memset(ao_data, 0.0, sizeof(float) * kAioChannel);
+	//AioMultiAoEx(aio_id, kAioChannel, &ao_data[0]);
+	//for (int i = 7; i <= 11; i++)
+	//	ao_data[i] = 5.0;
+	//AioMultiAoEx(aio_id, kAioChannel, &ao_data[0]);
 
-	CntInit("CNT000", &cnt_id);
-	for (int channel = 0; channel < kCntChannel; channel++) {
-		CntSetZMode(cnt_id, channel, CNT_ZPHASE_NOT_USE);
-		CntSetZLogic(cnt_id, channel, CNT_ZLOGIC_POSITIVE);
-		CntSelectChannelSignal(cnt_id, channel, CNT_ZLOGIC_POSITIVE);
-		CntSetCountDirection(cnt_id, channel, CNT_DIR_UP);
-		CntSetOperationMode(cnt_id, channel, CNT_MODE_2PHASE, CNT_MUL_X4, CNT_CLR_ASYNC);
-		CntSetDigitalFilter(cnt_id, channel, 0);
-		channel_start[channel] = channel;
-		preset_data[channel] = 2000000; 
-	}
-	channel_start[0] = 3;
-	CntPreset(cnt_id, channel_start, kCntChannel, preset_data);
-	CntStartCount(cnt_id, channel_start, 1);
-	AioSingleAoEx(aio_id, 1, 0.5);
-	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-	CntStopCount(cnt_id, channel_start, 1);
-	CntReadCount(cnt_id, channel_start, 1, &count);
+	//CntInit("CNT000", &cnt_id);
+	//for (int channel = 0; channel < kCntChannel; channel++) {
+	//	CntSetZMode(cnt_id, channel, CNT_ZPHASE_NOT_USE);
+	//	CntSetZLogic(cnt_id, channel, CNT_ZLOGIC_POSITIVE);
+	//	CntSelectChannelSignal(cnt_id, channel, CNT_ZLOGIC_POSITIVE);
+	//	CntSetCountDirection(cnt_id, channel, CNT_DIR_UP);
+	//	CntSetOperationMode(cnt_id, channel, CNT_MODE_2PHASE, CNT_MUL_X4, CNT_CLR_ASYNC);
+	//	CntSetDigitalFilter(cnt_id, channel, 0);
+	//	channel_start[channel] = channel;
+	//	preset_data[channel] = 2000000; 
+	//}
+	//channel_start[0] = 3;
+	//CntPreset(cnt_id, channel_start, kCntChannel, preset_data);
+	//CntStartCount(cnt_id, channel_start, 1);
+	//AioSingleAoEx(aio_id, 1, 0.5);
+	//std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+	//CntStopCount(cnt_id, channel_start, 1);
+	//CntReadCount(cnt_id, channel_start, 1, &count);
 
-	// Set to 0[V] on AIO
-	memset(ao_data, 0.0, sizeof(float) * kAioChannel);
-	AioMultiAoEx(aio_id, kAioChannel, &ao_data[0]);
+	//// Set to 0[V] on AIO
+	//memset(ao_data, 0.0, sizeof(float) * kAioChannel);
+	//AioMultiAoEx(aio_id, kAioChannel, &ao_data[0]);
 
-	AioExit(aio_id);
-	CntExit(cnt_id);
+	//AioExit(aio_id);
+	//CntExit(cnt_id);
 }
 
  
 int main() {
+	{
+		Crane crane;
+		crane.CoarseAxis().Move(Axis::X, -500);
+		crane.CoarseAxis().Move(Axis::Y, -1500);
+	}
+
 	CraneTest();
 
     //CraneCameras cameras;
