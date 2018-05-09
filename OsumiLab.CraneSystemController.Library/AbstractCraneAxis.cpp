@@ -4,6 +4,18 @@
 /// <summary>
 /// 
 /// </summary>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <param name="z"></param>
+void AbstractCraneAxis::SetAxisChannels(int x, int y, int z) {
+	this->_axis_channels[Axis::X] = x;
+	this->_axis_channels[Axis::Y] = y;
+	this->_axis_channels[Axis::Z] = z;
+}
+
+/// <summary>
+/// 
+/// </summary>
 /// <param name="aio"></param>
 /// <param name="cnt"></param>
 void AbstractCraneAxis::SetAioCntIDs(short aio, short cnt) {
@@ -28,7 +40,7 @@ void AbstractCraneAxis::SetCntID(short id) {
 }
 
 /// <summary>
-/// 
+/// Method that makes an active wait until the counter value is reached
 /// </summary>
 /// <param name="step"></param>
 /// <param name="channels"></param>
@@ -45,4 +57,13 @@ void AbstractCraneAxis::WaitUntilCounterReach(int step, short *channels) {
 		CntReadCount(this->_cnt_id, channels, 1, &current_value);
 
 	CntStopCount(this->_cnt_id, channels, 1);
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="axis"></param>
+/// <returns></returns>
+int AbstractCraneAxis::GetChannelFromAxis(Axis axis) {
+	return this->_axis_channels[axis];
 }

@@ -139,6 +139,8 @@
     <ClInclude Include="AbstractCraneAxis.h" />
     <ClInclude Include="CraneCameras.h" />
     <ClInclude Include="CraneCoarseAxis.h" />
+    <ClInclude Include="CraneFineAxis.h" />
+    <ClInclude Include="CraneRopeAxis.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="ObstaclesDetection.h" />
     <ClInclude Include="ObstaclesDraw.h" />
@@ -152,6 +154,8 @@
     <ClCompile Include="Crane.cpp" />
     <ClCompile Include="CraneCameras.cpp" />
     <ClCompile Include="CraneCoarseAxis.cpp" />
+    <ClCompile Include="CraneFineAxis.cpp" />
+    <ClCompile Include="CraneRopeAxis.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="ObstaclesDetection.cpp" />
     <ClCompile Include="ObstaclesDraw.cpp" />

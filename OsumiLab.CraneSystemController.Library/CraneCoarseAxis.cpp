@@ -1,21 +1,33 @@
 #include "stdafx.h"
 #include "CraneCoarseAxis.h"
 
-CraneCoarseAxis::CraneCoarseAxis() : CraneCoarseAxis(-1, -1) {
-}
-
-CraneCoarseAxis::CraneCoarseAxis(short aio_id, short cnt_id) {
-	this->SetAioCntIDs(aio_id, cnt_id);
-}
-
-CraneCoarseAxis::~CraneCoarseAxis() {
+/// <summary>
+/// 
+/// </summary>
+CraneCoarseAxis::CraneCoarseAxis() : CraneCoarseAxis(-1, -1, -1, -1) {
 }
 
 /// <summary>
 /// 
 /// </summary>
-/// <param name="a"></param>
-/// <param name="step"></param>
+/// <param name="aio_id"></param>
+/// <param name="cnt_id"></param>
+CraneCoarseAxis::CraneCoarseAxis(short aio_id, short cnt_id, int x_axis_channel, int y_axis_channel) {
+	this->SetAioCntIDs(aio_id, cnt_id);
+	this->SetAxisChannels(x_axis_channel, y_axis_channel, -1);
+}
+
+/// <summary>
+/// 
+/// </summary>
+CraneCoarseAxis::~CraneCoarseAxis() {
+}
+
+/// <summary>
+/// Method to move the Axis 
+/// </summary>
+/// <param name="a">Axis to be moved</param>
+/// <param name="step">Number of steps to move</param>
 void CraneCoarseAxis::Move(Axis a, int step) {
 	int channel = this->GetChannelFromAxis(a);
 	step *= -1;
@@ -30,23 +42,3 @@ void CraneCoarseAxis::Move(Axis a, int step) {
 	AioSingleAoEx(this->_aio_id, channel, 0);
 }
 
-/// <summary>
-/// 
-/// </summary>
-/// <param name="a"></param>
-/// <returns></returns>
-int CraneCoarseAxis::GetChannelFromAxis(Axis a) {
-	int channel = -1;
-
-	switch (a) {
-	case Axis::X:
-		channel = this->kXAxisChannel;
-		break;
-
-	case Axis::Y:
-		channel = this->kYAxisChannel;
-		break;
-	}
-	
-	return channel;
-}

@@ -57,6 +57,12 @@
     <ClInclude Include="AbstractCraneAxis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CraneFineAxis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CraneRopeAxis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -84,6 +90,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AbstractCraneAxis.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CraneFineAxis.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CraneRopeAxis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
