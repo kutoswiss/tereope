@@ -77,8 +77,12 @@ void Crane::InitAio(char *device_name) {
 	memset(this->_aio_data, 0.0, sizeof(float) * kAioMaxChannel);
 	AioMultiAoEx(this->_aio_id, kAioMaxChannel, this->_aio_data);
 
-	for (int i = 7; i <= 11; i++)
-		this->_aio_data[i] = 5.0;
+	this->_aio_data[7] = 5.0; // Voltage for fine axis Y
+	this->_aio_data[8] = 5.0; // Voltage for fine axis X
+	//this->_aio_data[9] = 5.0; // Voltage for Coarse axis Y (makes noise)
+	this->_aio_data[10] = 5.0; // Voltage for Coarse axis X 
+	this->_aio_data[11] = 5.0; // Voltage for rope
+
 
 	AioMultiAoEx(this->_aio_id, kAioMaxChannel, this->_aio_data);
 }

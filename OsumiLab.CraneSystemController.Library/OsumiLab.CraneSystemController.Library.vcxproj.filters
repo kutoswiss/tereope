@@ -63,6 +63,12 @@
     <ClInclude Include="CraneRopeAxis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CraneSceneCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CraneCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -96,6 +102,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CraneRopeAxis.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CraneSceneCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CraneCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

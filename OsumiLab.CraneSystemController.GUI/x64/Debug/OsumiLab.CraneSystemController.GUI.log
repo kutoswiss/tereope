@@ -1,6 +1,6 @@
-﻿  OsumiLab.CraneSystemController.GUI.cpp
+﻿  stdafx.cpp
+  OsumiLab.CraneSystemController.GUI.cpp
 c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\abstractcraneaxis.h(14): warning C4091: 'typedef ': ignored on left of 'Axis' when no variable is declared
 c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\osumilab.cranesystemcontroller.gui.cpp(16): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\osumilab.cranesystemcontroller.gui.cpp(17): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  OsumiLab.CraneSystemController.GUI.vcxproj -> C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\x64\Debug\OsumiLab.CraneSystemController.GUI.exe
-  OsumiLab.CraneSystemController.GUI.vcxproj -> C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\x64\Debug\OsumiLab.CraneSystemController.GUI.pdb (Full PDB)
+LINK : fatal error LNK1104: cannot open file 'C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\x64\Debug\OsumiLab.CraneSystemController.Library.lib'

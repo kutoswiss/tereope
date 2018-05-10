@@ -155,9 +155,9 @@ void CraneTest() {
 int main() {
 	{
 		Crane crane;
-		crane.Rope().Move(Axis::Z, -170000);
-		//crane.FineAxis().Move(Axis::Y, 200);
-		//crane.CoarseAxis().Move(Axis::X, 1000);
+		//crane.Rope().Move(Axis::Z, 170000);
+		crane.FineAxis().Move(Axis::X, -2500);
+		//crane.CoarseAxis().Move(Axis::X, 3000);
 		//crane.CoarseAxis().Move(Axis::Y, -1500);
 		//crane.CoarseAxis().Move(Axis::X, +500);
 		//crane.CoarseAxis().Move(Axis::Y, +1500);

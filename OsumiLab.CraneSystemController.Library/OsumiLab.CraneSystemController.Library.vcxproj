@@ -132,6 +132,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CraneCamera.h" />
     <ClInclude Include="Caio.h" />
     <ClInclude Include="CameraHelper.h" />
     <ClInclude Include="CCnt.h" />
@@ -141,6 +142,7 @@
     <ClInclude Include="CraneCoarseAxis.h" />
     <ClInclude Include="CraneFineAxis.h" />
     <ClInclude Include="CraneRopeAxis.h" />
+    <ClInclude Include="CraneSceneCamera.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="ObstaclesDetection.h" />
     <ClInclude Include="ObstaclesDraw.h" />
@@ -150,12 +152,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractCraneAxis.cpp" />
+    <ClCompile Include="CraneCamera.cpp" />
     <ClCompile Include="CameraHelper.cpp" />
     <ClCompile Include="Crane.cpp" />
     <ClCompile Include="CraneCameras.cpp" />
     <ClCompile Include="CraneCoarseAxis.cpp" />
     <ClCompile Include="CraneFineAxis.cpp" />
     <ClCompile Include="CraneRopeAxis.cpp" />
+    <ClCompile Include="CraneSceneCamera.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="ObstaclesDetection.cpp" />
     <ClCompile Include="ObstaclesDraw.cpp" />
