@@ -1,17 +1,11 @@
 #include "stdafx.h"
 #include "CraneCamera.h"
 
-CraneCamera::CraneCamera() {
-}
-
 /// <summary>
 /// 
 /// </summary>
-CraneCamera::CraneCamera(const char* pid, CameraPtr &camera) {
-	if(this->_vimba_system.Startup() != VmbErrorSuccess)
-		std::cout << "ERROR: Unable to startup Vimba System" << std::endl;
-
-	if(this->_vimba_system.GetCameraByID(pid, camera) != VmbErrorSuccess)
+CraneCamera::CraneCamera(VimbaSystem &vimbasystem, const char* pid) {
+	if(vimbasystem.GetCameraByID(pid, this->_camera) != VmbErrorSuccess)
 		std::cout << "ERROR: Unable to retrieve Vimba System cameras." << std::endl;
 }
 
@@ -19,14 +13,49 @@ CraneCamera::CraneCamera(const char* pid, CameraPtr &camera) {
 /// 
 /// </summary>
 CraneCamera::~CraneCamera() {
-	if (this->_vimba_system.Shutdown() != VmbErrorSuccess)
-		std::cout << "ERROR: Unable to shutdown Vimba System" << std::endl;
 }
 
 /// <summary>
 /// 
 /// </summary>
 /// <returns></returns>
-CameraPtrVector CraneCamera::GetCameras(void) {
-	return this->_cameras;
+CameraPtr CraneCamera::GetCamera(void) {
+	return this->_camera;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+FramePtr CraneCamera::GetFrame(void) {
+	FramePtr frame;
+	if(this->_camera->AcquireSingleImage(frame, this->kAcquireFrameTimeout) != VmbErrorSuccess)
+		std::cout << "Unable to retrieve frame from camera." << std::endl;
+	return frame;
+}
+
+/// <summary>
+/// 
+/// </summary>
+void CraneCamera::Open(void) {
+	std::string name;
+
+	if (this->_camera->GetName(name) == VmbErrorSuccess)
+		std::cout << name;
+
+	if(this->_camera->Open(VmbAccessModeFull) == VmbErrorSuccess)
+		std::cout << " camera opened" << std::endl;
+}
+
+/// <summary>
+/// 
+/// </summary>
+void CraneCamera::Close(void) {
+	std::string name;
+
+	if (this->_camera->GetName(name) == VmbErrorSuccess)
+		std::cout << name;
+
+	if (this->_camera->Close() == VmbErrorSuccess)
+		std::cout << " camera closed" << std::endl;
 }

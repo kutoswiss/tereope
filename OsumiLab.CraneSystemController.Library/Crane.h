@@ -6,14 +6,9 @@
 #include "CraneCoarseAxis.h"
 #include "CraneFineAxis.h"
 #include "CraneRopeAxis.h"
-
-#define AIO_DEVICE_NAME "AIO000"
-#define CNT_DEVICE_NAME "CNT000"
-#define X_COARSE_AXIS_CHANNEL 3
-#define Y_COARSE_AXIS_CHANNEL 2
-#define X_FINE_AXIS_CHANNEL 1
-#define Y_FINE_AXIS_CHANNEL 0
-#define Z_ROPE_AXIS_CHANNEL 4
+#include "CraneSceneCamera.h"
+#include "CraneRopeCamera.h"
+#include "CraneSettings.h"
 
 class Crane
 {
@@ -32,12 +27,15 @@ public:
 	~Crane();
 
 	/// <summary>
-	/// 
+	/// Getters
 	/// </summary>
 	/// <returns></returns>
 	CraneCoarseAxis CoarseAxis() const;
 	CraneFineAxis FineAxis() const;
 	CraneRopeAxis Rope() const;
+	CraneSceneCamera& RightSceneCamera() const;
+	CraneRopeCamera& XRopeCamera() const;
+	CraneRopeCamera& YRopeCamera() const;
 
 	/// <summary>
 	/// Public methods
@@ -54,6 +52,11 @@ private:
 	CraneCoarseAxis _coarse_axis;
 	CraneFineAxis _fine_axis;
 	CraneRopeAxis _rope;
+	VimbaSystem &_vimbasystem = VimbaSystem::GetInstance();
+	CraneSceneCamera *_cam_scene_right;
+	CraneRopeCamera *_cam_rope_x;
+	CraneRopeCamera *_cam_rope_y;
+
 
 	/// <summary>
 	/// Private members
@@ -63,5 +66,7 @@ private:
 	void SetCoarseAxis(void);
 	void SetFineAxis(void);
 	void SetRopeAxis(void);
+	void VimbaSystemStartup(void);
+	void VimbaSystemShutdown(void);
 };
 

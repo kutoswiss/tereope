@@ -49,8 +49,11 @@ FramePtr CraneCameras::GetFrame(int cam_index) {
 /// 
 /// </summary>
 void CraneCameras::OpenAllCameras() {
-	std::string name;
+	std::string name, id;
 	for (auto cam = this->_cameras.begin(); cam != this->_cameras.end(); cam++) {
+		if ((*cam)->GetID(id) == VmbErrorSuccess)
+			std::cout << id << " ";
+
 		if ((*cam)->GetName(name) == VmbErrorSuccess)
 			std::cout << name;
 

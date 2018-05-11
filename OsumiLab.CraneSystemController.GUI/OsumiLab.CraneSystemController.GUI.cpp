@@ -9,6 +9,7 @@
 #include "CCnt.h"
 #include "Crane.h"
 #include "AbstractCraneAxis.h"
+#include "CraneSceneCamera.h"
 
 #include <vector>
 #include <iostream>
@@ -21,6 +22,33 @@
 std::mutex mutex_obsdetection;
 std::mutex mutex_capturedone;
 std::condition_variable cvar_capturedone;
+
+void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_detection) {
+	const std::string kWindowTitle = "Scene camera view";
+	FramePtr frame;
+	cv::Mat frame_mat;
+	int binary_thr = ObstaclesDetection::kBinaryThresholdValue;
+
+	cv::namedWindow(kWindowTitle, cv::WINDOW_AUTOSIZE);
+	cv::createTrackbar("Binary Thr.", kWindowTitle, &binary_thr, 255, NULL);
+
+	while (1) {
+		frame = camera.GetFrame();
+		frame_mat = CameraHelper::FrameToCVMat(frame, CV_8UC1);
+		cv::cvtColor(frame_mat, frame_mat, CV_BayerBG2RGB);
+
+		obstacle_detection.SetBinaryThreshold(binary_thr);
+		obstacle_detection.SetRawFrame(frame_mat);
+		obstacle_detection.Detect();
+		cv::imshow(kWindowTitle, obstacle_detection.GetFrameWithRectangles());
+
+		if (cv::waitKey(15) >= 0)
+			break;
+	}
+
+	cv::destroyWindow(kWindowTitle);
+
+}
 
 /// <summary>
 /// Process to show frame of Guppy cameras with obstacles detection
@@ -154,9 +182,9 @@ void CraneTest() {
  
 int main() {
 	{
-		Crane crane;
+		//Crane crane;
 		//crane.Rope().Move(Axis::Z, 170000);
-		crane.FineAxis().Move(Axis::X, -2500);
+		//crane.FineAxis().Move(Axis::X, -2500);
 		//crane.CoarseAxis().Move(Axis::X, 3000);
 		//crane.CoarseAxis().Move(Axis::Y, -1500);
 		//crane.CoarseAxis().Move(Axis::X, +500);
@@ -166,18 +194,29 @@ int main() {
 		//crane.FineAxis().Move(Axis::Y, 500);
 	}
 
-	CraneTest();
+	//CraneTest();
 
-    //CraneCameras cameras;
-    //ObstaclesDetection obstacle_detection;
+    /*CraneCameras cameras;
+    ObstaclesDetection obstacle_detection;
 
-    //std::thread guppy_cam_thread(GuppyCameraThread, std::ref(cameras), std::ref(obstacle_detection));
-    //std::thread guppy_canny_thread(GuppyCannyThread, std::ref(obstacle_detection));
-    //std::thread guppy_binary_thread(GuppyBinaryThread, std::ref(obstacle_detection));
+    std::thread guppy_cam_thread(GuppyCameraThread, std::ref(cameras), std::ref(obstacle_detection));
+    std::thread guppy_canny_thread(GuppyCannyThread, std::ref(obstacle_detection));
+    std::thread guppy_binary_thread(GuppyBinaryThread, std::ref(obstacle_detection));
 
-    //guppy_cam_thread.join();
-    //guppy_canny_thread.join();
-    //guppy_binary_thread.join();
+    guppy_cam_thread.join();
+    guppy_canny_thread.join();
+    guppy_binary_thread.join();*/
+
+	{
+		Crane crane;
+		ObstaclesDetection obstacle_detection;
+		std::thread scene_cam_thread(SceneCameraThread, std::ref(crane.RightSceneCamera()), std::ref(obstacle_detection));
+
+		crane.CoarseAxis().Move(Axis::X, 3000);
+		//crane.Rope().Move(Axis::Z, -50000);
+
+		scene_cam_thread.join();
+	}
 
     return 0;
 }

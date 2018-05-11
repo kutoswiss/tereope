@@ -4,7 +4,7 @@
 /// <summary>
 /// Ctor
 /// </summary>
-Crane::Crane() : Crane(AIO_DEVICE_NAME, CNT_DEVICE_NAME) {
+Crane::Crane() : Crane(CraneSettings::kAioDeviceName, CraneSettings::kCntDeviceName) {
 	// No code
 }
 
@@ -13,13 +13,20 @@ Crane::Crane() : Crane(AIO_DEVICE_NAME, CNT_DEVICE_NAME) {
 /// </summary>
 /// <param name="device_name"></param>
 Crane::Crane(char *aio_name, char *cnt_name) {
+	// Initialize CNT-3208M-PE device
 	this->InitAio(aio_name);
 	this->InitCnt(cnt_name);
 
-	// Set all axis
+	// Initialize all axis
 	this->SetCoarseAxis();
 	this->SetFineAxis();
 	this->SetRopeAxis();
+
+	// Initialize Vimba system and cameras
+	this->VimbaSystemStartup();
+	this->_cam_scene_right = new CraneSceneCamera(this->_vimbasystem, CraneSettings::kGuppyCameraPID);
+	this->_cam_rope_x = new CraneRopeCamera(this->_vimbasystem, CraneSettings::kPikeXCameraPID);
+	this->_cam_rope_y = new CraneRopeCamera(this->_vimbasystem, CraneSettings::kPikeYCameraPID);
 }
 
 /// <summary>
@@ -27,6 +34,12 @@ Crane::Crane(char *aio_name, char *cnt_name) {
 /// </summary>
 Crane::~Crane() {
 	this->Exit();
+
+	delete this->_cam_scene_right;
+	delete this->_cam_rope_x;
+	delete this->_cam_rope_y;
+
+	this->VimbaSystemShutdown();
 }
 
 /// <summary>
@@ -51,6 +64,30 @@ CraneFineAxis Crane::FineAxis() const {
 /// <returns></returns>
 CraneRopeAxis Crane::Rope() const {
 	return this->_rope;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+CraneSceneCamera& Crane::RightSceneCamera() const {
+	return (*this->_cam_scene_right);
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+CraneRopeCamera& Crane::XRopeCamera() const {
+	return (*this->_cam_rope_x);
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+CraneRopeCamera& Crane::YRopeCamera() const {
+	return (*this->_cam_rope_y);
 }
 
 /// <summary>
@@ -83,7 +120,6 @@ void Crane::InitAio(char *device_name) {
 	this->_aio_data[10] = 5.0; // Voltage for Coarse axis X 
 	this->_aio_data[11] = 5.0; // Voltage for rope
 
-
 	AioMultiAoEx(this->_aio_id, kAioMaxChannel, this->_aio_data);
 }
 
@@ -109,7 +145,10 @@ void Crane::InitCnt(char *device_name) {
 /// </summary>
 void Crane::SetCoarseAxis(void) {
 	this->_coarse_axis.SetAioCntIDs(this->_aio_id, this->_cnt_id);
-	this->_coarse_axis.SetAxisChannels(X_COARSE_AXIS_CHANNEL, Y_COARSE_AXIS_CHANNEL, -1);
+	this->_coarse_axis.SetAxisChannels(
+		CraneSettings::kXCoarseAxisAioChannel,
+		CraneSettings::kYCoarseAxisAioChannel,
+		-1);
 }
 
 /// <summary>
@@ -117,7 +156,10 @@ void Crane::SetCoarseAxis(void) {
 /// </summary>
 void Crane::SetFineAxis(void) {
 	this->_fine_axis.SetAioCntIDs(this->_aio_id, this->_cnt_id);
-	this->_fine_axis.SetAxisChannels(X_FINE_AXIS_CHANNEL, Y_FINE_AXIS_CHANNEL, -1);
+	this->_fine_axis.SetAxisChannels(
+		CraneSettings::kXFineAxisAioChannel,
+		CraneSettings::kYFineAxisAioChannel,
+		-1);
 }
 
 /// <summary>
@@ -125,5 +167,21 @@ void Crane::SetFineAxis(void) {
 /// </summary>
 void Crane::SetRopeAxis(void) {
 	this->_rope.SetAioCntIDs(this->_aio_id, this->_cnt_id);
-	this->_rope.SetAxisChannels(-1, -1, Z_ROPE_AXIS_CHANNEL);
+	this->_rope.SetAxisChannels(-1, -1, CraneSettings::kZRopeAxisAioChannel);
+}
+
+/// <summary>
+/// 
+/// </summary>
+void Crane::VimbaSystemStartup(void) {
+	if (this->_vimbasystem.Startup() != VmbErrorSuccess)
+		std::cout << "ERROR: Unable to startup Vimba System" << std::endl;
+}
+
+/// <summary>
+/// 
+/// </summary>
+void Crane::VimbaSystemShutdown(void) {
+	if (this->_vimbasystem.Shutdown() != VmbErrorSuccess)
+		std::cout << "ERROR: Unable to shutdown Vimba System" << std::endl;
 }

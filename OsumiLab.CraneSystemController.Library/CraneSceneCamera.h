@@ -4,7 +4,8 @@
 class CraneSceneCamera : public CraneCamera
 {
 public:
-	CraneSceneCamera();
+	CraneSceneCamera(VimbaSystem &vimbasystem);
+	CraneSceneCamera(VimbaSystem &vimbasystem, const char *pid);
 	~CraneSceneCamera();
 };
 
