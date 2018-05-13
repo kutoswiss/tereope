@@ -1,4 +1,14 @@
-﻿  CraneSettings.cpp
+﻿  CraneCamera.cpp
+  CameraHelper.cpp
+  Generating Code...
+  Compiling...
+  CraneSceneCamera.cpp
+  CraneRopeCamera.cpp
+  Crane.cpp
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\abstractcraneaxis.h(14): warning C4091: 'typedef ': ignored on left of 'Axis' when no variable is declared
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\crane.cpp(98): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\crane.cpp(114): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  Generating Code...
 CCNT.lib(CCNT.DLL) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR already defined in caio.lib(CAIO.DLL); second definition ignored
 CCNT.lib(CCNT.DLL) : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
   OsumiLab.CraneSystemController.Library.vcxproj -> C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\x64\Debug\OsumiLab.CraneSystemController.Library.lib

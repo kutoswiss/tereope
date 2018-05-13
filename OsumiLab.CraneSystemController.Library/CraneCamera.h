@@ -1,9 +1,13 @@
 #pragma once
+
+#include "CameraHelper.h"
+#include "CraneSettings.h"
+
 #include <VimbaCPP.h>
 #include <VimbaSystem.hpp>
 #include <iostream>
 #include <string>
-#include "CraneSettings.h"
+
 
 using namespace AVT::VmbAPI;
 
@@ -21,6 +25,7 @@ public:
 	/// </summary>
 	CameraPtr GetCamera(void);
 	FramePtr GetFrame(void); 
+	cv::Mat GetMat(int type);
 	void Open(void);
 	void Close(void);
 

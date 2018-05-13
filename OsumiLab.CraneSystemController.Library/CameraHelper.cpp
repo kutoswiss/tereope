@@ -2,20 +2,6 @@
 #include "CameraHelper.h"
 
 /// <summary>
-/// 
-/// </summary>
-CameraHelper::CameraHelper()
-{
-}
-
-/// <summary>
-/// 
-/// </summary>
-CameraHelper::~CameraHelper()
-{
-}
-
-/// <summary>
 /// Static method to convert camera frame (AVT) into Mat (OpenCV)
 /// </summary>
 /// <param name="frame">Frame from AVT Camera</param>
@@ -35,5 +21,8 @@ cv::Mat CameraHelper::FrameToCVMat(FramePtr frame, int type) {
 	if (VmbErrorSuccess != frame->GetImage(image))
 		std::cout << "FAILED to acquire image data of frame!" << std::endl;
 
-	return cv::Mat(height, width, type, image);
+	cv::Mat m = cv::Mat(height, width, type, image);
+	cv::cvtColor(m, m, CV_BayerBG2RGB);
+
+	return m;
 }

@@ -37,6 +37,15 @@ FramePtr CraneCamera::GetFrame(void) {
 /// <summary>
 /// 
 /// </summary>
+/// <returns></returns>
+cv::Mat CraneCamera::GetMat(int type) {
+	cv::Mat frame_mat = CameraHelper::FrameToCVMat(this->GetFrame(), type);
+	return frame_mat;
+}
+
+/// <summary>
+/// 
+/// </summary>
 void CraneCamera::Open(void) {
 	std::string name;
 
