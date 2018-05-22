@@ -7,6 +7,7 @@
 #include <VimbaSystem.hpp>
 #include <iostream>
 #include <string>
+#include <memory>
 
 
 using namespace AVT::VmbAPI;

@@ -64,7 +64,6 @@ cv::Mat ObstaclesDetection::GetFrameWithRectangles() {
 void ObstaclesDetection::SetRawFrame(cv::Mat &frame) {
     this->_raw_frame = frame;
 
-
     cv::threshold(this->_raw_frame, 
 		this->_binary_frame, 
 		this->_binary_threshold, 
@@ -72,12 +71,16 @@ void ObstaclesDetection::SetRawFrame(cv::Mat &frame) {
 
     cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT,
         cv::Size(2 * 9 + 1, 2 * 9 + 1), cv::Point(9, 9));
+
+	cv::Mat kernel2 = cv::getStructuringElement(cv::MORPH_RECT,
+		cv::Size(3,3));
+
     cv::erode(this->_binary_frame, this->_binary_frame, kernel);
-    cv::dilate(this->_binary_frame, this->_binary_frame, kernel);
+	cv::dilate(this->_binary_frame, this->_binary_frame, kernel, cv::Point(-1, -1), 1);
     cv::cvtColor(this->_binary_frame, this->_binary_frame, CV_RGB2GRAY);
-    cv::threshold(this->_binary_frame, this->_binary_frame,
-        10, 255, cv::THRESH_BINARY);
-    
+    cv::threshold(this->_binary_frame, this->_binary_frame, 10, 255, cv::THRESH_BINARY);
+
+	cv::dilate(this->_binary_frame, this->_binary_frame, kernel2, cv::Point(-1, -1), 3);
     cv::Canny(this->_binary_frame, this->_canny_frame, this->_canny_threshold, 255);
 }
 
@@ -107,10 +110,21 @@ void ObstaclesDetection::SetCannyThreshold(uint threshold) {
 /// Method to run the detection process
 /// </summary>
 /// <returns>Amount of obstacles detected</returns>
-size_t ObstaclesDetection::Detect() {
+size_t ObstaclesDetection::Detect(bool print_detect) {
     std::vector<std::vector<cv::Point>> contours = this->FindContoursOnFrame();
     this->_obstacles = this->RectsToObstacles(this->CalcRotatedRects(contours));
+	if(print_detect) 
+		this->PrintDetect();
     return this->_obstacles.size();
+}
+
+/// <summary>
+/// Print on console the obstacles detection informations
+/// </summary>
+void ObstaclesDetection::PrintDetect() {
+	std::cout << std::endl << this->_obstacles.size() << " obstacles detected." << std::endl;
+	for (auto o = this->_obstacles.begin(); o != this->_obstacles.end(); o++)
+		std::cout << (*o).ToString() << std::endl;
 }
 
 /// <summary>
@@ -127,10 +141,10 @@ ObstaclesDetection::FindContoursOnFrame(uint min_contour_area) {
     cv::findContours(this->_canny_frame, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
     // Get obstacles contours
-    for (auto it = contours.begin(); it != contours.end(); it++) 
-        if (cv::contourArea(*it) > min_contour_area)
-            contours_filtered.push_back(*it);
-
+	for (auto it = contours.begin(); it != contours.end(); it++)
+		if (cv::contourArea(*it) > min_contour_area)
+			contours_filtered.push_back(*it);
+	
     return contours_filtered;
 }
 

@@ -24,9 +24,7 @@ Crane::Crane(char *aio_name, char *cnt_name) {
 
 	// Initialize Vimba system and cameras
 	this->VimbaSystemStartup();
-	this->_cam_scene_right = new CraneSceneCamera(this->_vimbasystem, CraneSettings::kGuppyCameraPID);
-	this->_cam_rope_x = new CraneRopeCamera(this->_vimbasystem, CraneSettings::kPikeXCameraPID);
-	this->_cam_rope_y = new CraneRopeCamera(this->_vimbasystem, CraneSettings::kPikeYCameraPID);
+	this->InitCameras();
 }
 
 /// <summary>
@@ -36,8 +34,9 @@ Crane::~Crane() {
 	this->Exit();
 
 	delete this->_cam_scene_right;
-	delete this->_cam_rope_x;
-	delete this->_cam_rope_y;
+	//this->_cam_scene_right.reset();
+	this->_cam_rope_x.reset();
+	this->_cam_rope_y.reset();
 
 	this->VimbaSystemShutdown();
 }
@@ -138,6 +137,21 @@ void Crane::InitCnt(char *device_name) {
 		CntSetOperationMode(this->_cnt_id, channel, CNT_MODE_2PHASE, CNT_MUL_X4, CNT_CLR_ASYNC);
 		CntSetDigitalFilter(this->_cnt_id, channel, 0);
 	}
+}
+
+/// <summary>
+/// 
+/// </summary>
+void Crane::InitCameras(void) {
+	this->_cam_scene_right = new CraneSceneCamera(this->_vimbasystem, CraneSettings::kGuppyCameraPID);
+	//this->_cam_scene_right = std::make_unique<CraneSceneCamera>
+	//	(this->_vimbasystem, CraneSettings::kGuppyCameraPID);
+
+	this->_cam_rope_x = std::make_unique<CraneRopeCamera>
+		(this->_vimbasystem, CraneSettings::kPikeXCameraPID);
+
+	this->_cam_rope_y = std::make_unique<CraneRopeCamera>
+		(this->_vimbasystem, CraneSettings::kPikeYCameraPID);
 }
 
 /// <summary>

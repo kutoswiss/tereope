@@ -53,16 +53,18 @@ private:
 	CraneFineAxis _fine_axis;
 	CraneRopeAxis _rope;
 	VimbaSystem &_vimbasystem = VimbaSystem::GetInstance();
+	//CraneSceneCameraPtr _cam_scene_right;
 	CraneSceneCamera *_cam_scene_right;
-	CraneRopeCamera *_cam_rope_x;
-	CraneRopeCamera *_cam_rope_y;
 
+	CraneRopeCameraPtr _cam_rope_x;
+	CraneRopeCameraPtr _cam_rope_y;
 
 	/// <summary>
 	/// Private members
 	/// </summary>
 	void InitAio(char *device_name);
 	void InitCnt(char *device_name);
+	void InitCameras(void);
 	void SetCoarseAxis(void);
 	void SetFineAxis(void);
 	void SetRopeAxis(void);

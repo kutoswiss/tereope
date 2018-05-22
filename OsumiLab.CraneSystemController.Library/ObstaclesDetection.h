@@ -22,7 +22,7 @@ public:
     /// Constants
     /// </summary>
     static const uint kDefaultMinContourArea = 100;
-    static const uint kBinaryThresholdValue = 20;
+    static const uint kBinaryThresholdValue = 30;
 	static const uint kCannyThresholdValue = 20;
 
     /// <summary>
@@ -41,7 +41,8 @@ public:
     /// Public methods
     /// </summary>
     /// <returns></returns>
-    size_t Detect();
+    size_t Detect(bool print_detect = false);
+	void PrintDetect();
 
 private:
     /// <summary>
