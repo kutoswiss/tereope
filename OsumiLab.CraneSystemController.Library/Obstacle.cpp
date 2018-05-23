@@ -4,6 +4,12 @@
 /// <summary>
 /// 
 /// </summary>
+Obstacle::Obstacle() {
+}
+
+/// <summary>
+/// 
+/// </summary>
 Obstacle::Obstacle(cv::RotatedRect rotated_rect) {
     this->_rotated_rect = rotated_rect;
 }
@@ -36,6 +42,14 @@ cv::Point2f Obstacle::GetCenter() const{
 /// <returns></returns>
 cv::RotatedRect Obstacle::GetRect() const {
     return this->_rotated_rect;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+uint Obstacle::GetArea() const {
+	return this->_rotated_rect.size.area();
 }
 
 /// <summary>

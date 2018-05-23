@@ -7,6 +7,7 @@ public:
     /// <summary>
     /// Ctor/Dtor
     /// </summary>
+	Obstacle();
     Obstacle(cv::RotatedRect rotated_rect);
     ~Obstacle();
 
@@ -17,7 +18,8 @@ public:
     uint GetAngle() const;
     cv::Point2f GetCenter() const;
     cv::RotatedRect GetRect() const;
-    
+	uint GetArea() const;
+
     /// <summary>
     /// Public methods
     /// </summary>

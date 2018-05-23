@@ -53,9 +53,7 @@ private:
 	CraneFineAxis _fine_axis;
 	CraneRopeAxis _rope;
 	VimbaSystem &_vimbasystem = VimbaSystem::GetInstance();
-	//CraneSceneCameraPtr _cam_scene_right;
-	CraneSceneCamera *_cam_scene_right;
-
+	CraneSceneCameraPtr _cam_scene_right;
 	CraneRopeCameraPtr _cam_rope_x;
 	CraneRopeCameraPtr _cam_rope_y;
 

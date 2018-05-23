@@ -37,7 +37,7 @@ void CraneCoarseAxis::Move(Axis a, int step) {
 		channel_start[i] = i;
 
 	channel_start[0] = channel;
-	AioSingleAoEx(this->_aio_id, channel, 0.5 * ((step < 0) ? -1 : 1));
+	AioSingleAoEx(this->_aio_id, channel, 0.2 * ((step < 0) ? -1 : 1));
 	WaitUntilCounterReach(step, channel_start);
 	AioSingleAoEx(this->_aio_id, channel, 0);
 }

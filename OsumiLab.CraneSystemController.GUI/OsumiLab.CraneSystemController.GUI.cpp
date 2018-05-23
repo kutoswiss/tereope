@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "ObstaclesDetection.h"
+#include "ObstaclesCorrespondence.h"
 #include "Crane.h"
 
 #include <vector>
@@ -12,6 +13,55 @@
 #include <condition_variable>Å@
 #include <chrono>    
 #include <string>
+
+void StereoCorrespondance();
+void ObstaclesDetectionDemo();
+void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_detection);
+
+int main() {
+	ObstaclesDetectionDemo();
+    return 0;
+}
+
+void StereoCorrespondance() {
+	Crane crane;
+	ObstaclesDetection obstacle_detection;
+	ObstaclesCorrespondence correspondence;
+	obstacle_detection.SetBinaryThreshold(35);
+
+	cv::Mat m1 = crane.RightSceneCamera().GetMat(CV_8UC1);
+	obstacle_detection.SetRawFrame(m1);
+	obstacle_detection.Detect();
+	std::vector<Obstacle> o1 = obstacle_detection.GetObstacles();
+	cv::imshow("1", obstacle_detection.GetFrameWithRectangles());
+	crane.CoarseAxis().Move(Axis::X, 15000);
+
+	cv::Mat m2 = crane.RightSceneCamera().GetMat(CV_8UC1);
+	obstacle_detection.SetRawFrame(m2);
+	obstacle_detection.Detect();
+	std::vector<Obstacle> o2 = obstacle_detection.GetObstacles();
+	cv::imshow("2", obstacle_detection.GetFrameWithRectangles());
+
+	correspondence.SetSamples(o1, o2);
+	correspondence.Match();
+	correspondence.PrintMatchedObstacles();
+
+	cv::waitKey(0);
+	cv::destroyWindow("Left");
+	cv::destroyWindow("Right");
+}
+
+void ObstaclesDetectionDemo() {
+	Crane crane;
+	ObstaclesDetection obstacle_detection;
+	obstacle_detection.SetBinaryThreshold(35);
+
+	std::thread scene_cam_thread(
+	SceneCameraThread,
+	std::ref(crane.RightSceneCamera()),
+	std::ref(obstacle_detection));
+	scene_cam_thread.join();
+}
 
 void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_detection) {
 	const std::string kWindowTitle = "Raw with obstacles";
@@ -30,10 +80,9 @@ void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_de
 
 	//cv::createTrackbar("Binary Thr.", kWindowTitle, &binary_thr, 255, NULL);
 	int i = 0;
-	
+
 	while (1) {
 		frame_mat = camera.GetMat(CV_8UC1);
-		obstacle_detection.SetBinaryThreshold(binary_thr);
 		obstacle_detection.SetRawFrame(frame_mat);
 		n_obstacles = obstacle_detection.Detect();
 
@@ -44,7 +93,7 @@ void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_de
 		cv::imshow(kBinaryWinTitle, obstacle_detection.GetBinaryFrame());
 		cv::imshow(kCannyWinTitle, obstacle_detection.GetCannyFrame());
 		cv::imshow(kRawWinTitle, frame_mat);
-		
+
 		if (cv::waitKey(15) >= 0)
 			break;
 
@@ -52,62 +101,5 @@ void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_de
 	}
 
 	cv::destroyAllWindows();
-}
-
-void StereoDetection(cv::Mat left, cv::Mat right) {
-
-}
- 
-int main() {
-	/*Crane crane;
-	ObstaclesDetection obstacle_detection;
-	obstacle_detection.SetBinaryThreshold(25);
-
-	cv::Mat img = crane.RightSceneCamera().GetMat(CV_8UC1);
-	obstacle_detection.SetRawFrame(img);
-	obstacle_detection.Detect();
-	cv::namedWindow("1", cv::WINDOW_AUTOSIZE);
-	cv::imshow("1", obstacle_detection.GetFrameWithRectangles());
-
-	crane.CoarseAxis().Move(Axis::X, -10000);
-
-	cv::Mat img2 = crane.RightSceneCamera().GetMat(CV_8UC1);
-	obstacle_detection.SetRawFrame(img2);
-	obstacle_detection.Detect();
-	cv::namedWindow("2", cv::WINDOW_AUTOSIZE);
-	cv::imshow("2", obstacle_detection.GetFrameWithRectangles());
-
-	cv::waitKey(0);
-	cv::destroyWindow("1");
-	cv::destroyWindow("2");
-	
-	system("pause");*/
-
-	Crane crane;
-	
-	ObstaclesDetection obstacle_detection;
-	std::thread scene_cam_thread(
-		SceneCameraThread,
-		std::ref(crane.RightSceneCamera()), 
-		std::ref(obstacle_detection));
-	scene_cam_thread.join();
-
-	//cv::namedWindow("Left", cv::WINDOW_AUTOSIZE);
-	//obstacle_detection.SetRawFrame(left);
-	//obstacle_detection.Detect();
-	//cv::imshow("Left", obstacle_detection.GetFrameWithRectangles());
-	//cv::imwrite("left.png", obstacle_detection.GetFrameWithRectangles());
-
-	//cv::namedWindow("Right", cv::WINDOW_AUTOSIZE);
-	//obstacle_detection.SetRawFrame(right);
-	//obstacle_detection.Detect();
-	//cv::imshow("Right", obstacle_detection.GetFrameWithRectangles());
-	//cv::imwrite("right.png", obstacle_detection.GetFrameWithRectangles());
-
-	//cv::waitKey(0);
-	//cv::destroyWindow("Left");
-	//cv::destroyWindow("Right");
-
-    return 0;
 }
 

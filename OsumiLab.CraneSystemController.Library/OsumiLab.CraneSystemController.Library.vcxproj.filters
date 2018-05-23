@@ -75,6 +75,12 @@
     <ClInclude Include="CraneSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StereoObstacle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObstaclesCorrespondence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -120,6 +126,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CraneSettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StereoObstacle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObstaclesCorrespondence.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

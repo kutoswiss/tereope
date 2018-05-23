@@ -33,8 +33,8 @@ Crane::Crane(char *aio_name, char *cnt_name) {
 Crane::~Crane() {
 	this->Exit();
 
-	delete this->_cam_scene_right;
-	//this->_cam_scene_right.reset();
+	//delete this->_cam_scene_right;
+	this->_cam_scene_right.reset();
 	this->_cam_rope_x.reset();
 	this->_cam_rope_y.reset();
 
@@ -143,9 +143,9 @@ void Crane::InitCnt(char *device_name) {
 /// 
 /// </summary>
 void Crane::InitCameras(void) {
-	this->_cam_scene_right = new CraneSceneCamera(this->_vimbasystem, CraneSettings::kGuppyCameraPID);
-	//this->_cam_scene_right = std::make_unique<CraneSceneCamera>
-	//	(this->_vimbasystem, CraneSettings::kGuppyCameraPID);
+	//this->_cam_scene_right = new CraneSceneCamera(this->_vimbasystem, CraneSettings::kGuppyCameraPID);
+	this->_cam_scene_right = std::make_unique<CraneSceneCamera>
+		(this->_vimbasystem, CraneSettings::kGuppyCameraPID);
 
 	this->_cam_rope_x = std::make_unique<CraneRopeCamera>
 		(this->_vimbasystem, CraneSettings::kPikeXCameraPID);
