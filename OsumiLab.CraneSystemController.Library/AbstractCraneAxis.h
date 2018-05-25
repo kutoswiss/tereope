@@ -32,6 +32,8 @@ public:
 	void SetAioID(short id);
 	void SetCntID(short id);
 
+	bool IsMoving() const;
+
 protected:
 	/// <summary>
 	/// Protected methods
@@ -46,6 +48,7 @@ protected:
 	/// </summary>
 	short _aio_id;
 	short _cnt_id;
+	bool _is_moving = false;
 
 private:
 	/// <summary>

@@ -40,11 +40,21 @@ void AbstractCraneAxis::SetCntID(short id) {
 }
 
 /// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+bool AbstractCraneAxis::IsMoving() const {
+	return this->_is_moving;
+}
+
+
+/// <summary>
 /// Method that makes an active wait until the counter value is reached
 /// </summary>
 /// <param name="step"></param>
 /// <param name="channels"></param>
 void AbstractCraneAxis::WaitUntilCounterReach(int step, short *channels) {
+	this->_is_moving = true;
 	DWORD current_value = 0;
 	DWORD initial_value = 0;
 
@@ -57,6 +67,7 @@ void AbstractCraneAxis::WaitUntilCounterReach(int step, short *channels) {
 		CntReadCount(this->_cnt_id, channels, 1, &current_value);
 
 	CntStopCount(this->_cnt_id, channels, 1);
+	this->_is_moving = false;
 }
 
 /// <summary>

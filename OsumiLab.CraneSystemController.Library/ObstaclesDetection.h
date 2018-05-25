@@ -21,9 +21,9 @@ public:
     /// <summary>
     /// Constants
     /// </summary>
-    static const uint kDefaultMinContourArea = 100;
-    static const uint kBinaryThresholdValue = 30;
-	static const uint kCannyThresholdValue = 20;
+    static const uint kDefaultMinContourArea = 50;
+    static const uint kBinaryThresholdValue = 35;
+	static const uint kCannyThresholdValue = 255;
 
     /// <summary>
     /// Properties
@@ -67,9 +67,13 @@ private:
     cv::Mat _raw_frame;
     cv::Mat _raw_frame_w_rects;
     cv::Mat _canny_frame;
-    cv::Mat _binary_frame;
+    cv::Mat _bin_frame;
+
+	// Kernels
+	cv::Mat _kernel3x3;
+	cv::Mat _kernel19x19;
 
 	// Detection parameters
-	uint _binary_threshold;
+	uint _bin_threshold;
 	uint _canny_threshold;
 };

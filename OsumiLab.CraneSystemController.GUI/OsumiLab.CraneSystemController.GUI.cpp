@@ -14,15 +14,40 @@
 #include <chrono>    
 #include <string>
 
+void MultipleFramesCapture(int step);
 void StereoCorrespondance();
 void ObstaclesDetectionDemo();
 void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_detection);
+void MultipleFramesCaptureThread(Crane &crane, CraneSceneCamera &camera, bool &end);
 
 int main() {
-	ObstaclesDetectionDemo();
+	//MultipleFramesCapture(-50000);
+	StereoCorrespondance();
     return 0;
 }
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="step"></param>
+void MultipleFramesCapture(int step) {
+	bool end = false;
+	Crane crane;
+
+	std::thread t(
+		MultipleFramesCaptureThread,
+		std::ref(crane),
+		std::ref(crane.RightSceneCamera()),
+		std::ref(end));
+
+	crane.CoarseAxis().Move(Axis::X, step);
+	end = true;
+	t.join();
+}
+
+/// <summary>
+/// 
+/// </summary>
 void StereoCorrespondance() {
 	Crane crane;
 	ObstaclesDetection obstacle_detection;
@@ -34,7 +59,7 @@ void StereoCorrespondance() {
 	obstacle_detection.Detect();
 	std::vector<Obstacle> o1 = obstacle_detection.GetObstacles();
 	cv::imshow("1", obstacle_detection.GetFrameWithRectangles());
-	crane.CoarseAxis().Move(Axis::X, 15000);
+	crane.CoarseAxis().Move(Axis::X, 10000);
 
 	cv::Mat m2 = crane.RightSceneCamera().GetMat(CV_8UC1);
 	obstacle_detection.SetRawFrame(m2);
@@ -51,6 +76,9 @@ void StereoCorrespondance() {
 	cv::destroyWindow("Right");
 }
 
+/// <summary>
+/// 
+/// </summary>
 void ObstaclesDetectionDemo() {
 	Crane crane;
 	ObstaclesDetection obstacle_detection;
@@ -63,6 +91,11 @@ void ObstaclesDetectionDemo() {
 	scene_cam_thread.join();
 }
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="camera"></param>
+/// <param name="obstacle_detection"></param>
 void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_detection) {
 	const std::string kWindowTitle = "Raw with obstacles";
 	const std::string kBinaryWinTitle = "Binary frame";
@@ -78,14 +111,15 @@ void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_de
 	cv::namedWindow(kCannyWinTitle, cv::WINDOW_AUTOSIZE);
 	cv::namedWindow(kRawWinTitle, cv::WINDOW_AUTOSIZE);
 
-	//cv::createTrackbar("Binary Thr.", kWindowTitle, &binary_thr, 255, NULL);
+	cv::createTrackbar("Binary Thr.", kWindowTitle, &binary_thr, 255, NULL);
 	int i = 0;
 
 	while (1) {
 		frame_mat = camera.GetMat(CV_8UC1);
 		obstacle_detection.SetRawFrame(frame_mat);
-		n_obstacles = obstacle_detection.Detect();
+		obstacle_detection.SetBinaryThreshold(binary_thr);
 
+		n_obstacles = obstacle_detection.Detect();
 		if (n_obstacles != pre_n_obstacles)
 			obstacle_detection.PrintDetect();
 
@@ -100,6 +134,23 @@ void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_de
 		pre_n_obstacles = n_obstacles;
 	}
 
+	cv::destroyAllWindows();
+}
+
+void MultipleFramesCaptureThread(Crane &crane, CraneSceneCamera &camera, bool &end) {
+	const std::string kWindowTitle = "Frames";
+	cv::Mat frame_mat;
+	cv::namedWindow(kWindowTitle, cv::WINDOW_AUTOSIZE);
+
+	int i = 0;
+	while (!end) {
+		std::stringstream ss;
+		ss << "dai/img" << i++ << ".png";
+		frame_mat = camera.GetMat(CV_8UC1);
+		cv::imshow(kWindowTitle, frame_mat);
+		cv::imwrite(ss.str(), frame_mat);
+		cv::waitKey(1);
+	}
 	cv::destroyAllWindows();
 }
 

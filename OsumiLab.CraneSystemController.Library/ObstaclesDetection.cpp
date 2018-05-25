@@ -5,14 +5,20 @@
 /// 
 /// </summary>
 ObstaclesDetection::ObstaclesDetection() {
-	this->_binary_threshold = this->kBinaryThresholdValue;
+	this->_bin_threshold = this->kBinaryThresholdValue;
 	this->_canny_threshold = this->kCannyThresholdValue;
+
+	this->_kernel19x19 = cv::getStructuringElement(cv::MORPH_RECT,
+		cv::Size(2 * 9 + 1, 2 * 9 + 1), cv::Point(9, 9));
+
+	this->_kernel3x3 = cv::getStructuringElement(cv::MORPH_RECT,
+		cv::Size(3, 3));
 }
 
 /// <summary>
 /// 
 /// </summary>
-ObstaclesDetection::ObstaclesDetection(cv::Mat &input) {
+ObstaclesDetection::ObstaclesDetection(cv::Mat &input) : ObstaclesDetection() {
     this->SetRawFrame(input);
 }
 
@@ -43,7 +49,7 @@ cv::Mat ObstaclesDetection::GetCannyFrame() const {
 /// </summary>
 /// <returns></returns>
 cv::Mat ObstaclesDetection::GetBinaryFrame() const {
-    return this->_binary_frame;
+    return this->_bin_frame;
 }
 
 /// <summary>
@@ -63,25 +69,11 @@ cv::Mat ObstaclesDetection::GetFrameWithRectangles() {
 /// <param name="frame"></param>
 void ObstaclesDetection::SetRawFrame(cv::Mat &frame) {
     this->_raw_frame = frame;
-
-    cv::threshold(this->_raw_frame, 
-		this->_binary_frame, 
-		this->_binary_threshold, 
-		255, cv::THRESH_BINARY);
-
-    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT,
-        cv::Size(2 * 9 + 1, 2 * 9 + 1), cv::Point(9, 9));
-
-	cv::Mat kernel2 = cv::getStructuringElement(cv::MORPH_RECT,
-		cv::Size(3,3));
-
-    cv::erode(this->_binary_frame, this->_binary_frame, kernel);
-	cv::dilate(this->_binary_frame, this->_binary_frame, kernel, cv::Point(-1, -1), 1);
-    cv::cvtColor(this->_binary_frame, this->_binary_frame, CV_RGB2GRAY);
-    cv::threshold(this->_binary_frame, this->_binary_frame, 10, 255, cv::THRESH_BINARY);
-
-	cv::dilate(this->_binary_frame, this->_binary_frame, kernel2, cv::Point(-1, -1), 3);
-    cv::Canny(this->_binary_frame, this->_canny_frame, this->_canny_threshold, 255);
+	cv::morphologyEx(this->_raw_frame, this->_bin_frame, cv::MORPH_OPEN, this->_kernel19x19);
+    cv::threshold(this->_bin_frame, this->_bin_frame, this->_bin_threshold, 255, cv::THRESH_BINARY);
+	cv::dilate(this->_bin_frame, this->_bin_frame, this->_kernel3x3);
+    cv::cvtColor(this->_bin_frame, this->_bin_frame, CV_RGB2GRAY);
+    cv::Canny(this->_bin_frame, this->_canny_frame, this->_canny_threshold, 255);
 }
 
 /// <summary>
@@ -92,7 +84,7 @@ void ObstaclesDetection::SetBinaryThreshold(uint threshold) {
 	if (threshold > 255)
 		threshold = 255;
 
-	this->_binary_threshold = threshold;
+	this->_bin_threshold = threshold;
 }
 
 /// <summary>
@@ -137,8 +129,8 @@ std::vector<std::vector<cv::Point>>
 ObstaclesDetection::FindContoursOnFrame(uint min_contour_area) {
     std::vector<std::vector<cv::Point>> contours, contours_filtered;
 
-    // Get contours from Sobel input
-    cv::findContours(this->_canny_frame, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+    // Get contours from Binary input
+    cv::findContours(this->_bin_frame, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
     // Get obstacles contours
 	for (auto it = contours.begin(); it != contours.end(); it++)
