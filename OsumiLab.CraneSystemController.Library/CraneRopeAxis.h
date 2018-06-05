@@ -11,6 +11,6 @@ public:
 	/// <summary>
 	/// Implemented methods
 	/// </summary>
-	void Move(Axis a, int step);
+	void Move(Axis a, int step, double voltage = 0);
 };
 

@@ -31,7 +31,7 @@ CraneRopeAxis::~CraneRopeAxis() {
 /// </summary>
 /// <param name="a">Axis to be moved</param>
 /// <param name="step">Number of steps to move</param>
-void CraneRopeAxis::Move(Axis a, int step) {
+void CraneRopeAxis::Move(Axis a, int step, double voltage) {
 	int channel = this->GetChannelFromAxis(a);
 
 	short channel_start[8];
@@ -42,7 +42,7 @@ void CraneRopeAxis::Move(Axis a, int step) {
 	}
 
 	channel_start[0] = channel;
-	AioSingleAoEx(this->_aio_id, channel, 2.0 * ((step < 0) ? -1 : 1));
+	AioSingleAoEx(this->_aio_id, channel, 1.0 * ((step < 0) ? -1 : 1));
 	WaitUntilCounterReach(step, channel_start);
 	AioSingleAoEx(this->_aio_id, channel, 0);
 }

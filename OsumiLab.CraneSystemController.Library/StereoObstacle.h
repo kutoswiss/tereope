@@ -13,10 +13,10 @@ public:
 	Obstacle GetLeftObstacle() const;
 	Obstacle GetRightObstacle() const;
 	int GetHeight() const;
+	double EvaluateHeight();
 
 private:
-	// Private methods
-	int EvaluateHeight();
+	
 
 	// Private members
 	Obstacle _left;

@@ -4,16 +4,15 @@
 class CraneCoarseAxis : public AbstractCraneAxis
 {
 public:
-	/// <summary>
-	/// Ctor/Dtor
-	/// </summary>
+	// Constants
+	const int kDefaultVoltage = 0.2;
+
+	// Ctor/Dtor
 	CraneCoarseAxis();
 	CraneCoarseAxis(short aio_id, short cnt_id, int x_axis_channel, int y_axis_channel);
 	~CraneCoarseAxis();
 
-	/// <summary>
-	/// Virtal methods implemented
-	/// </summary>
-	void Move(Axis a, int step);
+	// Virtal methods implemented
+	void Move(Axis a, int step, double voltage = 0);
 };
 

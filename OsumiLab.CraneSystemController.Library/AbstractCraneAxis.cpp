@@ -39,6 +39,20 @@ void AbstractCraneAxis::SetCntID(short id) {
 	this->_cnt_id = id;
 }
 
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="voltage"></param>
+void AbstractCraneAxis::SetVoltage(double voltage) {
+	if (voltage <= 0)
+		this->_voltage = this->_min_voltage;
+	else if (voltage > this->_max_voltage)
+		this->_voltage = this->_max_voltage;
+	else
+		this->_voltage = voltage;
+}
+
 /// <summary>
 /// 
 /// </summary>
@@ -61,10 +75,11 @@ void AbstractCraneAxis::WaitUntilCounterReach(int step, short *channels) {
 	CntStartCount(this->_cnt_id, channels, 1);
 	CntReadCount(this->_cnt_id, channels, 1, &initial_value);
 	CntReadCount(this->_cnt_id, channels, 1, &current_value);
-	
+
 	// Wait until the expected value is reached
-	while (std::abs(static_cast<long>(current_value - initial_value)) < std::abs(step))
+	while (std::abs(static_cast<long>(current_value - initial_value)) < std::abs(step)) {
 		CntReadCount(this->_cnt_id, channels, 1, &current_value);
+	}
 
 	CntStopCount(this->_cnt_id, channels, 1);
 	this->_is_moving = false;

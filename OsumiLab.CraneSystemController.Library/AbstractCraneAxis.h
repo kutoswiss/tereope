@@ -1,8 +1,11 @@
 #pragma once
 #include <windows.h>
 #include <thread>
+#include <chrono>
 #include "Caio.h"
 #include "CCnt.h"
+
+using namespace std::chrono;
 
 /// <summary>
 /// Enum
@@ -19,7 +22,7 @@ public:
 	/// Virtual methods
 	/// </summary>
 	virtual ~AbstractCraneAxis() {};
-	virtual void Move(Axis a, int step) = 0;
+	virtual void Move(Axis a, int step, double voltage = 0) = 0;
 	//virtual void MoveTo(Axis a, int position) = 0;
 
 	/// <summary>
@@ -31,6 +34,7 @@ public:
 	void SetAioCntIDs(short aio, short cnt);
 	void SetAioID(short id);
 	void SetCntID(short id);
+	void SetVoltage(double voltage);
 
 	bool IsMoving() const;
 
@@ -49,6 +53,9 @@ protected:
 	short _aio_id;
 	short _cnt_id;
 	bool _is_moving = false;
+	double _voltage = 0;
+	double _min_voltage = 0;
+	double _max_voltage = 2.0;
 
 private:
 	/// <summary>

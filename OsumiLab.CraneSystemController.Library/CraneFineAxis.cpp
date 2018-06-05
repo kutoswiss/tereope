@@ -28,7 +28,7 @@ CraneFineAxis::~CraneFineAxis() {
 /// </summary>
 /// <param name="a">Axis to be moved</param>
 /// <param name="step">Number of steps to move</param>
-void CraneFineAxis::Move(Axis a, int step) {
+void CraneFineAxis::Move(Axis a, int step, double voltage) {
 	int channel = this->GetChannelFromAxis(a);
 	step *= -1;
 
