@@ -120,6 +120,10 @@ void Crane::InitAio(char *device_name) {
 	this->_aio_data[11] = 5.0;		// Voltage for rope
 
 	AioMultiAoEx(this->_aio_id, kAioMaxChannel, this->_aio_data);
+
+	// Set all Axis channels to 0[V]
+	for (size_t i = 0; i <= 4; i++)
+		AioSingleAoEx(this->_aio_id, i, 0);
 }
 
 /// <summary>

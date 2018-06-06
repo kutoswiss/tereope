@@ -59,7 +59,7 @@ void ObstaclesCorrespondence::PrintMatchedObstacles(void) {
 		std::cout << (*o).GetLeftObstacle().ToString() << std::endl;
 		std::cout << "corresponds to" << std::endl;
 		std::cout << (*o).GetRightObstacle().ToString() << std::endl;
-		std::cout << "Height: " << (*o).EvaluateHeight() << std::endl << std::endl;
+		std::cout << "Height: " << (*o).EvaluateHeight() << " [m]" << std::endl << std::endl;
 	}
 }
 

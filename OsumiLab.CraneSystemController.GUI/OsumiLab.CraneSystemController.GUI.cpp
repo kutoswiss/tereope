@@ -21,11 +21,7 @@ void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_de
 void MultipleFramesCaptureThread(Crane &crane, CraneSceneCamera &camera, bool &end);
 
 int main() {
-	// This is for DAI
-	//MultipleFramesCapture(-5000);
 	StereoCorrespondance();
-	//Crane c;
-	//c.CoarseAxis().Move(Axis::X, -3000, 0.2);
     return 0;
 }
 
@@ -62,7 +58,7 @@ void StereoCorrespondance() {
 	obstacle_detection.Detect();
 	std::vector<Obstacle> o1 = obstacle_detection.GetObstacles();
 	cv::imshow("1", obstacle_detection.GetFrameWithRectangles());
-	crane.CoarseAxis().Move(Axis::X, -8000, 0.2);
+	crane.CoarseAxis().Move(Axis::X, 8000, 0.2);
 
 	cv::Mat m2 = crane.RightSceneCamera().GetMat(CV_8UC1);
 	obstacle_detection.SetRawFrame(m2);
