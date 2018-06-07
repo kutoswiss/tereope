@@ -24,8 +24,8 @@ int main() {
 	Crane c;
 	//c.Rope().Move(Axis::Z, 1000, 4);
 
-	//c.Rope().CalibratePresetValue(2000000);
-	c.Rope().MoveTo(0, 4);
+	c.Rope().CalibratePresetValue();
+	//c.Rope().MoveTo(0, 4);
 	/*c.CoarseAxis().Move(Axis::X, -8000, 0.5);
 	c.FineAxis().Move(Axis::Y, -2000, 0.5);
 	c.FineAxis().Move(Axis::Y, 2000, 0.5);*/

@@ -13,7 +13,7 @@ public:
 	~CraneRopeAxis();
 
 	// Public methods
-	void CraneRopeAxis::CalibratePresetValue(int preset_value);
+	void CraneRopeAxis::CalibratePresetValue();
 	void CraneRopeAxis::MoveTo(int step, double voltage);
 
 	// Implemented methods

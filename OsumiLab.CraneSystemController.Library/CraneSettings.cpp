@@ -25,4 +25,7 @@ namespace CraneSettings
 	const char *kGuppyCameraPID = "DEV_0xA47010F086149";
 	const char *kPikeXCameraPID = "DEV_0xA470110075023";
 	const char *kPikeYCameraPID = "DEV_0xA470110075024";
+
+	// Preset values
+	const int kCntPresetValue = 2000000;
 }

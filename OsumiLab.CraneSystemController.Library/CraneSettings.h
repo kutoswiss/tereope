@@ -24,4 +24,7 @@ namespace CraneSettings
 	extern const char *kGuppyCameraPID;
 	extern const char *kPikeXCameraPID;
 	extern const char *kPikeYCameraPID;
+
+	// Preset values
+	extern const int kCntPresetValue;
 }

@@ -4,6 +4,7 @@
 #include <chrono>
 #include "Caio.h"
 #include "CCnt.h"
+#include "CraneSettings.h"
 
 using namespace std::chrono;
 

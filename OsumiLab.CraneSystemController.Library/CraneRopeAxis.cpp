@@ -29,14 +29,14 @@ CraneRopeAxis::~CraneRopeAxis() {
 /// <summary>
 /// 
 /// </summary>
-void CraneRopeAxis::CalibratePresetValue(int preset_value) {
+void CraneRopeAxis::CalibratePresetValue() {
 	short channel_start[8];
 	unsigned long preset_data[8];
 	short cnt = this->GetCntChannelFromAxis(Axis::Z);
 
 	for (int i = 0; i < 8; i++) {
 		channel_start[i] = i;
-		preset_data[i] = preset_value;
+		preset_data[i] = CraneSettings::kCntPresetValue;
 	}
 
 	CntPreset(this->_cnt_id, &cnt, 1, preset_data);
@@ -71,7 +71,7 @@ void CraneRopeAxis::MoveTo(int step, double voltage) {
 	DWORD cntvalue;
 	CntStartCount(this->_cnt_id, &cnt, 1);
 	CntReadCount(this->_cnt_id, &cnt, 1, &cntvalue);
-	cntvalue -= 2000000;
+	cntvalue -= CraneSettings::kCntPresetValue; // Remove offset
 
 	if (cntvalue < step) {
 		up = true;
