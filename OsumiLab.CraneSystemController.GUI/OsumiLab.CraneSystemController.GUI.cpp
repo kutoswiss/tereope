@@ -21,7 +21,12 @@ void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_de
 void MultipleFramesCaptureThread(Crane &crane, CraneSceneCamera &camera, bool &end);
 
 int main() {
-	StereoCorrespondance();
+	Crane c;
+	/*c.CoarseAxis().Move(Axis::X, -8000, 0.5);
+	c.FineAxis().Move(Axis::Y, -2000, 0.5);
+	c.FineAxis().Move(Axis::Y, 2000, 0.5);*/
+	c.Rope().Move(Axis::Z, -100000, 4);
+	//StereoCorrespondance();
     return 0;
 }
 

@@ -7,10 +7,22 @@
 /// <param name="x"></param>
 /// <param name="y"></param>
 /// <param name="z"></param>
-void AbstractCraneAxis::SetAxisChannels(int x, int y, int z) {
-	this->_axis_channels[Axis::X] = x;
-	this->_axis_channels[Axis::Y] = y;
-	this->_axis_channels[Axis::Z] = z;
+void AbstractCraneAxis::SetAioChannels(int x, int y, int z) {
+	this->_axis_aio_channels[Axis::X] = x;
+	this->_axis_aio_channels[Axis::Y] = y;
+	this->_axis_aio_channels[Axis::Z] = z;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <param name="z"></param>
+void AbstractCraneAxis::SetCntChannels(int x, int y, int z) {
+	this->_axis_cnt_channels[Axis::X] = x;
+	this->_axis_cnt_channels[Axis::Y] = y;
+	this->_axis_cnt_channels[Axis::Z] = z;
 }
 
 /// <summary>
@@ -90,6 +102,15 @@ void AbstractCraneAxis::WaitUntilCounterReach(int step, short *channels) {
 /// </summary>
 /// <param name="axis"></param>
 /// <returns></returns>
-int AbstractCraneAxis::GetChannelFromAxis(Axis axis) {
-	return this->_axis_channels[axis];
+int AbstractCraneAxis::GetAioChannelFromAxis(Axis axis) {
+	return this->_axis_aio_channels[axis];
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="axis"></param>
+/// <returns></returns>
+int AbstractCraneAxis::GetCntChannelFromAxis(Axis axis) {
+	return this->_axis_cnt_channels[axis];
 }

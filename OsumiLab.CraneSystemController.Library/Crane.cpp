@@ -162,9 +162,13 @@ void Crane::InitCameras(void) {
 /// </summary>
 void Crane::SetCoarseAxis(void) {
 	this->_coarse_axis.SetAioCntIDs(this->_aio_id, this->_cnt_id);
-	this->_coarse_axis.SetAxisChannels(
+	this->_coarse_axis.SetAioChannels(
 		CraneSettings::kXCoarseAxisAioChannel,
 		CraneSettings::kYCoarseAxisAioChannel,
+		-1);
+	this->_coarse_axis.SetCntChannels(
+		CraneSettings::kXCoarseAxisCntChannel,
+		CraneSettings::kYCoarseAxisCntChannel,
 		-1);
 }
 
@@ -173,9 +177,13 @@ void Crane::SetCoarseAxis(void) {
 /// </summary>
 void Crane::SetFineAxis(void) {
 	this->_fine_axis.SetAioCntIDs(this->_aio_id, this->_cnt_id);
-	this->_fine_axis.SetAxisChannels(
+	this->_fine_axis.SetAioChannels(
 		CraneSettings::kXFineAxisAioChannel,
 		CraneSettings::kYFineAxisAioChannel,
+		-1);
+	this->_fine_axis.SetCntChannels(
+		CraneSettings::kXFineAxisCntChannel,
+		CraneSettings::kYFineAxisCntChannel,
 		-1);
 }
 
@@ -184,7 +192,8 @@ void Crane::SetFineAxis(void) {
 /// </summary>
 void Crane::SetRopeAxis(void) {
 	this->_rope.SetAioCntIDs(this->_aio_id, this->_cnt_id);
-	this->_rope.SetAxisChannels(-1, -1, CraneSettings::kZRopeAxisAioChannel);
+	this->_rope.SetAioChannels(-1, -1, CraneSettings::kZRopeAxisAioChannel);
+	this->_rope.SetCntChannels(-1, -1, CraneSettings::kZRopeAxisCntChannel);
 }
 
 /// <summary>

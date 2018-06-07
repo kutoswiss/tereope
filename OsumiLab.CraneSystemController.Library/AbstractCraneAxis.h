@@ -30,7 +30,8 @@ public:
 	/// </summary>
 	/// <param name="aio"></param>
 	/// <param name="cnt"></param>
-	void SetAxisChannels(int x, int y, int z);
+	void SetAioChannels(int x, int y, int z);
+	void SetCntChannels(int x, int y, int z);
 	void SetAioCntIDs(short aio, short cnt);
 	void SetAioID(short id);
 	void SetCntID(short id);
@@ -45,7 +46,8 @@ protected:
 	/// <param name="step"></param>
 	/// <param name="channels"></param>
 	void WaitUntilCounterReach(int step, short *channels);
-	int GetChannelFromAxis(Axis axis);
+	int GetAioChannelFromAxis(Axis axis);
+	int GetCntChannelFromAxis(Axis axis);
 
 	/// <summary>
 	/// Protected members
@@ -61,5 +63,6 @@ private:
 	/// <summary>
 	/// Private members
 	/// </summary>
-	int _axis_channels[3];
+	int _axis_aio_channels[3];
+	int _axis_cnt_channels[3];
 };
