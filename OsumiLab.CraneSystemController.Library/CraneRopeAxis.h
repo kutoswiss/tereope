@@ -12,6 +12,10 @@ public:
 	CraneRopeAxis(short aio_id, short cnt_id, int z_axis_channel);
 	~CraneRopeAxis();
 
+	// Public methods
+	void CraneRopeAxis::CalibratePresetValue(int preset_value);
+	void CraneRopeAxis::MoveTo(int step, double voltage);
+
 	// Implemented methods
 	void Move(Axis a, int step, double voltage = 0);
 };

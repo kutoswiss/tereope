@@ -29,6 +29,22 @@ CraneRopeAxis::~CraneRopeAxis() {
 /// <summary>
 /// 
 /// </summary>
+void CraneRopeAxis::CalibratePresetValue(int preset_value) {
+	short channel_start[8];
+	unsigned long preset_data[8];
+	short cnt = this->GetCntChannelFromAxis(Axis::Z);
+
+	for (int i = 0; i < 8; i++) {
+		channel_start[i] = i;
+		preset_data[i] = preset_value;
+	}
+
+	CntPreset(this->_cnt_id, &cnt, 1, preset_data);
+}
+
+/// <summary>
+/// 
+/// </summary>
 /// <param name="a"></param>
 /// <param name="step"></param>
 /// <param name="voltage"></param>
@@ -40,4 +56,37 @@ void CraneRopeAxis::Move(Axis a, int step, double voltage) {
 	AioSingleAoEx(this->_aio_id, aio, this->_voltage * ((step < 0) ? -1 : 1));
 	this->WaitUntilCounterReach(step, &cnt);
 	AioSingleAoEx(this->_aio_id, aio, 0);
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="a"></param>
+/// <param name="step"></param>
+/// <param name="voltage"></param>
+void CraneRopeAxis::MoveTo(int step, double voltage) {
+	short aio = this->GetAioChannelFromAxis(Axis::Z);
+	short cnt = this->GetCntChannelFromAxis(Axis::Z);
+	bool up = false;
+	DWORD cntvalue;
+	CntStartCount(this->_cnt_id, &cnt, 1);
+	CntReadCount(this->_cnt_id, &cnt, 1, &cntvalue);
+	cntvalue -= 2000000;
+
+	if (cntvalue < step) {
+		up = true;
+		step = step - cntvalue;
+	} else if (cntvalue > step) {
+		up = false;
+		step = cntvalue - step;
+	} else {
+		step = 0;
+	}
+
+	if(step != 0) {
+		this->SetVoltage(voltage);
+		AioSingleAoEx(this->_aio_id, aio, this->_voltage * (up) ? 1 : -1);
+		this->WaitUntilCounterReach(step, &cnt);
+		AioSingleAoEx(this->_aio_id, aio, 0);
+	}
 }
