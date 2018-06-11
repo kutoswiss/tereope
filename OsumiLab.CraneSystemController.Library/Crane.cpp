@@ -44,8 +44,8 @@ Crane::~Crane() {
 /// Method that returns the coarse axis object
 /// </summary>
 /// <returns></returns>
-CraneCoarseAxis Crane::CoarseAxis() const {
-	return this->_coarse_axis;
+CraneCoarseAxis& Crane::CoarseAxis() {
+	return std::ref(this->_coarse_axis);
 }
 
 /// <summary>

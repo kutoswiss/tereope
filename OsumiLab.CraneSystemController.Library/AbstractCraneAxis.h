@@ -2,6 +2,7 @@
 #include <windows.h>
 #include <thread>
 #include <chrono>
+#include <future>
 #include "Caio.h"
 #include "CCnt.h"
 #include "CraneSettings.h"
@@ -19,18 +20,12 @@ typedef enum Axis {
 
 class AbstractCraneAxis {
 public:
-	/// <summary>
-	/// Virtual methods
-	/// </summary>
+	// Virtual methods
 	virtual ~AbstractCraneAxis() {};
 	virtual void Move(Axis a, int step, double voltage = 0) = 0;
-	//virtual void MoveTo(Axis a, int position) = 0;
+	//virtual void Stop(Axis a) = 0;
 
-	/// <summary>
-	/// Setters
-	/// </summary>
-	/// <param name="aio"></param>
-	/// <param name="cnt"></param>
+	// Setters
 	void SetAioChannels(int x, int y, int z);
 	void SetCntChannels(int x, int y, int z);
 	void SetAioCntIDs(short aio, short cnt);
@@ -38,32 +33,21 @@ public:
 	void SetCntID(short id);
 	void SetVoltage(double voltage);
 
-	bool IsMoving() const;
-
 protected:
-	/// <summary>
-	/// Protected methods
-	/// </summary>
-	/// <param name="step"></param>
-	/// <param name="channels"></param>
+	// Protected methods
 	void WaitUntilCounterReach(int step, short *channels);
 	int GetAioChannelFromAxis(Axis axis);
 	int GetCntChannelFromAxis(Axis axis);
 
-	/// <summary>
-	/// Protected members
-	/// </summary>
+	// Protected members
 	short _aio_id;
 	short _cnt_id;
-	bool _is_moving = false;
 	double _voltage = 0;
 	double _min_voltage = 0;
 	double _max_voltage = 2.0;
 
 private:
-	/// <summary>
-	/// Private members
-	/// </summary>
+	// Private members
 	int _axis_aio_channels[3];
 	int _axis_cnt_channels[3];
 };

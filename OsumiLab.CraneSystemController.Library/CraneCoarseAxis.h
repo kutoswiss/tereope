@@ -14,5 +14,13 @@ public:
 
 	// Virtal methods implemented
 	void Move(Axis a, int step, double voltage = 0);
+	void Stop(Axis a);
+
+	// Public methods
+	void MoveXThread(int& step, double& voltage);
+
+private:
+	std::unique_ptr<std::thread> _x_axis_thread;
+	//std::unique_ptr<std::thread> _y_axis_thread;
 };
 

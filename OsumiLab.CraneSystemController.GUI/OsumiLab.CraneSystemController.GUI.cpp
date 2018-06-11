@@ -20,12 +20,41 @@ void StereoCorrespondance(int steps);
 void ObstaclesDetectionDemo();
 void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_detection);
 void MultipleFramesCaptureThread(Crane &crane, CraneSceneCamera &camera, bool &end);
+void Test()
+{
+	printf("hello\n");
+}
 
 int main() {
+	Crane c;
+	int x_val = 0;
+	std::string input;
+	while (true) {
+		std::cout << "> ";
+		std::cin >> input;
+		if (input == "x") {
+			std::cout << "> Enter X value: ";
+			std::cin >> x_val;
+			c.CoarseAxis().Move(Axis::X, x_val, 0.2);
+		}
+		else if (input == "stop")
+			c.CoarseAxis().Stop(Axis::X);
+		else if (input == "quit")
+			break;
+	}
+
+	////std::thread t1(Test);
+	//std::unique_ptr<std::thread> t1;
+	//t1 = std::make_unique<std::thread>(Test);
+	//t1->join();
+
+	//t1 = std::make_unique<std::thread>(Test);
+	//t1->join();
+
+	
+	
 	//StereoCorrespondance(8000);
-	//Crane c;
-	//c.Rope().CalibratePresetValue();
-	//c.Rope().MoveTo(1000, 4);
+
 	//c.Rope().ElevateTo(0, 4);
 	//c.Rope().Move(Axis::Z, 1000, 4);
 	/*c.Rope().CalibratePresetValue();	
@@ -66,10 +95,9 @@ void ObstacleAvoidanceDemo() {
 	std::vector<StereoObstacle> o = correspondence.Match();
 	if (o.size() > 0) {
 		double m = o[0].GetHeight() + 0.1;
-		crane.Rope().CalibratePresetValue();
-		crane.Rope().ElevateTo(m, 4);
+		crane.Rope().ElevateTo(m);
 		crane.CoarseAxis().Move(Axis::X, -30000, 0.5);
-		crane.Rope().ToGround(4);
+		crane.Rope().ToGround();
 	}
 }
 

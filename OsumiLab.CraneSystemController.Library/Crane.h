@@ -30,7 +30,7 @@ public:
 	/// Getters
 	/// </summary>
 	/// <returns></returns>
-	CraneCoarseAxis CoarseAxis() const;
+	CraneCoarseAxis& CoarseAxis();
 	CraneFineAxis FineAxis() const;
 	CraneRopeAxis Rope() const;
 	CraneSceneCamera& RightSceneCamera() const;
