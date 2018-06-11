@@ -1,31 +1,10 @@
-﻿  CraneSettings.cpp
-  CraneRopeAxis.cpp
+﻿  CraneRopeAxis.cpp
 c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\abstractcraneaxis.h(18): warning C4091: 'typedef ': ignored on left of 'Axis' when no variable is declared
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\craneropeaxis.cpp(56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\craneropeaxis.cpp(76): warning C4018: '<': signed/unsigned mismatch
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\craneropeaxis.cpp(79): warning C4018: '>': signed/unsigned mismatch
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\craneropeaxis.cpp(88): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Generating Code...
-  Compiling...
-  CraneSceneCamera.cpp
-  CraneRopeCamera.cpp
-  CraneFineAxis.cpp
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\abstractcraneaxis.h(18): warning C4091: 'typedef ': ignored on left of 'Axis' when no variable is declared
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\cranefineaxis.cpp(69): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  CraneCoarseAxis.cpp
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\abstractcraneaxis.h(18): warning C4091: 'typedef ': ignored on left of 'Axis' when no variable is declared
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\cranecoarseaxis.h(8): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\cranecoarseaxis.cpp(36): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  CraneCamera.cpp
-  Crane.cpp
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\abstractcraneaxis.h(18): warning C4091: 'typedef ': ignored on left of 'Axis' when no variable is declared
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\cranecoarseaxis.h(8): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\crane.cpp(96): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\crane.cpp(113): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\crane.cpp(126): warning C4267: 'argument': conversion from 'size_t' to 'short', possible loss of data
-  AbstractCraneAxis.cpp
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\abstractcraneaxis.h(18): warning C4091: 'typedef ': ignored on left of 'Axis' when no variable is declared
-  Generating Code...
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\craneropeaxis.cpp(65): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\craneropeaxis.cpp(84): warning C4018: '<': signed/unsigned mismatch
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\craneropeaxis.cpp(87): warning C4018: '>': signed/unsigned mismatch
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\craneropeaxis.cpp(106): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\craneropeaxis.cpp(116): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 CCNT.lib(CCNT.DLL) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR already defined in caio.lib(CAIO.DLL); second definition ignored
 CCNT.lib(CCNT.DLL) : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
   OsumiLab.CraneSystemController.Library.vcxproj -> C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\x64\Debug\OsumiLab.CraneSystemController.Library.lib

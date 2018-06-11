@@ -42,7 +42,9 @@ std::vector<StereoObstacle> ObstaclesCorrespondence::Match(void) {
 	for(auto l = this->_left_samples.begin(); l != this->_left_samples.end(); l++) {
 		for (auto r = this->_right_samples.begin(); r != this->_right_samples.end(); r++) {
 			if (this->IsMatched(*l, *r)) {
-				this->_matched_obstacles.push_back(StereoObstacle(*l, *r));
+				StereoObstacle o = StereoObstacle(*l, *r);
+				o.EvaluateHeight();
+				this->_matched_obstacles.push_back(o);
 				break;
 			}
 		}

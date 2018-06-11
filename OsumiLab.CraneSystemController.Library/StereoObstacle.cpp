@@ -44,6 +44,15 @@ Obstacle StereoObstacle::GetRightObstacle() const {
 /// 
 /// </summary>
 /// <returns></returns>
+double StereoObstacle::GetHeight() const {
+	return this->_height;
+}
+
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
 double StereoObstacle::EvaluateHeight() {
 	const double kFocalLenght = 0.00651;
 	const double kPixelSize = 0.0000074;
@@ -51,5 +60,6 @@ double StereoObstacle::EvaluateHeight() {
 	const double kCameraHeight = 1.62; 
 	double d = (this->_left.GetCenter().x - this->_right.GetCenter().x) * kPixelSize;
 	double z = std::abs(static_cast<double>((kFocalLenght * kCaptureDistance) / d));
-	return kCameraHeight - z;
+	this->_height = kCameraHeight - z;
+	return this->_height;
 }

@@ -14,24 +14,63 @@
 #include <chrono>    
 #include <string>
 
+void ObstacleAvoidanceDemo();
 void MultipleFramesCapture(int step);
-void StereoCorrespondance();
+void StereoCorrespondance(int steps);
 void ObstaclesDetectionDemo();
 void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_detection);
 void MultipleFramesCaptureThread(Crane &crane, CraneSceneCamera &camera, bool &end);
 
 int main() {
-	Crane c;
+	//StereoCorrespondance(8000);
+	//Crane c;
+	//c.Rope().CalibratePresetValue();
+	//c.Rope().MoveTo(1000, 4);
+	//c.Rope().ElevateTo(0, 4);
 	//c.Rope().Move(Axis::Z, 1000, 4);
-
-	c.Rope().CalibratePresetValue();
-	//c.Rope().MoveTo(0, 4);
+	/*c.Rope().CalibratePresetValue();	
+	double m = CraneRopeAxis::MeterToEncoderStep(0.3);
+	c.Rope().MoveTo(m, 4);*/
+	//c.Rope().MoveTo(1000, 4);
+	//c.Rope().MoveTo(1000, 4);
 	/*c.CoarseAxis().Move(Axis::X, -8000, 0.5);
 	c.FineAxis().Move(Axis::Y, -2000, 0.5);
 	c.FineAxis().Move(Axis::Y, 2000, 0.5);*/
-	//c.Rope().Move(Axis::Z, -1000, 4);
+	//c.Rope().Move(Axis::Z, -10000, 4);
 	//StereoCorrespondance();
     return 0;
+}
+
+/// <summary>
+/// 
+/// </summary>
+void ObstacleAvoidanceDemo() {
+	Crane crane;
+	ObstaclesDetection obstacle_detection;
+	ObstaclesCorrespondence correspondence;
+	obstacle_detection.SetBinaryThreshold(35);
+
+	cv::Mat m1 = crane.RightSceneCamera().GetMat(CV_8UC1);
+	obstacle_detection.SetRawFrame(m1);
+	obstacle_detection.Detect();
+	std::vector<Obstacle> o1 = obstacle_detection.GetObstacles();
+
+	crane.CoarseAxis().Move(Axis::X, -8000, 0.2);
+
+	cv::Mat m2 = crane.RightSceneCamera().GetMat(CV_8UC1);
+	obstacle_detection.SetRawFrame(m2);
+	obstacle_detection.Detect();
+	std::vector<Obstacle> o2 = obstacle_detection.GetObstacles();
+
+	correspondence.SetSamples(o1, o2);
+	std::vector<StereoObstacle> o = correspondence.Match();
+	if (o.size() > 0) {
+		double m = o[0].GetHeight() + 0.1;
+		crane.Rope().CalibratePresetValue();
+		crane.Rope().ElevateTo(m, 4);
+		crane.CoarseAxis().Move(Axis::X, -30000, 0.5);
+		crane.Rope().ToGround(4);
+	}
 }
 
 /// <summary>
@@ -56,7 +95,7 @@ void MultipleFramesCapture(int step) {
 /// <summary>
 /// 
 /// </summary>
-void StereoCorrespondance() {
+void StereoCorrespondance(int steps) {
 	Crane crane;
 	ObstaclesDetection obstacle_detection;
 	ObstaclesCorrespondence correspondence;
@@ -67,7 +106,7 @@ void StereoCorrespondance() {
 	obstacle_detection.Detect();
 	std::vector<Obstacle> o1 = obstacle_detection.GetObstacles();
 	cv::imshow("1", obstacle_detection.GetFrameWithRectangles());
-	crane.CoarseAxis().Move(Axis::X, 8000, 0.2);
+	crane.CoarseAxis().Move(Axis::X, steps, 0.2);
 
 	cv::Mat m2 = crane.RightSceneCamera().GetMat(CV_8UC1);
 	obstacle_detection.SetRawFrame(m2);

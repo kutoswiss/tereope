@@ -27,6 +27,15 @@ CraneRopeAxis::~CraneRopeAxis() {
 }
 
 /// <summary>
+/// Convert meters to encoder steps value
+/// </summary>
+/// <param name="m">Meter unit</param>
+/// <returns></returns>
+double CraneRopeAxis::MeterToEncoderStep(double m) {
+	return m * 54400 / 0.1; // 0.1[m] = 54'000 steps
+}
+
+/// <summary>
 /// 
 /// </summary>
 void CraneRopeAxis::CalibratePresetValue() {
@@ -65,7 +74,6 @@ void CraneRopeAxis::Move(Axis a, int step, double voltage) {
 /// <param name="step"></param>
 /// <param name="voltage"></param>
 void CraneRopeAxis::MoveTo(int step, double voltage) {
-	short aio = this->GetAioChannelFromAxis(Axis::Z);
 	short cnt = this->GetCntChannelFromAxis(Axis::Z);
 	bool up = false;
 	DWORD cntvalue;
@@ -84,9 +92,35 @@ void CraneRopeAxis::MoveTo(int step, double voltage) {
 	}
 
 	if(step != 0) {
-		this->SetVoltage(voltage);
-		AioSingleAoEx(this->_aio_id, aio, this->_voltage * (up) ? 1 : -1);
-		this->WaitUntilCounterReach(step, &cnt);
-		AioSingleAoEx(this->_aio_id, aio, 0);
+		this->Move(Axis::Z, step * ((up) ? 1 : -1), voltage);
 	}
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="meter"></param>
+/// <param name="voltage"></param>
+void CraneRopeAxis::Elevate(double meter, double voltage) {
+	double m = CraneRopeAxis::MeterToEncoderStep(meter);
+	this->Move(Axis::Z, m, voltage);
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="meter"></param>
+/// <param name="voltage"></param>
+void CraneRopeAxis::ElevateTo(double meter, double voltage) {
+	double m = CraneRopeAxis::MeterToEncoderStep(meter);
+	this->MoveTo(m, voltage);
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="voltage"></param>
+void CraneRopeAxis::ToGround(double voltage) {
+	this->MoveTo(2000, voltage);
+	this->CalibratePresetValue();
 }
