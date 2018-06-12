@@ -52,7 +52,7 @@ CraneCoarseAxis& Crane::CoarseAxis() {
 /// 
 /// </summary>
 /// <returns></returns>
-CraneFineAxis Crane::FineAxis() const {
+CraneFineAxis& Crane::FineAxis() {
 	return this->_fine_axis;
 }
 
@@ -60,7 +60,7 @@ CraneFineAxis Crane::FineAxis() const {
 /// 
 /// </summary>
 /// <returns></returns>
-CraneRopeAxis Crane::Rope() const {
+CraneRopeAxis& Crane::Rope() {
 	return this->_rope;
 }
 

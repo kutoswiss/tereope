@@ -27,6 +27,7 @@ void Test()
 
 int main() {
 	Crane c;
+
 	int x_val = 0;
 	std::string input;
 	while (true) {

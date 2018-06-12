@@ -31,8 +31,8 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	CraneCoarseAxis& CoarseAxis();
-	CraneFineAxis FineAxis() const;
-	CraneRopeAxis Rope() const;
+	CraneFineAxis& FineAxis();
+	CraneRopeAxis& Rope();
 	CraneSceneCamera& RightSceneCamera() const;
 	CraneRopeCamera& XRopeCamera() const;
 	CraneRopeCamera& YRopeCamera() const;

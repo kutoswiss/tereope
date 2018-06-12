@@ -87,6 +87,31 @@ void AbstractCraneAxis::WaitUntilCounterReach(int step, short *channels) {
 }
 
 /// <summary>
+/// Method that makes an active wait until the counter value is reached
+/// </summary>
+/// <param name="step"></param>
+/// <param name="channels"></param>
+void AbstractCraneAxis::WaitUntilCounterReach(int step, short *channels, bool *stop_signal) {
+	DWORD current_value = 0;
+	DWORD initial_value = 0;
+
+	*stop_signal = false;
+	CntStartCount(this->_cnt_id, channels, 1);
+	CntReadCount(this->_cnt_id, channels, 1, &initial_value);
+	CntReadCount(this->_cnt_id, channels, 1, &current_value);
+
+	// Wait until the expected value is reached
+	while (std::abs(static_cast<long>(current_value - initial_value)) < std::abs(step)) {
+		CntReadCount(this->_cnt_id, channels, 1, &current_value);
+		if (*stop_signal)
+			break;
+	}
+
+	*stop_signal = false;
+	CntStopCount(this->_cnt_id, channels, 1);
+}
+
+/// <summary>
 /// 
 /// </summary>
 /// <param name="axis"></param>

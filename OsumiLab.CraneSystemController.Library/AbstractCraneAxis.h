@@ -36,6 +36,7 @@ public:
 protected:
 	// Protected methods
 	void WaitUntilCounterReach(int step, short *channels);
+	void WaitUntilCounterReach(int step, short *channels, bool *stop_signal);
 	int GetAioChannelFromAxis(Axis axis);
 	int GetCntChannelFromAxis(Axis axis);
 

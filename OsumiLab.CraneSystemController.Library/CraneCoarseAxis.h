@@ -18,9 +18,12 @@ public:
 
 	// Public methods
 	void MoveXThread(int& step, double& voltage);
+	void MoveYThread(int& step, double& voltage);
 
 private:
 	std::unique_ptr<std::thread> _x_axis_thread;
-	//std::unique_ptr<std::thread> _y_axis_thread;
+	std::unique_ptr<std::thread> _y_axis_thread;
+	bool _x_stop_signal = false;
+	bool _y_stop_signal = false;
 };
 
