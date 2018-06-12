@@ -64,6 +64,19 @@ void CraneCoarseAxis::SetEnableVoltage(Axis a, const double voltage) {
 /// <param name="step">Number of steps to move</param>
 void CraneCoarseAxis::Move(Axis a, int step, double voltage) {
 	switch (a) {
+	case X: this->MoveX(step, voltage); break;
+	case Y: this->MoveY(step, voltage); break;
+	}
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="a"></param>
+/// <param name="step"></param>
+/// <param name="voltage"></param>
+void CraneCoarseAxis::MoveThread(Axis a, int step, double voltage) {
+	switch (a) {
 	case X:
 		this->Stop(a);
 		this->_x_axis_thread = std::make_unique<std::thread>(
@@ -81,22 +94,34 @@ void CraneCoarseAxis::Move(Axis a, int step, double voltage) {
 /// 
 /// </summary>
 /// <param name="a"></param>
+/// <returns></returns>
+void CraneCoarseAxis::WaitUntilFinish(Axis a) {
+	switch (a) {
+	case X:
+		if ((this->_x_axis_thread != nullptr) && this->_x_axis_thread->joinable()) 
+			this->_x_axis_thread->join();
+		
+		break;
+	case Y: 
+		if ((this->_y_axis_thread != nullptr) && this->_y_axis_thread->joinable())
+			this->_y_axis_thread->join();
+	};
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="a"></param>
 void CraneCoarseAxis::Stop(Axis a) {
 	short aio = this->GetAioChannelFromAxis(a);
 	AioSingleAoEx(this->_aio_id, aio, 0);
 
 	switch (a) {
-	case X:
-		this->_x_stop_signal = true;
-		if ((this->_x_axis_thread != nullptr) && this->_x_axis_thread->joinable())
-			this->_x_axis_thread->join();
-		break;
-	case Y:
-		this->_y_stop_signal = true;
-		if ((this->_y_axis_thread != nullptr) && this->_y_axis_thread->joinable())
-			this->_y_axis_thread->join();
-		break;
+	case X: this->_x_stop_signal = true; break;
+	case Y: this->_y_stop_signal = true; break;
 	}
+
+	this->WaitUntilFinish(a);
 }
 
 /// <summary>
@@ -109,8 +134,10 @@ void CraneCoarseAxis::MoveX(int step, double voltage) {
 	short cnt = this->GetCntChannelFromAxis(Axis::X);
 
 	this->SetVoltage(voltage);
+	double v = this->_voltage * ((step < 0) ? 1 : -1);
+
 	this->Enable(Axis::X);
-	AioSingleAoEx(this->_aio_id, aio, this->_voltage * ((step < 0) ? 1 : -1));
+	AioSingleAoEx(this->_aio_id, aio, v);
 	this->WaitUntilCounterReach(step, &cnt, &(this->_x_stop_signal));
 	AioSingleAoEx(this->_aio_id, aio, 0);
 	this->Disable(Axis::X);
@@ -126,8 +153,10 @@ void CraneCoarseAxis::MoveY(int step, double voltage) {
 	short cnt = this->GetCntChannelFromAxis(Axis::Y);
 
 	this->SetVoltage(voltage);
+	double v = this->_voltage * ((step < 0) ? 1 : -1);
+
 	this->Enable(Axis::Y);
-	AioSingleAoEx(this->_aio_id, aio, this->_voltage * ((step < 0) ? 1 : -1));
+	AioSingleAoEx(this->_aio_id, aio, v);
 	this->WaitUntilCounterReach(step, &cnt, &(this->_y_stop_signal));
 	AioSingleAoEx(this->_aio_id, aio, 0);
 	this->Disable(Axis::Y);
@@ -153,5 +182,3 @@ void CraneCoarseAxis::MoveXThread(int& step, double& voltage) {
 void CraneCoarseAxis::MoveYThread(int& step, double& voltage) {
 	this->MoveY(step, voltage);
 }
-
-

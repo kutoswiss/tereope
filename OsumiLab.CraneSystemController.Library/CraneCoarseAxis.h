@@ -19,6 +19,8 @@ public:
 	void Stop(Axis a);
 
 	// Public methods
+	void MoveThread(Axis a, int step, double voltage = 0);
+	void WaitUntilFinish(Axis a);
 	void MoveX(int step, double voltage);
 	void MoveY(int step, double voltage);
 	
@@ -27,8 +29,8 @@ private:
 	void Enable(Axis a);
 	void Disable(Axis a);
 	void SetEnableVoltage(Axis a, const double voltage);
-	void MoveXThread(int& step, double& voltage);
-	void MoveYThread(int& step, double& voltage);
+	void MoveXThread(int &step, double &voltage);
+	void MoveYThread(int &step, double &voltage);
 
 	// Private members
 	std::unique_ptr<std::thread> _x_axis_thread;

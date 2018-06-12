@@ -22,8 +22,8 @@ void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_de
 void MultipleFramesCaptureThread(Crane &crane, CraneSceneCamera &camera, bool &end);
 
 int main() {
-	Crane c;
-	c.CoarseAxis().MoveY(3000, 0.2);
+	//Crane c1;
+	//c1.CoarseAxis().MoveY(3000, 0.2);
 	//ObstacleAvoidanceDemo();
 	//Crane c;
 	//c.Rope().Move(Axis::Z, -1000, 4);
@@ -35,21 +35,30 @@ int main() {
 
 	//c.Rope().Move(Axis::Z, -2000, 4);
 	//c.CoarseAxis().MoveX(1000, 0.2);
-	//int x_val = 0;
-	//std::string input;
-	//while (true) {
-	//	std::cout << "> ";
-	//	std::cin >> input;
-	//	if (input == "x") {
-	//		std::cout << "> Enter X value: ";
-	//		std::cin >> x_val;
-	//		c.CoarseAxis().Move(Axis::X, x_val, 0.2);
-	//	}
-	//	else if (input == "stop")
-	//		c.CoarseAxis().Stop(Axis::X);
-	//	else if (input == "quit")
-	//		break;
-	//}
+
+	Crane c;
+	int x_val = 0;
+	int y_val = 0;
+
+	std::string input;
+	while (true) {
+		std::cout << "> ";
+		std::cin >> input;
+		if (input == "x") {
+			std::cout << "> Enter X value: ";
+			std::cin >> x_val;
+			c.CoarseAxis().MoveThread(Axis::X, x_val, 0.5);
+		}
+		else if (input == "y") {
+			std::cout << "> Enter Y value: ";
+			std::cin >> y_val;
+			c.CoarseAxis().MoveThread(Axis::Y, y_val, 0.2);
+		}
+		else if (input == "stop")
+			c.CoarseAxis().Stop(Axis::X);
+		else if (input == "quit")
+			break;
+	}
 
 	////std::thread t1(Test);
 	//std::unique_ptr<std::thread> t1;
