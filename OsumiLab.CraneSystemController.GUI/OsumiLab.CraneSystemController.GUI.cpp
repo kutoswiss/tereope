@@ -20,29 +20,36 @@ void StereoCorrespondance(int steps);
 void ObstaclesDetectionDemo();
 void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_detection);
 void MultipleFramesCaptureThread(Crane &crane, CraneSceneCamera &camera, bool &end);
-void Test()
-{
-	printf("hello\n");
-}
 
 int main() {
 	Crane c;
+	c.CoarseAxis().MoveY(3000, 0.2);
+	//ObstacleAvoidanceDemo();
+	//Crane c;
+	//c.Rope().Move(Axis::Z, -1000, 4);
+	//c.Rope().CalibratePresetValue();
 
-	int x_val = 0;
-	std::string input;
-	while (true) {
-		std::cout << "> ";
-		std::cin >> input;
-		if (input == "x") {
-			std::cout << "> Enter X value: ";
-			std::cin >> x_val;
-			c.CoarseAxis().Move(Axis::X, x_val, 0.2);
-		}
-		else if (input == "stop")
-			c.CoarseAxis().Stop(Axis::X);
-		else if (input == "quit")
-			break;
-	}
+	//c.Rope().ElevateTo(0.3, 4);
+	//c.Rope().MoveTo(1000, 4);
+	//c.Rope().CalibratePresetValue();
+
+	//c.Rope().Move(Axis::Z, -2000, 4);
+	//c.CoarseAxis().MoveX(1000, 0.2);
+	//int x_val = 0;
+	//std::string input;
+	//while (true) {
+	//	std::cout << "> ";
+	//	std::cin >> input;
+	//	if (input == "x") {
+	//		std::cout << "> Enter X value: ";
+	//		std::cin >> x_val;
+	//		c.CoarseAxis().Move(Axis::X, x_val, 0.2);
+	//	}
+	//	else if (input == "stop")
+	//		c.CoarseAxis().Stop(Axis::X);
+	//	else if (input == "quit")
+	//		break;
+	//}
 
 	////std::thread t1(Test);
 	//std::unique_ptr<std::thread> t1;
@@ -52,8 +59,6 @@ int main() {
 	//t1 = std::make_unique<std::thread>(Test);
 	//t1->join();
 
-	
-	
 	//StereoCorrespondance(8000);
 
 	//c.Rope().ElevateTo(0, 4);
@@ -85,7 +90,7 @@ void ObstacleAvoidanceDemo() {
 	obstacle_detection.Detect();
 	std::vector<Obstacle> o1 = obstacle_detection.GetObstacles();
 
-	crane.CoarseAxis().Move(Axis::X, -8000, 0.2);
+	crane.CoarseAxis().MoveX(-8000, 0.2);
 
 	cv::Mat m2 = crane.RightSceneCamera().GetMat(CV_8UC1);
 	obstacle_detection.SetRawFrame(m2);
@@ -95,9 +100,9 @@ void ObstacleAvoidanceDemo() {
 	correspondence.SetSamples(o1, o2);
 	std::vector<StereoObstacle> o = correspondence.Match();
 	if (o.size() > 0) {
-		double m = o[0].GetHeight() + 0.1;
+		double m = o[0].GetHeight() + 0.05;
 		crane.Rope().ElevateTo(m);
-		crane.CoarseAxis().Move(Axis::X, -30000, 0.5);
+		crane.CoarseAxis().MoveX(-30000, 0.5);
 		crane.Rope().ToGround();
 	}
 }

@@ -71,6 +71,15 @@ void CraneRopeAxis::Move(Axis a, int step, double voltage) {
 /// 
 /// </summary>
 /// <param name="a"></param>
+void CraneRopeAxis::Stop(Axis a) {
+
+}
+
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="a"></param>
 /// <param name="step"></param>
 /// <param name="voltage"></param>
 void CraneRopeAxis::MoveTo(int step, double voltage) {
@@ -121,6 +130,8 @@ void CraneRopeAxis::ElevateTo(double meter, double voltage) {
 /// </summary>
 /// <param name="voltage"></param>
 void CraneRopeAxis::ToGround(double voltage) {
-	this->MoveTo(2000, voltage);
+	this->MoveTo(1000, voltage);
+	this->Move(Axis::Z, 1000, 4);
+	this->Move(Axis::Z, 1000, 4);
 	this->CalibratePresetValue();
 }

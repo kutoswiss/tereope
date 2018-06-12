@@ -113,13 +113,13 @@ void Crane::InitAio(char *device_name) {
 	memset(this->_aio_data, 0.0, sizeof(float) * kAioMaxChannel);
 	AioMultiAoEx(this->_aio_id, kAioMaxChannel, this->_aio_data);
 
-	this->_aio_data[7] = 5.0;		// Voltage for fine axis Y
-	this->_aio_data[8] = 5.0;		// Voltage for fine axis X
-	//this->_aio_data[9] = 5.0;		// Voltage for Coarse axis Y (makes noise)
-	this->_aio_data[10] = 5.0;		// Voltage for Coarse axis X 
-	this->_aio_data[11] = 5.0;		// Voltage for rope
+	//this->_aio_data[7] = 5.0;		// Voltage for fine axis Y
+	//this->_aio_data[8] = 5.0;		// Voltage for fine axis X
+	////this->_aio_data[9] = 5.0;		// Voltage for Coarse axis Y (makes noise)
+	//this->_aio_data[10] = 0.0;		// Voltage for Coarse axis X 
+	//this->_aio_data[11] = 5.0;		// Voltage for rope
 
-	AioMultiAoEx(this->_aio_id, kAioMaxChannel, this->_aio_data);
+	//AioMultiAoEx(this->_aio_id, kAioMaxChannel, this->_aio_data);
 
 	// Set all Axis channels to 0[V]
 	for (size_t i = 0; i <= 4; i++)

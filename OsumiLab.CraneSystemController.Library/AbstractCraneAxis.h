@@ -23,7 +23,7 @@ public:
 	// Virtual methods
 	virtual ~AbstractCraneAxis() {};
 	virtual void Move(Axis a, int step, double voltage = 0) = 0;
-	//virtual void Stop(Axis a) = 0;
+	virtual void Stop(Axis a) = 0;
 
 	// Setters
 	void SetAioChannels(int x, int y, int z);

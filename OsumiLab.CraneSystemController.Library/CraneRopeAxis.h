@@ -22,7 +22,8 @@ public:
 	void ElevateTo(double meter, double voltage = kMaxVoltage);
 	void ToGround(double voltage = kMaxVoltage);
 
-	// Implemented methods
+	// Virtual Implemented methods
 	void Move(Axis a, int step, double voltage = 0);
+	void Stop(Axis a);
 };
 
