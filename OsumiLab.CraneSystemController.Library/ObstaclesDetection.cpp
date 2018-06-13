@@ -8,11 +8,12 @@ ObstaclesDetection::ObstaclesDetection() {
 	this->_bin_threshold = this->kBinaryThresholdValue;
 	this->_canny_threshold = this->kCannyThresholdValue;
 
-	this->_kernel19x19 = cv::getStructuringElement(cv::MORPH_RECT,
-		cv::Size(2 * 9 + 1, 2 * 9 + 1), cv::Point(9, 9));
+	this->_kernel3 = CameraHelper::GetOnesKernel(3);
+	this->_kernel10 = CameraHelper::GetOnesKernel(10);
 
-	this->_kernel3x3 = cv::getStructuringElement(cv::MORPH_RECT,
-		cv::Size(3, 3));
+	this->_rope_load_area.height = this->_rope_load_area.width = 100;
+	this->_rope_load_area.x = 300 - (this->_rope_load_area.width / 2);
+	this->_rope_load_area.y = 325 - (this->_rope_load_area.height / 2);
 }
 
 /// <summary>
@@ -40,6 +41,14 @@ std::vector<Obstacle> ObstaclesDetection::GetObstacles() const {
 /// 
 /// </summary>
 /// <returns></returns>
+Obstacle ObstaclesDetection::GetRopeLoad() const {
+	return this->_rope_load;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
 cv::Mat ObstaclesDetection::GetCannyFrame() const {
     return this->_canny_frame;
 }
@@ -60,6 +69,7 @@ cv::Mat ObstaclesDetection::GetFrameWithRectangles() {
 	this->_raw_frame.copyTo(this->_raw_frame_w_rects);
 	this->_obstacles_draw.SetFrame(this->_raw_frame_w_rects);
 	this->_obstacles_draw.Draw(this->_obstacles);
+	this->_obstacles_draw.DrawObstacle(this->_rope_load, cv::Scalar(255, 0, 0));
     return this->_raw_frame_w_rects;
 }
 
@@ -69,9 +79,9 @@ cv::Mat ObstaclesDetection::GetFrameWithRectangles() {
 /// <param name="frame"></param>
 void ObstaclesDetection::SetRawFrame(cv::Mat &frame) {
     this->_raw_frame = frame;
-	cv::morphologyEx(this->_raw_frame, this->_bin_frame, cv::MORPH_OPEN, this->_kernel19x19);
+	cv::morphologyEx(this->_raw_frame, this->_bin_frame, cv::MORPH_OPEN, this->_kernel10);
     cv::threshold(this->_bin_frame, this->_bin_frame, this->_bin_threshold, 255, cv::THRESH_BINARY);
-	cv::dilate(this->_bin_frame, this->_bin_frame, this->_kernel3x3);
+	cv::dilate(this->_bin_frame, this->_bin_frame, this->_kernel3);
     cv::cvtColor(this->_bin_frame, this->_bin_frame, CV_RGB2GRAY);
     cv::Canny(this->_bin_frame, this->_canny_frame, this->_canny_threshold, 255);
 }
@@ -164,7 +174,25 @@ ObstaclesDetection::CalcRotatedRects(std::vector<std::vector<cv::Point>> contour
 std::vector<Obstacle> 
 ObstaclesDetection::RectsToObstacles(std::vector<cv::RotatedRect> rects) {
     std::vector<Obstacle> obstacles;
-    for (auto it = rects.begin(); it != rects.end(); it++) 
-        obstacles.push_back(Obstacle((*it)));
+    for (auto it = rects.begin(); it != rects.end(); it++) {
+		if (this->IsInsideRopeLoadArea(*it))
+			this->_rope_load = Obstacle(*it);
+		else
+			obstacles.push_back(Obstacle((*it)));
+	}
     return obstacles;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="rect"></param>
+/// <returns></returns>
+bool ObstaclesDetection::IsInsideRopeLoadArea(cv::RotatedRect rect) {
+	bool x_condition = ((rect.center.x > this->_rope_load_area.x) && 
+		(rect.center.x < (this->_rope_load_area.x + this->_rope_load_area.width)));
+	bool y_condition = ((rect.center.y > this->_rope_load_area.y) &&
+		(rect.center.y < (this->_rope_load_area.y + this->_rope_load_area.height)));
+
+	return x_condition && y_condition;
 }

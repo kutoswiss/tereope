@@ -26,3 +26,12 @@ cv::Mat CameraHelper::FrameToCVMat(FramePtr frame, int type) {
 
 	return m;
 }
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="size"></param>
+/// <returns></returns>
+cv::Mat CameraHelper::GetOnesKernel(int size) {
+	return cv::getStructuringElement(cv::MORPH_RECT, cv::Size(size, size));
+}

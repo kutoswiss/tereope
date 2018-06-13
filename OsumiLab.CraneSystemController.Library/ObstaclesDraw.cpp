@@ -1,16 +1,26 @@
 #include "stdafx.h"
 #include "ObstaclesDraw.h"
 
+/// <summary>
+/// 
+/// </summary>
 ObstaclesDraw::ObstaclesDraw() {
 	this->_textinfos = true;
 	this->_corners = true;
 	this->_origins = true;
 }
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="frame"></param>
 ObstaclesDraw::ObstaclesDraw(cv::Mat &frame) : ObstaclesDraw() {
 	this->_frame = frame;
 }
 
+/// <summary>
+/// 
+/// </summary>
 ObstaclesDraw::~ObstaclesDraw() {
 }
 
@@ -30,6 +40,21 @@ void ObstaclesDraw::SetFrame(cv::Mat &frame) {
 void ObstaclesDraw::Draw(std::vector<Obstacle> obstacles, uint tickness) {
 	this->DrawObstacles(obstacles, tickness);
 	this->DrawAdditionnalInfos(obstacles);
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="obstacle"></param>
+/// <param name="tickness"></param>
+void ObstaclesDraw::DrawObstacle(Obstacle obstacle, cv::Scalar color, uint tickness) {
+	// Get points from rotated rectangles
+	std::vector<std::vector<cv::Point>> points;
+	points.push_back(obstacle.ToPoints());
+
+	// Draw polylines from points
+	cv::polylines(this->_frame, points,
+		true, color, tickness, CV_AA);
 }
 
 /// <summary>
@@ -82,6 +107,13 @@ void ObstaclesDraw::DrawCorners(Obstacle obstacle) {
 	cv::circle(this->_frame, obstacle.ToPoints()[1], 2, this->kObstaclesCornerColor, 2);
 	cv::circle(this->_frame, obstacle.ToPoints()[2], 2, this->kObstaclesCornerColor, 2);
 	cv::circle(this->_frame, obstacle.ToPoints()[3], 2, this->kObstaclesCornerColor, 2);
+}
+
+/// <summary>
+/// 
+/// </summary>
+void ObstaclesDraw::DrawRopeLoadArea(cv::Rect2d r) {
+	cv::rectangle(this->_frame, r, cv::Scalar(0, 0, 255), 1, CV_AA);
 }
 
 /// <summary>

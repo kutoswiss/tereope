@@ -62,9 +62,11 @@ void CraneRopeAxis::Move(Axis a, int step, double voltage) {
 	short cnt = this->GetCntChannelFromAxis(a);
 
 	this->SetVoltage(voltage);
+	this->Enable();
 	AioSingleAoEx(this->_aio_id, aio, this->_voltage * ((step < 0) ? -1 : 1));
 	this->WaitUntilCounterReach(step, &cnt);
 	AioSingleAoEx(this->_aio_id, aio, 0);
+	this->Disable();
 }
 
 /// <summary>
@@ -72,7 +74,9 @@ void CraneRopeAxis::Move(Axis a, int step, double voltage) {
 /// </summary>
 /// <param name="a"></param>
 void CraneRopeAxis::Stop(Axis a) {
-
+	short aio = this->GetAioChannelFromAxis(a);
+	AioSingleAoEx(this->_aio_id, aio, 0);
+	this->Disable();
 }
 
 
@@ -131,7 +135,22 @@ void CraneRopeAxis::ElevateTo(double meter, double voltage) {
 /// <param name="voltage"></param>
 void CraneRopeAxis::ToGround(double voltage) {
 	this->MoveTo(1000, voltage);
-	this->Move(Axis::Z, 1000, 4);
-	this->Move(Axis::Z, 1000, 4);
+	this->Move(Axis::Z, 500, 4);
 	this->CalibratePresetValue();
+}
+
+/// <summary>
+/// Enable coarse axis
+/// </summary>
+/// <param name="a"></param>
+void CraneRopeAxis::Enable() {
+	AioSingleAoEx(this->_aio_id, kZEnableChannel, 5.0);
+}
+
+/// <summary>
+/// Disable coarse axis
+/// </summary>
+/// <param name="a"></param>
+void CraneRopeAxis::Disable() {
+	AioSingleAoEx(this->_aio_id, kZEnableChannel, 0.0);
 }

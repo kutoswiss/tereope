@@ -2,6 +2,7 @@
 #include "opencv2\opencv.hpp"
 #include "Obstacle.h"
 #include "ObstaclesDraw.h"
+#include "CameraHelper.h"
 #include <VimbaCPP.h>
 #include <VimbaSystem.hpp>
 #include <iostream>
@@ -30,6 +31,7 @@ public:
     /// </summary>
     /// <returns></returns>
     std::vector<Obstacle> GetObstacles() const;
+	Obstacle GetRopeLoad() const;
     cv::Mat GetCannyFrame() const;
     cv::Mat GetBinaryFrame() const;
     cv::Mat GetFrameWithRectangles();
@@ -54,6 +56,7 @@ private:
 		CalcRotatedRects(std::vector<std::vector<cv::Point>> contours);
     std::vector<Obstacle>
 		RectsToObstacles(std::vector<cv::RotatedRect> rects);
+	bool IsInsideRopeLoadArea(cv::RotatedRect rect);
 
     /// <summary>
     /// Private members
@@ -63,6 +66,10 @@ private:
 	// Vectors
     std::vector<Obstacle> _obstacles;
 
+	// Rope load area
+	cv::Rect2d _rope_load_area;
+	Obstacle _rope_load;
+
 	// Matrices
     cv::Mat _raw_frame;
     cv::Mat _raw_frame_w_rects;
@@ -70,8 +77,8 @@ private:
     cv::Mat _bin_frame;
 
 	// Kernels
-	cv::Mat _kernel3x3;
-	cv::Mat _kernel19x19;
+	cv::Mat _kernel3;
+	cv::Mat _kernel10;
 
 	// Detection parameters
 	uint _bin_threshold;

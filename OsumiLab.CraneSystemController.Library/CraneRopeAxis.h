@@ -11,6 +11,7 @@ public:
 
 	// Constants
 	static constexpr double kMaxVoltage = 4.0;
+	const int kZEnableChannel = 11;
 
 	// Static methods
 	static double MeterToEncoderStep(double m);
@@ -25,5 +26,10 @@ public:
 	// Virtual Implemented methods
 	void Move(Axis a, int step, double voltage = 0);
 	void Stop(Axis a);
+
+private:
+	// Private methods
+	void Enable();
+	void Disable();
 };
 

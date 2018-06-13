@@ -11,5 +11,6 @@ class CameraHelper
 {
 public:
 	static cv::Mat FrameToCVMat(FramePtr frame, int type);
+	static cv::Mat GetOnesKernel(int size);
 };
 

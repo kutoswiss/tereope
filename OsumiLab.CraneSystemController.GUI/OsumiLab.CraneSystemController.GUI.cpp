@@ -20,22 +20,17 @@ void StereoCorrespondance(int steps);
 void ObstaclesDetectionDemo();
 void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_detection);
 void MultipleFramesCaptureThread(Crane &crane, CraneSceneCamera &camera, bool &end);
+void CLIController();
+
 
 int main() {
-	//Crane c1;
-	//c1.CoarseAxis().MoveY(3000, 0.2);
-	//ObstacleAvoidanceDemo();
 	//Crane c;
-	//c.Rope().Move(Axis::Z, -1000, 4);
-	//c.Rope().CalibratePresetValue();
+	//c.Rope().ToGround(4);
+	ObstaclesDetectionDemo();
+    return 0;
+}
 
-	//c.Rope().ElevateTo(0.3, 4);
-	//c.Rope().MoveTo(1000, 4);
-	//c.Rope().CalibratePresetValue();
-
-	//c.Rope().Move(Axis::Z, -2000, 4);
-	//c.CoarseAxis().MoveX(1000, 0.2);
-
+void CLIController() {
 	Crane c;
 	int x_val = 0;
 	int y_val = 0;
@@ -54,36 +49,21 @@ int main() {
 			std::cin >> y_val;
 			c.CoarseAxis().MoveThread(Axis::Y, y_val, 0.2);
 		}
+		else if (input == "xy") {
+			std::cout << "> Enter X value: ";
+			std::cin >> x_val;
+			std::cout << "> Enter Y value: ";
+			std::cin >> y_val;
+			c.CoarseAxis().MoveThread(Axis::X, x_val, 0.5);
+			c.CoarseAxis().MoveThread(Axis::Y, y_val, 0.5);
+		}
 		else if (input == "stop")
 			c.CoarseAxis().Stop(Axis::X);
 		else if (input == "quit")
 			break;
 	}
-
-	////std::thread t1(Test);
-	//std::unique_ptr<std::thread> t1;
-	//t1 = std::make_unique<std::thread>(Test);
-	//t1->join();
-
-	//t1 = std::make_unique<std::thread>(Test);
-	//t1->join();
-
-	//StereoCorrespondance(8000);
-
-	//c.Rope().ElevateTo(0, 4);
-	//c.Rope().Move(Axis::Z, 1000, 4);
-	/*c.Rope().CalibratePresetValue();	
-	double m = CraneRopeAxis::MeterToEncoderStep(0.3);
-	c.Rope().MoveTo(m, 4);*/
-	//c.Rope().MoveTo(1000, 4);
-	//c.Rope().MoveTo(1000, 4);
-	/*c.CoarseAxis().Move(Axis::X, -8000, 0.5);
-	c.FineAxis().Move(Axis::Y, -2000, 0.5);
-	c.FineAxis().Move(Axis::Y, 2000, 0.5);*/
-	//c.Rope().Move(Axis::Z, -10000, 4);
-	//StereoCorrespondance();
-    return 0;
 }
+
 
 /// <summary>
 /// 
