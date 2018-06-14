@@ -21,30 +21,37 @@ void ObstaclesDetectionDemo();
 void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_detection);
 void MultipleFramesCaptureThread(Crane &crane, CraneSceneCamera &camera, bool &end);
 void CLIController();
-
+void ObstacleCollisionDetectionThread(Crane &crane, ObstaclesDetection &detector);
 
 int main() {
 	//Crane c;
 	//c.Rope().ToGround(4);
 	ObstaclesDetectionDemo();
+	CLIController();
     return 0;
 }
 
 void CLIController() {
 	Crane c;
+	ObstaclesDetection detector;
+	detector.SetBinaryThreshold(35);
 	int x_val = 0;
 	int y_val = 0;
+	std::thread collision_thread(
+		ObstacleCollisionDetectionThread,
+		std::ref(c),
+		std::ref(detector));
 
 	std::string input;
 	while (true) {
 		std::cout << "> ";
 		std::cin >> input;
-		if (input == "x") {
+		if ((input == "x") && !detector.IsCollided()) {
 			std::cout << "> Enter X value: ";
 			std::cin >> x_val;
 			c.CoarseAxis().MoveThread(Axis::X, x_val, 0.5);
 		}
-		else if (input == "y") {
+		else if ((input == "y") && !detector.IsCollided()) {
 			std::cout << "> Enter Y value: ";
 			std::cin >> y_val;
 			c.CoarseAxis().MoveThread(Axis::Y, y_val, 0.2);
@@ -57,11 +64,15 @@ void CLIController() {
 			c.CoarseAxis().MoveThread(Axis::X, x_val, 0.5);
 			c.CoarseAxis().MoveThread(Axis::Y, y_val, 0.5);
 		}
-		else if (input == "stop")
+		else if (input == "stop") {
 			c.CoarseAxis().Stop(Axis::X);
+			std::cout << c.CoarseAxis().GetCntValue(Axis::X) << std::endl;
+		}
 		else if (input == "quit")
 			break;
 	}
+
+	collision_thread.join();
 }
 
 
@@ -164,6 +175,25 @@ void ObstaclesDetectionDemo() {
 /// <summary>
 /// 
 /// </summary>
+/// <param name="crane"></param>
+/// <param name="detector"></param>
+void ObstacleCollisionDetectionThread(Crane &crane, ObstaclesDetection &detector) {
+	while (true) {
+		cv::Mat m1 = crane.RightSceneCamera().GetMat(CV_8UC1);
+		detector.SetRawFrame(m1);
+		detector.Detect();
+		detector.GetFrameWithRectangles();
+		if (detector.IsCollided()) {
+			crane.CoarseAxis().Stop(Axis::X);
+			std::cout << "Collision detected." << std::endl;
+			break;
+		}
+	}
+}
+
+/// <summary>
+/// 
+/// </summary>
 /// <param name="camera"></param>
 /// <param name="obstacle_detection"></param>
 void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_detection) {
@@ -177,9 +207,6 @@ void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_de
 	int binary_thr = ObstaclesDetection::kBinaryThresholdValue;
 	int n_obstacles, pre_n_obstacles = 0;
 	cv::namedWindow(kWindowTitle, cv::WINDOW_AUTOSIZE);
-	cv::namedWindow(kBinaryWinTitle, cv::WINDOW_AUTOSIZE);
-	cv::namedWindow(kCannyWinTitle, cv::WINDOW_AUTOSIZE);
-	cv::namedWindow(kRawWinTitle, cv::WINDOW_AUTOSIZE);
 
 	cv::createTrackbar("Binary Thr.", kWindowTitle, &binary_thr, 255, NULL);
 	int i = 0;
@@ -192,16 +219,12 @@ void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_de
 		n_obstacles = obstacle_detection.Detect();
 		if (n_obstacles != pre_n_obstacles)
 			obstacle_detection.PrintDetect();
-
+		
 		cv::imshow(kWindowTitle, obstacle_detection.GetFrameWithRectangles());
-		cv::imshow(kBinaryWinTitle, obstacle_detection.GetBinaryFrame());
-		cv::imshow(kCannyWinTitle, obstacle_detection.GetCannyFrame());
-		cv::imshow(kRawWinTitle, frame_mat);
-
-		if (cv::waitKey(15) >= 0)
-			break;
-
 		pre_n_obstacles = n_obstacles;
+		std::cout << (obstacle_detection.IsCollided() ? "Collision detected." : "Collision free") << std::endl;
+		if (cv::waitKey(15) >= 0) 
+			break;
 	}
 
 	cv::destroyAllWindows();

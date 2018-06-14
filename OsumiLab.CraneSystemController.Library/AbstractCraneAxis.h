@@ -32,6 +32,7 @@ public:
 	void SetAioID(short id);
 	void SetCntID(short id);
 	void SetVoltage(double voltage);
+	int GetCntValue(Axis a);
 
 protected:
 	// Protected methods
@@ -51,4 +52,6 @@ private:
 	// Private members
 	int _axis_aio_channels[3];
 	int _axis_cnt_channels[3];
+	DWORD _current_value = 0;
+	DWORD _initial_value = 0;
 };

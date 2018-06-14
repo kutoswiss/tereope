@@ -26,6 +26,7 @@ public:
 	void DrawObstacle(Obstacle obstacle, cv::Scalar color, uint tickness = kObstaclesPolygonTickness);
 	void DrawObstacles(std::vector<Obstacle> obstacles, uint tickness = kObstaclesPolygonTickness);
 	void DrawAdditionnalInfos(std::vector<Obstacle> obstacles);
+	void DrawRopeLoadArea(cv::Rect2d r);
 
 private:
 	/// <summary>
@@ -35,7 +36,6 @@ private:
 	void DrawTextInfos(Obstacle obstacle);
 	void DrawOrigin(Obstacle obstacle);
 	void DrawCorners(Obstacle obstacle);
-	void DrawRopeLoadArea(cv::Rect2d r);
 
 	/// <summary>
 	/// Private members

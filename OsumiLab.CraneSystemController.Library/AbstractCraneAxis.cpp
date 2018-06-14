@@ -71,16 +71,16 @@ void AbstractCraneAxis::SetVoltage(double voltage) {
 /// <param name="step"></param>
 /// <param name="channels"></param>
 void AbstractCraneAxis::WaitUntilCounterReach(int step, short *channels) {
-	DWORD current_value = 0;
-	DWORD initial_value = 0;
+	this->_current_value = 0;
+	this->_initial_value = 0;
 
 	CntStartCount(this->_cnt_id, channels, 1);
-	CntReadCount(this->_cnt_id, channels, 1, &initial_value);
-	CntReadCount(this->_cnt_id, channels, 1, &current_value);
+	CntReadCount(this->_cnt_id, channels, 1, &_initial_value);
+	CntReadCount(this->_cnt_id, channels, 1, &_current_value);
 
 	// Wait until the expected value is reached
-	while (std::abs(static_cast<long>(current_value - initial_value)) < std::abs(step)) {
-		CntReadCount(this->_cnt_id, channels, 1, &current_value);
+	while (std::abs(static_cast<long>(_current_value - _initial_value)) < std::abs(step)) {
+		CntReadCount(this->_cnt_id, channels, 1, &_current_value);
 	}
 
 	CntStopCount(this->_cnt_id, channels, 1);
@@ -92,17 +92,17 @@ void AbstractCraneAxis::WaitUntilCounterReach(int step, short *channels) {
 /// <param name="step"></param>
 /// <param name="channels"></param>
 void AbstractCraneAxis::WaitUntilCounterReach(int step, short *channels, bool *stop_signal) {
-	DWORD current_value = 0;
-	DWORD initial_value = 0;
+	this->_current_value = 0;
+	this->_initial_value = 0;
 
 	*stop_signal = false;
 	CntStartCount(this->_cnt_id, channels, 1);
-	CntReadCount(this->_cnt_id, channels, 1, &initial_value);
-	CntReadCount(this->_cnt_id, channels, 1, &current_value);
+	CntReadCount(this->_cnt_id, channels, 1, &_initial_value);
+	CntReadCount(this->_cnt_id, channels, 1, &_current_value);
 
 	// Wait until the expected value is reached
-	while (std::abs(static_cast<long>(current_value - initial_value)) < std::abs(step)) {
-		CntReadCount(this->_cnt_id, channels, 1, &current_value);
+	while (std::abs(static_cast<long>(_current_value - _initial_value)) < std::abs(step)) {
+		CntReadCount(this->_cnt_id, channels, 1, &_current_value);
 		if (*stop_signal)
 			break;
 	}
@@ -127,4 +127,13 @@ int AbstractCraneAxis::GetAioChannelFromAxis(Axis axis) {
 /// <returns></returns>
 int AbstractCraneAxis::GetCntChannelFromAxis(Axis axis) {
 	return this->_axis_cnt_channels[axis];
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="a"></param>
+/// <returns></returns>
+int AbstractCraneAxis::GetCntValue(Axis a) {
+	return std::abs(static_cast<int>(this->_current_value - this->_initial_value));
 }

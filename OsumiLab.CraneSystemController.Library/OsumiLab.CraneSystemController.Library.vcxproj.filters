@@ -81,6 +81,9 @@
     <ClInclude Include="ObstaclesCorrespondence.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RopeLoadArea.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -132,6 +135,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ObstaclesCorrespondence.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RopeLoadArea.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

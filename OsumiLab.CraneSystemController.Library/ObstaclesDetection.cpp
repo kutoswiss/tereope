@@ -11,6 +11,7 @@ ObstaclesDetection::ObstaclesDetection() {
 	this->_kernel3 = CameraHelper::GetOnesKernel(3);
 	this->_kernel10 = CameraHelper::GetOnesKernel(10);
 
+	// Define rope load area
 	this->_rope_load_area.height = this->_rope_load_area.width = 100;
 	this->_rope_load_area.x = 300 - (this->_rope_load_area.width / 2);
 	this->_rope_load_area.y = 325 - (this->_rope_load_area.height / 2);
@@ -70,7 +71,18 @@ cv::Mat ObstaclesDetection::GetFrameWithRectangles() {
 	this->_obstacles_draw.SetFrame(this->_raw_frame_w_rects);
 	this->_obstacles_draw.Draw(this->_obstacles);
 	this->_obstacles_draw.DrawObstacle(this->_rope_load, cv::Scalar(255, 0, 0));
+	this->_obstacles_draw.DrawRopeLoadArea(this->_rope_load_area);
+	this->_collide = this->ObstaclesInsideRopeArea();
+
     return this->_raw_frame_w_rects;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+bool ObstaclesDetection::IsCollided() const {
+	return this->_collide;
 }
 
 /// <summary>
@@ -195,4 +207,122 @@ bool ObstaclesDetection::IsInsideRopeLoadArea(cv::RotatedRect rect) {
 		(rect.center.y < (this->_rope_load_area.y + this->_rope_load_area.height)));
 
 	return x_condition && y_condition;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="obstacle"></param>
+/// <returns></returns>
+bool ObstaclesDetection::CollideWithRopeLoadArea(Obstacle obstacle) {
+	auto pts1 = obstacle.ToPoints();
+	std::vector<cv::Point> pts2;
+	pts2.push_back(cv::Point(this->_rope_load_area.x, this->_rope_load_area.y));
+	pts2.push_back(cv::Point(this->_rope_load_area.x, 
+		this->_rope_load_area.y + this->_rope_load_area.height));
+	pts2.push_back(cv::Point(this->_rope_load_area.x + this->_rope_load_area.width, 
+		this->_rope_load_area.y));
+	pts2.push_back(cv::Point(this->_rope_load_area.x + this->_rope_load_area.width, 
+		this->_rope_load_area.y + this->_rope_load_area.height));
+
+	return this->LinesIntersect(pts1, pts2);
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="l1"></param>
+/// <param name="l2"></param>
+/// <returns></returns>
+bool ObstaclesDetection::LineIntersect(std::tuple<cv::Point, cv::Point> l1, std::tuple<cv::Point, cv::Point> l2) {
+	double x1_0 = std::get<0>(l1).x;
+	double y1_0 = std::get<0>(l1).y;
+	double x2_0 = std::get<1>(l1).x;
+	double y2_0 = std::get<1>(l1).y;
+
+	double x1_1 = std::get<0>(l2).x;
+	double y1_1 = std::get<0>(l2).y;
+	double x2_1 = std::get<1>(l2).x;
+	double y2_1 = std::get<1>(l2).y;
+
+	double A0 = y2_0 - y1_0;
+	double B0 = x1_0 - x2_0;
+	double C0 = A0*x1_0 + B0*y1_0;
+
+	double A1 = y2_1 - y1_1;
+	double B1 = x1_1 - x2_1;
+	double C1 = A1*x1_1 + B0*y1_1;
+
+	double det = A0 * B1 - A1 * B0;
+
+	if (det != 0) {
+		double x_intersect = (B1*C0 - B0*C1) / det;
+		double y_intersect = (A0*C1 - A1*C0) / det;
+
+		bool x_condition = (x_intersect >= (x1_1 - 5)) && (x_intersect <= (x2_1 + 5));
+			//&& (x_intersect >= (x1_0 - 5)) && (x_intersect <= (x2_0 + 5));
+
+		bool y_condition = (y_intersect >= (y1_1 - 5)) && (y_intersect <= (y2_1 + 5));
+			//&& (y_intersect >= (y1_0 - 5)) && (y_intersect <= (y2_0 + 5));
+
+		return (x_condition && y_condition);
+	} else 
+		return false;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="p1"></param>
+/// <param name="p2"></param>
+/// <returns></returns>
+bool ObstaclesDetection::LinesIntersect(std::vector<cv::Point> p1, std::vector<cv::Point> p2) {
+	auto lines_1 = this->GetLines(p1);
+	auto lines_2 = this->GetLines(p2);
+	bool res = false;
+
+	for (auto l1 = lines_1.begin(); l1 < lines_1.end(); l1++) {
+		for (auto l2 = lines_2.begin(); l2 < lines_2.end(); l2++) {
+			res |= this->LineIntersect((*l1), (*l2));
+		}
+	}
+	
+	return res;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="pts"></param>
+/// <returns></returns>
+std::vector<std::tuple<cv::Point, cv::Point>>
+ObstaclesDetection::GetLines(std::vector<cv::Point> pts) {
+	std::vector<std::tuple<cv::Point, cv::Point>> lines;
+
+	for (auto p = pts.begin(); p != pts.end(); p++) {
+		for (auto tmp = pts.begin(); tmp < pts.end(); tmp++) {
+			if ((*p) != (*tmp))
+				lines.push_back(std::make_tuple((*p), (*tmp)));
+		}
+	}
+
+	return lines;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+bool ObstaclesDetection::ObstaclesInsideRopeArea(void) {
+	bool res = false;
+	int x_origin = this->_rope_load_area.x;
+	int y_origin = this->_rope_load_area.y;
+
+	for (int y = y_origin; y < (this->_rope_load_area.height + y_origin); y++) {
+		for (int x = x_origin; x < (this->_rope_load_area.width + x_origin); x++) {
+			cv::Vec3b c = this->_raw_frame_w_rects.at<cv::Vec3b>(y, x);
+			res |= (c.val[1] >= 240);
+		}
+	}
+	return res;
 }

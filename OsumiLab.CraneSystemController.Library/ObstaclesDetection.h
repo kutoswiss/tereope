@@ -35,9 +35,16 @@ public:
     cv::Mat GetCannyFrame() const;
     cv::Mat GetBinaryFrame() const;
     cv::Mat GetFrameWithRectangles();
+	bool IsCollided() const;
 	void SetRawFrame(cv::Mat &frame);
 	void SetBinaryThreshold(uint threshold);
 	void SetCannyThreshold(uint threshold);
+
+	bool IsInsideRopeLoadArea(cv::RotatedRect rect);
+	bool CollideWithRopeLoadArea(Obstacle obstacle);
+	bool LineIntersect(std::tuple<cv::Point, cv::Point> l1, std::tuple<cv::Point, cv::Point> l2);
+	bool LinesIntersect(std::vector<cv::Point> p1, std::vector<cv::Point> p2);
+	std::vector<std::tuple<cv::Point, cv::Point>> GetLines(std::vector<cv::Point> pts);
 
     /// <summary>
     /// Public methods
@@ -56,7 +63,8 @@ private:
 		CalcRotatedRects(std::vector<std::vector<cv::Point>> contours);
     std::vector<Obstacle>
 		RectsToObstacles(std::vector<cv::RotatedRect> rects);
-	bool IsInsideRopeLoadArea(cv::RotatedRect rect);
+	bool ObstaclesInsideRopeArea(void);
+
 
     /// <summary>
     /// Private members
@@ -83,4 +91,5 @@ private:
 	// Detection parameters
 	uint _bin_threshold;
 	uint _canny_threshold;
+	bool _collide = false;
 };
