@@ -5,7 +5,7 @@
 /// 
 /// </summary>
 ObstaclesDraw::ObstaclesDraw() {
-	this->_textinfos = true;
+	this->_textinfos = false;
 	this->_corners = true;
 	this->_origins = true;
 }

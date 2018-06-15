@@ -12,7 +12,7 @@ ObstaclesDetection::ObstaclesDetection() {
 	this->_kernel10 = CameraHelper::GetOnesKernel(10);
 
 	// Define rope load area
-	this->_rope_load_area.height = this->_rope_load_area.width = 100;
+	this->_rope_load_area.height = this->_rope_load_area.width = 200;
 	this->_rope_load_area.x = 300 - (this->_rope_load_area.width / 2);
 	this->_rope_load_area.y = 325 - (this->_rope_load_area.height / 2);
 }
@@ -206,7 +206,10 @@ bool ObstaclesDetection::IsInsideRopeLoadArea(cv::RotatedRect rect) {
 	bool y_condition = ((rect.center.y > this->_rope_load_area.y) &&
 		(rect.center.y < (this->_rope_load_area.y + this->_rope_load_area.height)));
 
-	return x_condition && y_condition;
+	bool width_condition = (rect.size.width < (this->_rope_load_area.width/2));
+	bool height_condition = (rect.size.height < (this->_rope_load_area.height/2));
+
+	return x_condition && y_condition && width_condition && height_condition;
 }
 
 /// <summary>

@@ -33,6 +33,11 @@ CraneCoarseAxis::~CraneCoarseAxis() {
 /// </summary>
 /// <param name="a"></param>
 void CraneCoarseAxis::Enable(Axis a) {
+	// Little hack against remaining voltage
+	// It works for the moment.
+	this->SetEnableVoltage(a, -10.0); 
+
+	// Enable the axis
 	this->SetEnableVoltage(a, 5.0);
 }
 

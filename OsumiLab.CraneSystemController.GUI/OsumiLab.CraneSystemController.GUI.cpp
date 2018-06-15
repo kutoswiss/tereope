@@ -14,7 +14,7 @@
 #include <chrono>    
 #include <string>
 
-void ObstacleAvoidanceDemo();
+void ObstacleAvoidanceDemo(int steps);
 void MultipleFramesCapture(int step);
 void StereoCorrespondance(int steps);
 void ObstaclesDetectionDemo();
@@ -25,14 +25,16 @@ void ObstacleCollisionDetectionThread(Crane &crane, ObstaclesDetection &detector
 
 int main() {
 	//Crane c;
-	//c.Rope().ToGround(4);
+	//c.Rope().Move(Axis::Z, -1000, 4);
+	//c.Rope().CalibratePresetValue();
 	ObstaclesDetectionDemo();
-	CLIController();
+	//CLIController();
     return 0;
 }
 
 void CLIController() {
 	Crane c;
+	c.Rope().CalibratePresetValue();
 	ObstaclesDetection detector;
 	detector.SetBinaryThreshold(35);
 	int x_val = 0;
@@ -46,12 +48,12 @@ void CLIController() {
 	while (true) {
 		std::cout << "> ";
 		std::cin >> input;
-		if ((input == "x") && !detector.IsCollided()) {
+		if (input == "x") {
 			std::cout << "> Enter X value: ";
 			std::cin >> x_val;
-			c.CoarseAxis().MoveThread(Axis::X, x_val, 0.5);
+			c.CoarseAxis().MoveThread(Axis::X, x_val, 0.2);
 		}
-		else if ((input == "y") && !detector.IsCollided()) {
+		else if (input == "y") {
 			std::cout << "> Enter Y value: ";
 			std::cin >> y_val;
 			c.CoarseAxis().MoveThread(Axis::Y, y_val, 0.2);
@@ -76,10 +78,12 @@ void CLIController() {
 }
 
 
+
+
 /// <summary>
 /// 
 /// </summary>
-void ObstacleAvoidanceDemo() {
+void ObstacleAvoidanceDemo(int steps) {
 	Crane crane;
 	ObstaclesDetection obstacle_detection;
 	ObstaclesCorrespondence correspondence;
@@ -90,7 +94,7 @@ void ObstacleAvoidanceDemo() {
 	obstacle_detection.Detect();
 	std::vector<Obstacle> o1 = obstacle_detection.GetObstacles();
 
-	crane.CoarseAxis().MoveX(-8000, 0.2);
+	crane.CoarseAxis().MoveX(steps, 0.2);
 
 	cv::Mat m2 = crane.RightSceneCamera().GetMat(CV_8UC1);
 	obstacle_detection.SetRawFrame(m2);
@@ -178,6 +182,7 @@ void ObstaclesDetectionDemo() {
 /// <param name="crane"></param>
 /// <param name="detector"></param>
 void ObstacleCollisionDetectionThread(Crane &crane, ObstaclesDetection &detector) {
+
 	while (true) {
 		cv::Mat m1 = crane.RightSceneCamera().GetMat(CV_8UC1);
 		detector.SetRawFrame(m1);
@@ -186,6 +191,35 @@ void ObstacleCollisionDetectionThread(Crane &crane, ObstaclesDetection &detector
 		if (detector.IsCollided()) {
 			crane.CoarseAxis().Stop(Axis::X);
 			std::cout << "Collision detected." << std::endl;
+			
+			cv::Mat m1 = crane.RightSceneCamera().GetMat(CV_8UC1);
+			detector.SetRawFrame(m1);
+			detector.Detect();
+			std::vector<Obstacle> o1 = detector.GetObstacles();
+			cv::namedWindow("1", cv::WINDOW_AUTOSIZE);
+			cv::imshow("1", detector.GetFrameWithRectangles());
+
+			crane.CoarseAxis().MoveX(-8000, 0.2);
+
+			cv::Mat m2 = crane.RightSceneCamera().GetMat(CV_8UC1);
+			detector.SetRawFrame(m2);
+			detector.Detect();
+			std::vector<Obstacle> o2 = detector.GetObstacles();
+			cv::namedWindow("2", cv::WINDOW_AUTOSIZE);
+			cv::imshow("2", detector.GetFrameWithRectangles());
+
+			ObstaclesCorrespondence correspondence;
+			correspondence.SetSamples(o1, o2);
+			std::vector<StereoObstacle> o = correspondence.Match();
+			cv::waitKey(0);
+			cv::destroyAllWindows();
+
+			if (o.size() > 0) {
+				double m = o[0].GetHeight() + 0.05;
+				crane.Rope().ElevateTo(m);
+				crane.CoarseAxis().MoveX(-30000, 0.5);
+				crane.Rope().ToGround();
+			}
 			break;
 		}
 	}
@@ -222,7 +256,6 @@ void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_de
 		
 		cv::imshow(kWindowTitle, obstacle_detection.GetFrameWithRectangles());
 		pre_n_obstacles = n_obstacles;
-		std::cout << (obstacle_detection.IsCollided() ? "Collision detected." : "Collision free") << std::endl;
 		if (cv::waitKey(15) >= 0) 
 			break;
 	}
