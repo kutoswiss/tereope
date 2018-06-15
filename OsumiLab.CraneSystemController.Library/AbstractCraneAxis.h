@@ -32,6 +32,8 @@ public:
 	void SetAioID(short id);
 	void SetCntID(short id);
 	void SetVoltage(double voltage);
+
+	// Getters
 	int GetCntValue(Axis a);
 
 protected:

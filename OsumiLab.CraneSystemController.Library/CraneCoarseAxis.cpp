@@ -135,6 +135,10 @@ void CraneCoarseAxis::Stop(Axis a) {
 /// <param name="step"></param>
 /// <param name="voltage"></param>
 void CraneCoarseAxis::MoveX(int step, double voltage) {
+	double acceleration_voltage = 0.0;
+	double deceleration_voltage = 0.0;
+	int ramp_steps = 0;
+	int stable_steps = 0;
 	short aio = this->GetAioChannelFromAxis(Axis::X);
 	short cnt = this->GetCntChannelFromAxis(Axis::X);
 
@@ -142,9 +146,24 @@ void CraneCoarseAxis::MoveX(int step, double voltage) {
 	double v = this->_voltage * ((step < 0) ? 1 : -1);
 
 	this->Enable(Axis::X);
+	ramp_steps = (step / 4) / 10;
+	stable_steps = step - (ramp_steps * 10 * 2);
+	for (size_t i = 1; i <= 10; i++) {
+		acceleration_voltage = (v / 10) * i;
+		AioSingleAoEx(this->_aio_id, aio, acceleration_voltage);
+		this->WaitUntilCounterReach(ramp_steps, &cnt, &(this->_x_stop_signal));
+	}
+
 	AioSingleAoEx(this->_aio_id, aio, v);
-	this->WaitUntilCounterReach(step, &cnt, &(this->_x_stop_signal));
+	this->WaitUntilCounterReach(stable_steps, &cnt, &(this->_x_stop_signal));
+
+	for (size_t i = 10; i > 0; i--) {
+		deceleration_voltage = (v / 10) * i;
+		AioSingleAoEx(this->_aio_id, aio, deceleration_voltage);
+		this->WaitUntilCounterReach(ramp_steps, &cnt, &(this->_x_stop_signal));
+	}
 	AioSingleAoEx(this->_aio_id, aio, 0);
+
 	this->Disable(Axis::X);
 }
 

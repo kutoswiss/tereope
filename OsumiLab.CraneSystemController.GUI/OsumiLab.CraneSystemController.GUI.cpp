@@ -27,8 +27,8 @@ int main() {
 	//Crane c;
 	//c.Rope().Move(Axis::Z, -1000, 4);
 	//c.Rope().CalibratePresetValue();
-	ObstaclesDetectionDemo();
-	//CLIController();
+	//ObstaclesDetectionDemo();
+	CLIController();
     return 0;
 }
 
@@ -39,10 +39,10 @@ void CLIController() {
 	detector.SetBinaryThreshold(35);
 	int x_val = 0;
 	int y_val = 0;
-	std::thread collision_thread(
-		ObstacleCollisionDetectionThread,
-		std::ref(c),
-		std::ref(detector));
+	//std::thread collision_thread(
+	//	ObstacleCollisionDetectionThread,
+	//	std::ref(c),
+	//	std::ref(detector));
 
 	std::string input;
 	while (true) {
@@ -51,7 +51,7 @@ void CLIController() {
 		if (input == "x") {
 			std::cout << "> Enter X value: ";
 			std::cin >> x_val;
-			c.CoarseAxis().MoveThread(Axis::X, x_val, 0.2);
+			c.CoarseAxis().MoveThread(Axis::X, x_val, 0.5);
 		}
 		else if (input == "y") {
 			std::cout << "> Enter Y value: ";
@@ -74,10 +74,8 @@ void CLIController() {
 			break;
 	}
 
-	collision_thread.join();
+	//collision_thread.join();
 }
-
-
 
 
 /// <summary>
