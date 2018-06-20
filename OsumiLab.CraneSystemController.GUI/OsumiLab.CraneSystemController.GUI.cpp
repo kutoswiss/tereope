@@ -5,6 +5,7 @@
 #include "ObstaclesDetection.h"
 #include "ObstaclesCorrespondence.h"
 #include "Crane.h"
+#include "RopeVision.h"
 
 #include <vector>
 #include <iostream>
@@ -24,11 +25,33 @@ void CLIController();
 void ObstacleCollisionDetectionThread(Crane &crane, ObstaclesDetection &detector);
 
 int main() {
+	Crane c;
+	RopeVision rv;
+	cv::Mat m = c.XRopeCamera().GetMat(CV_8UC1);
+	rv.SetFrame(m);
+	rv.Compute();
+
+	cv::namedWindow("1", cv::WINDOW_AUTOSIZE);
+
+	while (1) {
+		cv::Mat m = c.XRopeCamera().GetMat(CV_8UC1);
+		rv.SetFrame(m);
+		rv.Compute();
+		cv::imshow("1", rv.GetFrameWithLines());
+		if (cv::waitKey(15) >= 0)
+			break;
+	}
+	cv::destroyAllWindows();
+
+
+
 	//Crane c;
 	//c.Rope().Move(Axis::Z, -1000, 4);
 	//c.Rope().CalibratePresetValue();
 	//ObstaclesDetectionDemo();
-	CLIController();
+	//CLIController();
+	//Crane c;
+	//c.FineAxis().Move(Axis::X, -5000, 0.5);
     return 0;
 }
 
@@ -43,6 +66,7 @@ void CLIController() {
 	//	ObstacleCollisionDetectionThread,
 	//	std::ref(c),
 	//	std::ref(detector));
+
 
 	std::string input;
 	while (true) {
@@ -181,7 +205,6 @@ void ObstaclesDetectionDemo() {
 /// <param name="crane"></param>
 /// <param name="detector"></param>
 void ObstacleCollisionDetectionThread(Crane &crane, ObstaclesDetection &detector) {
-
 	while (true) {
 		cv::Mat m1 = crane.RightSceneCamera().GetMat(CV_8UC1);
 		detector.SetRawFrame(m1);

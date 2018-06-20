@@ -90,12 +90,12 @@ bool ObstaclesDetection::IsCollided() const {
 /// </summary>
 /// <param name="frame"></param>
 void ObstaclesDetection::SetRawFrame(cv::Mat &frame) {
-    this->_raw_frame = frame;
-	cv::morphologyEx(this->_raw_frame, this->_bin_frame, cv::MORPH_OPEN, this->_kernel10);
-    cv::threshold(this->_bin_frame, this->_bin_frame, this->_bin_threshold, 255, cv::THRESH_BINARY);
-	cv::dilate(this->_bin_frame, this->_bin_frame, this->_kernel3);
-    cv::cvtColor(this->_bin_frame, this->_bin_frame, CV_RGB2GRAY);
-    cv::Canny(this->_bin_frame, this->_canny_frame, this->_canny_threshold, 255);
+    _raw_frame = frame;
+	cv::morphologyEx(_raw_frame, _bin_frame, cv::MORPH_OPEN, _kernel10);
+    cv::threshold(_bin_frame, _bin_frame, _bin_threshold, 255, cv::THRESH_BINARY);
+	cv::dilate(_bin_frame, _bin_frame, _kernel3);
+    cv::cvtColor(_bin_frame, _bin_frame, CV_RGB2GRAY);
+    cv::Canny(_bin_frame, _canny_frame, _canny_threshold, 255);
 }
 
 /// <summary>

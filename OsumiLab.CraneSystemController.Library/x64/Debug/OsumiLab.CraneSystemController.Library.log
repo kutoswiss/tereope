@@ -1,12 +1,12 @@
-﻿  CraneCoarseAxis.cpp
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\abstractcraneaxis.h(19): warning C4091: 'typedef ': ignored on left of 'Axis' when no variable is declared
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\cranecoarseaxis.h(8): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\cranecoarseaxis.cpp(59): warning C4244: 'argument': conversion from 'const double' to 'float', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\cranecoarseaxis.cpp(60): warning C4244: 'argument': conversion from 'const double' to 'float', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\cranecoarseaxis.cpp(152): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\cranecoarseaxis.cpp(156): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\cranecoarseaxis.cpp(161): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\cranecoarseaxis.cpp(205): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+﻿  RopeVision.cpp
+  ObstaclesDetection.cpp
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\obstaclesdetection.cpp(223): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\obstaclesdetection.cpp(225): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\obstaclesdetection.cpp(227): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\obstaclesdetection.cpp(229): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\obstaclesdetection.cpp(321): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\obstaclesdetection.cpp(322): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  Generating Code...
 CCNT.lib(CCNT.DLL) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR already defined in caio.lib(CAIO.DLL); second definition ignored
 CCNT.lib(CCNT.DLL) : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
   OsumiLab.CraneSystemController.Library.vcxproj -> C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\x64\Debug\OsumiLab.CraneSystemController.Library.lib

@@ -84,6 +84,12 @@
     <ClInclude Include="RopeLoadArea.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RopeSwingRegulator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RopeVision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -138,6 +144,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RopeLoadArea.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RopeSwingRegulator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RopeVision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

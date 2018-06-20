@@ -23,6 +23,35 @@ CraneFineAxis::CraneFineAxis(short aio_id, short cnt_id, int x_axis_channel, int
 CraneFineAxis::~CraneFineAxis() {
 }
 
+/// <summary>
+/// Enable coarse axis
+/// </summary>
+/// <param name="a"></param>
+void CraneFineAxis::Enable(Axis a) {
+	// Enable the axis
+	this->SetEnableVoltage(a, 5.0);
+}
+
+/// <summary>
+/// Disable coarse axis
+/// </summary>
+/// <param name="a"></param>
+void CraneFineAxis::Disable(Axis a) {
+	this->SetEnableVoltage(a, 0.0);
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="a"></param>
+/// <param name="voltage"></param>
+void CraneFineAxis::SetEnableVoltage(Axis a, const double voltage) {
+	switch (a) {
+	case X: AioSingleAoEx(this->_aio_id, kXEnableChannel, voltage); break;
+	case Y: AioSingleAoEx(this->_aio_id, kYEnableChannel, voltage); break;
+	}
+}
+
 
 /// <summary>
 /// Method to move the Axis 
@@ -37,9 +66,11 @@ void CraneFineAxis::Move(Axis a, int step, double voltage) {
 		step *= -1;
 
 	this->SetVoltage(voltage);
+	this->Enable(a);
 	AioSingleAoEx(this->_aio_id, aio, this->_voltage * ((step < 0) ? 1 : -1));
 	this->WaitUntilCounterReach(step, &cnt);
 	AioSingleAoEx(this->_aio_id, aio, 0);
+	this->Disable(a);
 }
 
 /// <summary>
@@ -47,5 +78,6 @@ void CraneFineAxis::Move(Axis a, int step, double voltage) {
 /// </summary>
 /// <param name="a"></param>
 void CraneFineAxis::Stop(Axis a) {
-
+	short aio = this->GetAioChannelFromAxis(a);
+	AioSingleAoEx(this->_aio_id, aio, 0);
 }
