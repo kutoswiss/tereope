@@ -87,7 +87,7 @@
     <ClInclude Include="RopeSwingRegulator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RopeVision.h">
+    <ClInclude Include="RopeSideVision.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -149,7 +149,7 @@
     <ClCompile Include="RopeSwingRegulator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RopeVision.cpp">
+    <ClCompile Include="RopeSideVision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

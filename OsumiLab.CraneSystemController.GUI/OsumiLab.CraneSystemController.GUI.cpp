@@ -5,7 +5,7 @@
 #include "ObstaclesDetection.h"
 #include "ObstaclesCorrespondence.h"
 #include "Crane.h"
-#include "RopeVision.h"
+#include "RopeSideVision.h"
 
 #include <vector>
 #include <iostream>
@@ -26,24 +26,26 @@ void ObstacleCollisionDetectionThread(Crane &crane, ObstaclesDetection &detector
 
 int main() {
 	Crane c;
-	RopeVision rv;
+	RopeSideVision rvx, rvy;
 	cv::Mat m = c.XRopeCamera().GetMat(CV_8UC1);
-	rv.SetFrame(m);
-	rv.Compute();
+	rvx.SetFrame(m);
+	rvx.Compute();
 
-	cv::namedWindow("1", cv::WINDOW_AUTOSIZE);
+	cv::namedWindow("X", cv::WINDOW_AUTOSIZE);
+	cv::namedWindow("Y", cv::WINDOW_AUTOSIZE);
 
 	while (1) {
-		cv::Mat m = c.XRopeCamera().GetMat(CV_8UC1);
-		rv.SetFrame(m);
-		rv.Compute();
-		cv::imshow("1", rv.GetFrameWithLines());
-		if (cv::waitKey(15) >= 0)
-			break;
+		cv::Mat mx = c.XRopeCamera().GetMat(CV_8UC1);
+		cv::Mat my = c.YRopeCamera().GetMat(CV_8UC1);
+
+		rvx.SetFrame(mx); rvy.SetFrame(my);
+		rvx.Compute(); rvy.Compute();
+		cv::imshow("X", rvx.GetFrameWithLines());
+		cv::imshow("Y", rvy.GetFrameWithLines());
+
+		if (cv::waitKey(15) >= 0) break;
 	}
 	cv::destroyAllWindows();
-
-
 
 	//Crane c;
 	//c.Rope().Move(Axis::Z, -1000, 4);
