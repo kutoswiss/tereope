@@ -135,8 +135,7 @@ void CraneCoarseAxis::Stop(Axis a) {
 /// <param name="step"></param>
 /// <param name="voltage"></param>
 void CraneCoarseAxis::MoveX(int step, double voltage) {
-	double acceleration_voltage = 0.0;
-	double deceleration_voltage = 0.0;
+	double ramp_voltage = 0.0;
 	int ramp_steps = 0;
 	int stable_steps = 0;
 	short aio = this->GetAioChannelFromAxis(Axis::X);
@@ -148,18 +147,18 @@ void CraneCoarseAxis::MoveX(int step, double voltage) {
 	this->Enable(Axis::X);
 	ramp_steps = (step / 4) / 10;
 	stable_steps = step - (ramp_steps * 10 * 2);
-	for (size_t i = 1; i <= 10; i++) {
-		acceleration_voltage = (v / 10) * i;
-		AioSingleAoEx(this->_aio_id, aio, acceleration_voltage);
+	for (int i = 1; i <= 10; i++) {
+		ramp_voltage = (v / 10) * i;
+		AioSingleAoEx(this->_aio_id, aio, ramp_voltage);
 		this->WaitUntilCounterReach(ramp_steps, &cnt, &(this->_x_stop_signal));
 	}
 
 	AioSingleAoEx(this->_aio_id, aio, v);
 	this->WaitUntilCounterReach(stable_steps, &cnt, &(this->_x_stop_signal));
 
-	for (size_t i = 10; i > 0; i--) {
-		deceleration_voltage = (v / 10) * i;
-		AioSingleAoEx(this->_aio_id, aio, deceleration_voltage);
+	for (int i = 10; i > 0; i--) {
+		ramp_voltage = (v / 10) * i;
+		AioSingleAoEx(this->_aio_id, aio, ramp_voltage);
 		this->WaitUntilCounterReach(ramp_steps, &cnt, &(this->_x_stop_signal));
 	}
 	AioSingleAoEx(this->_aio_id, aio, 0);
@@ -173,11 +172,34 @@ void CraneCoarseAxis::MoveX(int step, double voltage) {
 /// <param name="step"></param>
 /// <param name="voltage"></param>
 void CraneCoarseAxis::MoveY(int step, double voltage) {
+	double ramp_voltage = 0.0;
+	int ramp_steps = 0;
+	int stable_steps = 0;
 	short aio = this->GetAioChannelFromAxis(Axis::Y);
 	short cnt = this->GetCntChannelFromAxis(Axis::Y);
 
 	this->SetVoltage(voltage);
 	double v = this->_voltage * ((step < 0) ? 1 : -1);
+
+	//this->Enable(Axis::Y);
+	//ramp_steps = (step / 4) / 10;
+	//stable_steps = step - (ramp_steps * 10 * 2);
+	//for (int i = 1; i <= 10; i++) {
+	//	ramp_voltage = (v / 10) * i;
+	//	AioSingleAoEx(this->_aio_id, aio, ramp_voltage);
+	//	this->WaitUntilCounterReach(ramp_steps, &cnt, &(this->_y_stop_signal));
+	//}
+
+	//AioSingleAoEx(this->_aio_id, aio, v);
+	//this->WaitUntilCounterReach(stable_steps, &cnt, &(this->_y_stop_signal));
+
+	//for (int i = 10; i > 0; i--) {
+	//	ramp_voltage = (v / 10) * i;
+	//	AioSingleAoEx(this->_aio_id, aio, ramp_voltage);
+	//	this->WaitUntilCounterReach(ramp_steps, &cnt, &(this->_y_stop_signal));
+	//}
+	//AioSingleAoEx(this->_aio_id, aio, 0);
+	//this->Disable(Axis::Y);
 
 	this->Enable(Axis::Y);
 	AioSingleAoEx(this->_aio_id, aio, v);

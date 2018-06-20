@@ -56,7 +56,7 @@ void CLIController() {
 		else if (input == "y") {
 			std::cout << "> Enter Y value: ";
 			std::cin >> y_val;
-			c.CoarseAxis().MoveThread(Axis::Y, y_val, 0.2);
+			c.CoarseAxis().MoveThread(Axis::Y, y_val, 0.5);
 		}
 		else if (input == "xy") {
 			std::cout << "> Enter X value: ";
@@ -68,6 +68,7 @@ void CLIController() {
 		}
 		else if (input == "stop") {
 			c.CoarseAxis().Stop(Axis::X);
+			c.CoarseAxis().Stop(Axis::Y);
 			std::cout << c.CoarseAxis().GetCntValue(Axis::X) << std::endl;
 		}
 		else if (input == "quit")
