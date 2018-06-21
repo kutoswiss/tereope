@@ -24,12 +24,17 @@ cv::Mat RopeSideVision::GetFrameWithLines() {
 	return _frame_w_lines;
 }
 
+double RopeSideVision::GetAngle() {
+	return _angle;
+}
+
 void RopeSideVision::Compute() {
 	cv::cvtColor(_frame, _frame, CV_RGB2GRAY);
+	cv::cvtColor(_frame, _frame_w_lines, CV_GRAY2BGR);
 	cv::threshold(_frame, _frame, 50, 255, cv::THRESH_BINARY);
 	cv::Canny(_frame, _frame, 50, 200, 3);
-	cv::cvtColor(_frame, _frame_w_lines, CV_GRAY2BGR);
 	this->FindLines();
+	this->CalculateAngle();
 }
 
 void RopeSideVision::FindLines() {
@@ -40,11 +45,26 @@ void RopeSideVision::FindLines() {
 	cv::HoughLinesP(_frame, _lines, 1, CV_PI / 180, 50, 50, 10);
 	for (size_t i = 0; i < _lines.size(); i++) {
 		l = _lines[i];
-		p1 = cv::Point(l[0], l[1]); p2 = cv::Point(l[2], l[3]);
+		p1 = cv::Point(l[0], l[1]); 
+		p2 = cv::Point(l[2], l[3]);
 		cv::line(_frame_w_lines, p1, p2, cv::Scalar(0, 255, 0), 2, CV_AA);
 	}
 }
 
 void RopeSideVision::CalculateAngle() {
+	cv::Vec4i l;
+	cv::Point p1, p2;
+	double dx, dy;
+	_angle = 0.0;
 
+	for (size_t i = 0; i < _lines.size(); i++) {
+		l = _lines[i];
+		p1 = cv::Point(l[0], l[1]); 
+		p2 = cv::Point(l[2], l[3]);
+		dx = p2.x - p1.x; 
+		dy = p2.y - p1.y;
+		_angle += std::atan(dy / dx);
+	}
+
+	_angle = (_angle / _lines.size()) * 180 / M_PI;
 }

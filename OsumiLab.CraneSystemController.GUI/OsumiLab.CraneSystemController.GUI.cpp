@@ -35,15 +35,16 @@ int main() {
 	cv::namedWindow("Y", cv::WINDOW_AUTOSIZE);
 
 	while (1) {
-		cv::Mat mx = c.XRopeCamera().GetMat(CV_8UC1);
-		cv::Mat my = c.YRopeCamera().GetMat(CV_8UC1);
-
-		rvx.SetFrame(mx); rvy.SetFrame(my);
-		rvx.Compute(); rvy.Compute();
+		rvx.SetFrame(c.XRopeCamera().GetMat(CV_8UC1));
+		rvy.SetFrame(c.YRopeCamera().GetMat(CV_8UC1));
+		rvx.Compute(); 
+		rvy.Compute();
 		cv::imshow("X", rvx.GetFrameWithLines());
 		cv::imshow("Y", rvy.GetFrameWithLines());
 
 		if (cv::waitKey(15) >= 0) break;
+		std::cout << "X = " << rvx.GetAngle() << std::endl;
+		std::cout << "Y = " << rvy.GetAngle() << std::endl;
 	}
 	cv::destroyAllWindows();
 
