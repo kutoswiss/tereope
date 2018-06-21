@@ -16,6 +16,7 @@ public:
 	void SetFrame(cv::Mat &m);
 	cv::Mat GetFrame();
 	cv::Mat GetFrameWithLines();
+	cv::Mat GetCannyFrame();
 	double GetAngle();
 
 	// Public method
@@ -31,5 +32,6 @@ private:
 	std::vector<cv::Vec4i> _lines;
 	cv::Mat _frame;
 	cv::Mat _frame_w_lines;
+	cv::Mat _canny;
 };
 
