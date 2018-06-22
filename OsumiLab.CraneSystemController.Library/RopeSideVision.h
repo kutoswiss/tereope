@@ -17,6 +17,7 @@ public:
 	cv::Mat GetFrame();
 	cv::Mat GetFrameWithLines();
 	cv::Mat GetCannyFrame();
+	cv::Mat GetBinaryFrame();
 	double GetAngle();
 
 	// Public method
@@ -25,6 +26,7 @@ public:
 private:
 	// Private methods
 	void FindLines();
+	void LinearRegression(std::vector<cv::Point> points, double *a, double *b);
 	void CalculateAngle();
 
 	// Private members
@@ -33,5 +35,6 @@ private:
 	cv::Mat _frame;
 	cv::Mat _frame_w_lines;
 	cv::Mat _canny;
+	cv::Mat _binary;
 };
 

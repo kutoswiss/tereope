@@ -21,6 +21,7 @@ public:
 	void MoveX(int step, double voltage);
 	void MoveY(int step, double voltage);
 
+	void SetAxisVoltage(Axis a, double voltage);
 private:
 	// Private methods
 	void Enable(Axis a);

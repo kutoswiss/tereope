@@ -28,6 +28,10 @@ cv::Mat RopeSideVision::GetCannyFrame() {
 	return _canny;
 }
 
+cv::Mat RopeSideVision::GetBinaryFrame() {
+	return _binary;
+}
+
 double RopeSideVision::GetAngle() {
 	return _angle;
 }
@@ -35,8 +39,8 @@ double RopeSideVision::GetAngle() {
 void RopeSideVision::Compute() {
 	cv::cvtColor(_frame, _frame, CV_RGB2GRAY);
 	cv::cvtColor(_frame, _frame_w_lines, CV_GRAY2BGR);
-	cv::threshold(_frame, _frame, 50, 255, cv::THRESH_BINARY);
-	cv::Canny(_frame, _canny, 50, 200, 3);
+	cv::threshold(_frame, _binary, 50, 255, cv::THRESH_BINARY);
+	cv::Canny(_binary, _canny, 50, 200, 3);
 	this->FindLines();
 	this->CalculateAngle();
 }
@@ -53,30 +57,24 @@ void RopeSideVision::FindLines() {
 		l = _lines[i];
 		p1 = cv::Point(l[0], l[1]); 
 		p2 = cv::Point(l[2], l[3]);
-
-		if (p1.x < xmin) xmin = p1.x;
-		if (p2.x < xmin) xmin = p2.x;
-		if (p1.x > xmax) xmax = p1.x;
-		if (p2.x > xmax) xmax = p2.x;
-
-		if (p1.y < ymin) ymin = p1.y;
-		if (p2.y < ymin) ymin = p2.y;
-		if (p1.y > ymax) ymax = p1.y;
-		if (p2.y > ymax) ymax = p2.y;
-
-		//cv::line(_frame_w_lines, p1, p2, cv::Scalar(0, 255, 0), 2, CV_AA);
+		cv::circle(_frame_w_lines, p1, 2, cv::Scalar(0, 255, 0));
+		cv::circle(_frame_w_lines, p2, 2, cv::Scalar(0, 255, 0));
 	}
 
-	cv::line(_frame_w_lines, 
-		cv::Point(xmin, ymin), cv::Point(xmax, ymax), 
-		cv::Scalar(0, 0, 255), 2, CV_AA);
+	//cv::line(_frame_w_lines,
+	//	cv::Point(xmax, ymin), cv::Point(xmin, ymax),
+	//	cv::Scalar(0, 0, 255), 2, CV_AA);
 
+	//cv::line(_frame_w_lines,
+	//	cv::Point(xmin, ymin), cv::Point(xmax, ymax),
+	//	cv::Scalar(0, 0, 255), 2, CV_AA);
 }
 
 void RopeSideVision::CalculateAngle() {
 	cv::Vec4i l;
 	cv::Point p1, p2;
 	double dx, dy;
+	std::vector<double> angles;
 	_angle = 0.0;
 
 	for (size_t i = 0; i < _lines.size(); i++) {
@@ -85,7 +83,7 @@ void RopeSideVision::CalculateAngle() {
 		p2 = cv::Point(l[2], l[3]);
 		dx = p2.x - p1.x; 
 		dy = p2.y - p1.y;
-		_angle += std::atan(dy / dx);
+		_angle += std::atan(dx / dy);
 	}
 
 	_angle = (_angle / _lines.size()) * 180 / M_PI;

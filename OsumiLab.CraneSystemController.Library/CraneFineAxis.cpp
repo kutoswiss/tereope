@@ -80,4 +80,16 @@ void CraneFineAxis::Move(Axis a, int step, double voltage) {
 void CraneFineAxis::Stop(Axis a) {
 	short aio = this->GetAioChannelFromAxis(a);
 	AioSingleAoEx(this->_aio_id, aio, 0);
+	this->Disable(a);
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="a"></param>
+/// <param name="voltage"></param>
+void CraneFineAxis::SetAxisVoltage(Axis a, double voltage) {
+	short aio = this->GetAioChannelFromAxis(a);
+	this->Enable(a);
+	AioSingleAoEx(this->_aio_id, aio, voltage);
 }

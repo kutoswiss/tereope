@@ -27,6 +27,7 @@ void ObstacleCollisionDetectionThread(Crane &crane, ObstaclesDetection &detector
 int main() {
 	Crane c;
 	RopeSideVision rvx, rvy;
+	double xvoltage = 0, yvoltage = 0;
 	cv::Mat m = c.XRopeCamera().GetMat(CV_8UC1);
 	rvx.SetFrame(m);
 	rvx.Compute();
@@ -43,8 +44,17 @@ int main() {
 		cv::imshow("Y", rvy.GetFrameWithLines());
 
 		if (cv::waitKey(15) >= 0) break;
-		std::cout << "X = " << rvx.GetAngle() << std::endl;
-		std::cout << "Y = " << rvy.GetAngle() << std::endl;
+		xvoltage = rvx.GetAngle() * 0.5 / 3;
+		yvoltage = rvy.GetAngle() * 0.5 / 3;
+
+		xvoltage = (xvoltage > 0.5) ? 0.5 : xvoltage;
+		xvoltage = (xvoltage < -0.5) ? -0.5 : xvoltage;
+		yvoltage = (yvoltage > 0.5) ? 0.5 : yvoltage;
+		yvoltage = (yvoltage < -0.5) ? -0.5 : yvoltage;
+
+		std::cout << "X = " << rvx.GetAngle() << ", V = " << xvoltage << std::endl;
+		std::cout << "Y = " << rvy.GetAngle() << ", V = " << yvoltage <<std::endl;
+		c.FineAxis().SetAxisVoltage(Axis::Y, yvoltage);
 	}
 	cv::destroyAllWindows();
 
@@ -69,7 +79,6 @@ void CLIController() {
 	//	ObstacleCollisionDetectionThread,
 	//	std::ref(c),
 	//	std::ref(detector));
-
 
 	std::string input;
 	while (true) {
