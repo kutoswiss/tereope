@@ -25,9 +25,11 @@ void CLIController();
 void ObstacleCollisionDetectionThread(Crane &crane, ObstaclesDetection &detector);
 
 int main() {
+
 	Crane c;
 	RopeSideVision rvx, rvy;
 	double xvoltage = 0, yvoltage = 0;
+	const double max_voltage = 1.5;
 	cv::Mat m = c.XRopeCamera().GetMat(CV_8UC1);
 	rvx.SetFrame(m);
 	rvx.Compute();
@@ -44,17 +46,28 @@ int main() {
 		cv::imshow("Y", rvy.GetFrameWithLines());
 
 		if (cv::waitKey(15) >= 0) break;
-		xvoltage = rvx.GetAngle() * 0.5 / 3;
-		yvoltage = rvy.GetAngle() * 0.5 / 3;
+		xvoltage = rvx.GetAngle() * max_voltage / 3;
+		yvoltage = rvy.GetAngle() * max_voltage / 3;
 
-		xvoltage = (xvoltage > 0.5) ? 0.5 : xvoltage;
-		xvoltage = (xvoltage < -0.5) ? -0.5 : xvoltage;
-		yvoltage = (yvoltage > 0.5) ? 0.5 : yvoltage;
-		yvoltage = (yvoltage < -0.5) ? -0.5 : yvoltage;
+		xvoltage = (xvoltage > max_voltage) ? max_voltage : xvoltage;
+		xvoltage = (xvoltage < (max_voltage*-1)) ? (max_voltage*-1) : xvoltage;
+		yvoltage = (yvoltage > max_voltage) ? max_voltage : yvoltage;
+		yvoltage = (yvoltage < (max_voltage*-1)) ? (max_voltage*-1) : yvoltage;
+		
+		//if ((yvoltage > 0.0)&&(yvoltage < 0.5))
+		//	yvoltage = 0.5;
+		//else if ((yvoltage < 0.0) && (yvoltage > -0.5))
+		//	yvoltage = -0.5;
+
+		//if ((xvoltage > 0.0) && (xvoltage < 0.5))
+		//	xvoltage = 0.5;
+		//else if ((xvoltage < 0.0) && (xvoltage > -0.5))
+		//	xvoltage = -0.5;
 
 		std::cout << "X = " << rvx.GetAngle() << ", V = " << xvoltage << std::endl;
-		std::cout << "Y = " << rvy.GetAngle() << ", V = " << yvoltage <<std::endl;
+		std::cout << "Y = " << rvy.GetAngle() << ", V = " << yvoltage << std::endl;
 		c.FineAxis().SetAxisVoltage(Axis::Y, yvoltage);
+		c.FineAxis().SetAxisVoltage(Axis::X, xvoltage);
 	}
 	cv::destroyAllWindows();
 
