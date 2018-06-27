@@ -3,9 +3,15 @@
 #include "Obstacle.h"
 #include "ObstaclesDraw.h"
 #include "CameraHelper.h"
+#include "RopeLoadArea.h"
+#include "DrawTool.h"
+#include "DrawObstacles.h"
+#include "DrawObstaclesCorners.h"
+#include "DrawObstaclesInfos.h"
 #include <VimbaCPP.h>
 #include <VimbaSystem.hpp>
 #include <iostream>
+#include <memory>
 
 using namespace AVT::VmbAPI;
 
@@ -22,8 +28,8 @@ public:
     /// <summary>
     /// Constants
     /// </summary>
-    static const uint kDefaultMinContourArea = 50;
-    static const uint kBinaryThresholdValue = 35;
+    static const uint kDefaultMinContourArea = 200;
+    static const uint kBinaryThresholdValue = 45;
 	static const uint kCannyThresholdValue = 255;
 
     /// <summary>
@@ -70,12 +76,14 @@ private:
     /// Private members
     /// </summary>
 	ObstaclesDraw _obstacles_draw;
+	std::unique_ptr<DrawTool> _draw_tool;
     
 	// Vectors
     std::vector<Obstacle> _obstacles;
 
 	// Rope load area
-	cv::Rect2d _rope_load_area;
+	//cv::Rect2d _rope_load_area;
+	RopeLoadArea _rope_load_area;
 	Obstacle _rope_load;
 
 	// Matrices

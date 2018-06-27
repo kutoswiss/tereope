@@ -1,6 +1,7 @@
 #pragma once
 #include "opencv2\opencv.hpp"
 #include "Obstacle.h"
+#include "RopeLoadArea.h"
 #include <iostream>
 
 class ObstaclesDraw
@@ -26,7 +27,7 @@ public:
 	void DrawObstacle(Obstacle obstacle, cv::Scalar color, uint tickness = kObstaclesPolygonTickness);
 	void DrawObstacles(std::vector<Obstacle> obstacles, uint tickness = kObstaclesPolygonTickness);
 	void DrawAdditionnalInfos(std::vector<Obstacle> obstacles);
-	void DrawRopeLoadArea(cv::Rect2d r);
+	void DrawRopeLoadArea(RopeLoadArea r);
 
 private:
 	/// <summary>

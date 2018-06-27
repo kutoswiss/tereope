@@ -21,7 +21,8 @@ namespace CraneSettings
 	extern const int kZRopeAxisCntChannel;
 
 	// Cameras settings
-	extern const char *kGuppyCameraPID;
+	extern const char *kGuppyLeftCameraPID;
+	extern const char *kGuppyRightCameraPID;
 	extern const char *kPikeXCameraPID;
 	extern const char *kPikeYCameraPID;
 

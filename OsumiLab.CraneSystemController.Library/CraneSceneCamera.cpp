@@ -6,7 +6,7 @@
 /// </summary>
 /// <param name="vimbasystem"></param>
 CraneSceneCamera::CraneSceneCamera(VimbaSystem &vimbasystem) 
-	: CraneSceneCamera(vimbasystem, CraneSettings::kGuppyCameraPID) {
+	: CraneSceneCamera(vimbasystem, CraneSettings::kGuppyRightCameraPID) {
 	// No code
 }
 

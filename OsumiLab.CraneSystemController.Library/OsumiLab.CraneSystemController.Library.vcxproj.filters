@@ -90,6 +90,18 @@
     <ClInclude Include="RopeSideVision.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DrawTool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawObstacles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawObstaclesCorners.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawObstaclesInfos.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -150,6 +162,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RopeSideVision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawTool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawObstacles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawObstaclesCorners.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawObstaclesInfos.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -33,6 +33,7 @@ Crane::Crane(char *aio_name, char *cnt_name) {
 Crane::~Crane() {
 	this->Exit();
 
+	this->_cam_scene_left.reset();
 	this->_cam_scene_right.reset();
 	this->_cam_rope_x.reset();
 	this->_cam_rope_y.reset();
@@ -62,6 +63,14 @@ CraneFineAxis& Crane::FineAxis() {
 /// <returns></returns>
 CraneRopeAxis& Crane::Rope() {
 	return this->_rope;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+CraneSceneCamera& Crane::LeftSceneCamera() const {
+	return (*this->_cam_scene_left);
 }
 
 /// <summary>
@@ -147,8 +156,11 @@ void Crane::InitCnt(char *device_name) {
 /// 
 /// </summary>
 void Crane::InitCameras(void) {
+	this->_cam_scene_left = std::make_unique<CraneSceneCamera>
+		(this->_vimbasystem, CraneSettings::kGuppyLeftCameraPID);
+
 	this->_cam_scene_right = std::make_unique<CraneSceneCamera>
-		(this->_vimbasystem, CraneSettings::kGuppyCameraPID);
+		(this->_vimbasystem, CraneSettings::kGuppyRightCameraPID);
 
 	this->_cam_rope_x = std::make_unique<CraneRopeCamera>
 		(this->_vimbasystem, CraneSettings::kPikeXCameraPID);

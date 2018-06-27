@@ -33,6 +33,7 @@ public:
 	CraneCoarseAxis& CoarseAxis();
 	CraneFineAxis& FineAxis();
 	CraneRopeAxis& Rope();
+	CraneSceneCamera& LeftSceneCamera() const;
 	CraneSceneCamera& RightSceneCamera() const;
 	CraneRopeCamera& XRopeCamera() const;
 	CraneRopeCamera& YRopeCamera() const;
@@ -53,6 +54,7 @@ private:
 	CraneFineAxis _fine_axis;
 	CraneRopeAxis _rope;
 	VimbaSystem &_vimbasystem = VimbaSystem::GetInstance();
+	CraneSceneCameraPtr _cam_scene_left;
 	CraneSceneCameraPtr _cam_scene_right;
 	CraneRopeCameraPtr _cam_rope_x;
 	CraneRopeCameraPtr _cam_rope_y;

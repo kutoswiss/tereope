@@ -17,6 +17,8 @@ public:
 	std::vector<StereoObstacle> Match(void);
 	void PrintMatchedObstacles(void);
 
+	std::vector<StereoObstacle> GetStereoObstacles();
+
 private:
 	// Private methods
 	bool IsMatched(Obstacle l, Obstacle r);

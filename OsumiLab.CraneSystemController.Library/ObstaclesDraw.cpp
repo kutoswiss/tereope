@@ -112,8 +112,11 @@ void ObstaclesDraw::DrawCorners(Obstacle obstacle) {
 /// <summary>
 /// 
 /// </summary>
-void ObstaclesDraw::DrawRopeLoadArea(cv::Rect2d r) {
-	cv::rectangle(this->_frame, r, cv::Scalar(0, 0, 255), 1, CV_AA);
+/// <param name="r"></param>
+void ObstaclesDraw::DrawRopeLoadArea(RopeLoadArea area) {
+	std::vector<std::vector<cv::Point>> points;
+	points.push_back(area.ToPoints());
+	cv::polylines(this->_frame, points, true, cv::Scalar(0, 0, 255), 1, CV_AA);
 }
 
 /// <summary>

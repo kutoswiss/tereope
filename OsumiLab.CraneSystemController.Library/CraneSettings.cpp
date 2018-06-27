@@ -22,7 +22,8 @@ namespace CraneSettings
 	const int kZRopeAxisCntChannel = 4;
 
 	// Cameras settings
-	const char *kGuppyCameraPID = "DEV_0xA47010F086149";
+	const char *kGuppyLeftCameraPID = "DEV_0xA47010F0B03B2";
+	const char *kGuppyRightCameraPID = "DEV_0xA47010F086149";
 	const char *kPikeXCameraPID = "DEV_0xA470110075023";
 	const char *kPikeYCameraPID = "DEV_0xA470110075024";
 

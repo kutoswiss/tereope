@@ -27,49 +27,84 @@ void ObstacleCollisionDetectionThread(Crane &crane, ObstaclesDetection &detector
 int main() {
 
 	Crane c;
-	RopeSideVision rvx, rvy;
-	double xvoltage = 0, yvoltage = 0;
-	const double max_voltage = 1.5;
-	cv::Mat m = c.XRopeCamera().GetMat(CV_8UC1);
-	rvx.SetFrame(m);
-	rvx.Compute();
-
-	cv::namedWindow("X", cv::WINDOW_AUTOSIZE);
-	cv::namedWindow("Y", cv::WINDOW_AUTOSIZE);
+	ObstaclesDetection od;
+	std::vector<Obstacle> oleft, oright;
+	ObstaclesCorrespondence correspondence;
+	std::vector<StereoObstacle> stereo_obstacles;
 
 	while (1) {
-		rvx.SetFrame(c.XRopeCamera().GetMat(CV_8UC1));
-		rvy.SetFrame(c.YRopeCamera().GetMat(CV_8UC1));
-		rvx.Compute(); 
-		rvy.Compute();
-		cv::imshow("X", rvx.GetFrameWithLines());
-		cv::imshow("Y", rvy.GetFrameWithLines());
+		cv::Mat left = c.LeftSceneCamera().GetMat(CV_8UC1);
+		od.SetRawFrame(left);
+		od.Detect();
+		oleft = od.GetObstacles();
+		cv::imshow("left", od.GetFrameWithRectangles());
 
-		if (cv::waitKey(15) >= 0) break;
-		xvoltage = rvx.GetAngle() * max_voltage / 3;
-		yvoltage = rvy.GetAngle() * max_voltage / 3;
+		cv::Mat right = c.RightSceneCamera().GetMat(CV_8UC1);
+		od.SetRawFrame(right);
+		od.Detect();
+		oright = od.GetObstacles();
+		cv::imshow("right", od.GetFrameWithRectangles());
 
-		xvoltage = (xvoltage > max_voltage) ? max_voltage : xvoltage;
-		xvoltage = (xvoltage < (max_voltage*-1)) ? (max_voltage*-1) : xvoltage;
-		yvoltage = (yvoltage > max_voltage) ? max_voltage : yvoltage;
-		yvoltage = (yvoltage < (max_voltage*-1)) ? (max_voltage*-1) : yvoltage;
-		
-		//if ((yvoltage > 0.0)&&(yvoltage < 0.5))
-		//	yvoltage = 0.5;
-		//else if ((yvoltage < 0.0) && (yvoltage > -0.5))
-		//	yvoltage = -0.5;
+		correspondence.SetSamples(oright, oleft);
+		correspondence.Match();
+		stereo_obstacles = correspondence.GetStereoObstacles();
+		for (auto it = stereo_obstacles.begin(); it != stereo_obstacles.end(); it++){
+			std::cout << (*it).GetHeight() << " m" << std::endl;
+		}
+		std::cout << std::endl;
 
-		//if ((xvoltage > 0.0) && (xvoltage < 0.5))
-		//	xvoltage = 0.5;
-		//else if ((xvoltage < 0.0) && (xvoltage > -0.5))
-		//	xvoltage = -0.5;
-
-		std::cout << "X = " << rvx.GetAngle() << ", V = " << xvoltage << std::endl;
-		std::cout << "Y = " << rvy.GetAngle() << ", V = " << yvoltage << std::endl;
-		c.FineAxis().SetAxisVoltage(Axis::Y, yvoltage);
-		c.FineAxis().SetAxisVoltage(Axis::X, xvoltage);
+		if (cv::waitKey(15) >= 0)
+			break;
 	}
 	cv::destroyAllWindows();
+
+
+	//StereoCorrespondance(8000);
+	//ObstaclesDetectionDemo();
+	//Crane c;
+	//RopeSideVision rvx, rvy;
+	//double xvoltage = 0, yvoltage = 0;
+	//const double max_voltage = 1.5;
+	//cv::Mat m = c.XRopeCamera().GetMat(CV_8UC1);
+	//rvx.SetFrame(m);
+	//rvx.Compute();
+
+	//cv::namedWindow("X", cv::WINDOW_AUTOSIZE);
+	//cv::namedWindow("Y", cv::WINDOW_AUTOSIZE);
+
+	//while (1) {
+	//	rvx.SetFrame(c.XRopeCamera().GetMat(CV_8UC1));
+	//	rvy.SetFrame(c.YRopeCamera().GetMat(CV_8UC1));
+	//	rvx.Compute(); 
+	//	rvy.Compute();
+	//	cv::imshow("X", rvx.GetFrameWithLines());
+	//	cv::imshow("Y", rvy.GetFrameWithLines());
+
+	//	if (cv::waitKey(15) >= 0) break;
+	//	xvoltage = rvx.GetAngle() * max_voltage / 3;
+	//	yvoltage = rvy.GetAngle() * max_voltage / 3;
+
+	//	xvoltage = (xvoltage > max_voltage) ? max_voltage : xvoltage;
+	//	xvoltage = (xvoltage < (max_voltage*-1)) ? (max_voltage*-1) : xvoltage;
+	//	yvoltage = (yvoltage > max_voltage) ? max_voltage : yvoltage;
+	//	yvoltage = (yvoltage < (max_voltage*-1)) ? (max_voltage*-1) : yvoltage;
+	//	
+	//	//if ((yvoltage > 0.0)&&(yvoltage < 0.5))
+	//	//	yvoltage = 0.5;
+	//	//else if ((yvoltage < 0.0) && (yvoltage > -0.5))
+	//	//	yvoltage = -0.5;
+
+	//	//if ((xvoltage > 0.0) && (xvoltage < 0.5))
+	//	//	xvoltage = 0.5;
+	//	//else if ((xvoltage < 0.0) && (xvoltage > -0.5))
+	//	//	xvoltage = -0.5;
+
+	//	std::cout << "X = " << rvx.GetAngle() << ", V = " << xvoltage << std::endl;
+	//	std::cout << "Y = " << rvy.GetAngle() << ", V = " << yvoltage << std::endl;
+	//	c.FineAxis().SetAxisVoltage(Axis::Y, yvoltage);
+	//	c.FineAxis().SetAxisVoltage(Axis::X, xvoltage);
+	//}
+	//cv::destroyAllWindows();
 
 	//Crane c;
 	//c.Rope().Move(Axis::Z, -1000, 4);

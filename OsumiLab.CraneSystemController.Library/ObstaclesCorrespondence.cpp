@@ -39,6 +39,7 @@ void ObstaclesCorrespondence::SetSamples(
 /// </summary>
 /// <returns></returns>
 std::vector<StereoObstacle> ObstaclesCorrespondence::Match(void) {
+	this->_matched_obstacles.clear();
 	for(auto l = this->_left_samples.begin(); l != this->_left_samples.end(); l++) {
 		for (auto r = this->_right_samples.begin(); r != this->_right_samples.end(); r++) {
 			if (this->IsMatched(*l, *r)) {
@@ -94,4 +95,12 @@ bool ObstaclesCorrespondence::IsMatched(Obstacle l, Obstacle r) {
 	res &= (std::abs(static_cast<int>(l.GetArea() - r.GetArea())) <= kAreaVariance);
 
 	return res;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+std::vector<StereoObstacle> ObstaclesCorrespondence::GetStereoObstacles() {
+	return this->_matched_obstacles;
 }
