@@ -23,42 +23,13 @@ void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_de
 void MultipleFramesCaptureThread(Crane &crane, CraneSceneCamera &camera, bool &end);
 void CLIController();
 void ObstacleCollisionDetectionThread(Crane &crane, ObstaclesDetection &detector);
+void FixedPositionStereoVision();
+void RopeSideVisionDemo();
+void RopeSwingRegulationDemo();
 
 int main() {
-
-	Crane c;
-	ObstaclesDetection od;
-	std::vector<Obstacle> oleft, oright;
-	ObstaclesCorrespondence correspondence;
-	std::vector<StereoObstacle> stereo_obstacles;
-
-	while (1) {
-		cv::Mat left = c.LeftSceneCamera().GetMat(CV_8UC1);
-		od.SetRawFrame(left);
-		od.Detect();
-		oleft = od.GetObstacles();
-		cv::imshow("left", od.GetFrameWithRectangles());
-
-		cv::Mat right = c.RightSceneCamera().GetMat(CV_8UC1);
-		od.SetRawFrame(right);
-		od.Detect();
-		oright = od.GetObstacles();
-		cv::imshow("right", od.GetFrameWithRectangles());
-
-		correspondence.SetSamples(oright, oleft);
-		correspondence.Match();
-		stereo_obstacles = correspondence.GetStereoObstacles();
-		for (auto it = stereo_obstacles.begin(); it != stereo_obstacles.end(); it++){
-			std::cout << (*it).GetHeight() << " m" << std::endl;
-		}
-		std::cout << std::endl;
-
-		if (cv::waitKey(15) >= 0)
-			break;
-	}
-	cv::destroyAllWindows();
-
-
+	//FixedPositionStereoVision();
+	RopeSideVisionDemo();
 	//StereoCorrespondance(8000);
 	//ObstaclesDetectionDemo();
 	//Crane c;
@@ -114,6 +85,65 @@ int main() {
 	//Crane c;
 	//c.FineAxis().Move(Axis::X, -5000, 0.5);
     return 0;
+}
+
+void RopeSwingRegulationDemo() {
+
+}
+
+void RopeSideVisionDemo() {
+	Crane c;
+	RopeSideVision rvx, rvy;
+
+	while (1) {
+		rvx.SetFrame(c.XRopeCamera().GetMat(CV_8UC1));
+		rvy.SetFrame(c.YRopeCamera().GetMat(CV_8UC1));
+
+		rvx.Compute(); 
+		rvy.Compute();
+
+		cv::imshow("X", rvx.GetDecoredFrame());
+		cv::imshow("Y", rvy.GetDecoredFrame());
+
+		if (cv::waitKey(15) >= 0) 
+			break;
+	}
+	cv::destroyAllWindows();
+}
+
+void FixedPositionStereoVision() {
+	Crane c;
+	ObstaclesDetection od;
+	std::vector<Obstacle> oleft, oright;
+	ObstaclesCorrespondence correspondence;
+	std::vector<StereoObstacle> stereo_obstacles;
+	cv::Mat left, right;
+
+	while (1) {
+		left = c.LeftSceneCamera().GetMat(CV_8UC1);
+		od.SetRawFrame(left);
+		od.Detect();
+		oleft = od.GetObstacles();
+		cv::imshow("left", od.GetFrameWithRectangles());
+
+		right = c.RightSceneCamera().GetMat(CV_8UC1);
+		od.SetRawFrame(right);
+		od.Detect();
+		oright = od.GetObstacles();
+		cv::imshow("right", od.GetFrameWithRectangles());
+
+		correspondence.SetSamples(oright, oleft);
+		correspondence.Match();
+		stereo_obstacles = correspondence.GetStereoObstacles();
+		for (auto it = stereo_obstacles.begin(); it != stereo_obstacles.end(); it++) {
+			std::cout << (*it).GetHeight() << " m" << std::endl;
+		}
+		std::cout << std::endl;
+
+		if (cv::waitKey(15) >= 0)
+			break;
+	}
+	cv::destroyAllWindows();
 }
 
 void CLIController() {

@@ -5,19 +5,16 @@
 /// 
 /// </summary>
 ObstaclesDetection::ObstaclesDetection() {
-	this->_bin_threshold = this->kBinaryThresholdValue;
-	this->_canny_threshold = this->kCannyThresholdValue;
+	_bin_threshold = kBinaryThresholdValue;
+	_canny_threshold = kCannyThresholdValue;
 
-	this->_kernel3 = CameraHelper::GetOnesKernel(3);
-	this->_kernel10 = CameraHelper::GetOnesKernel(10);
+	_kernel3 = CameraHelper::GetOnesKernel(3);
+	_kernel10 = CameraHelper::GetOnesKernel(10);
 
-	this->_draw_tool = std::unique_ptr<DrawTool>();
+	_draw_tool = std::unique_ptr<DrawTool>();
 
 	// Define rope load area
-	this->_rope_load_area.Set(100, 100, cv::Point(300, 325));
-	//this->_rope_load_area.height = this->_rope_load_area.width = 100;
-	//this->_rope_load_area.x = 300 - (this->_rope_load_area.width / 2);
-	//this->_rope_load_area.y = 325 - (this->_rope_load_area.height / 2);
+	_rope_load_area.Set(100, 100, cv::Point(300, 325));
 }
 
 /// <summary>
@@ -38,7 +35,7 @@ ObstaclesDetection::~ObstaclesDetection() {
 /// </summary>
 /// <returns>Obstacle object</returns>
 std::vector<Obstacle> ObstaclesDetection::GetObstacles() const {
-    return this->_obstacles;
+    return _obstacles;
 }
 
 /// <summary>
@@ -46,7 +43,7 @@ std::vector<Obstacle> ObstaclesDetection::GetObstacles() const {
 /// </summary>
 /// <returns></returns>
 Obstacle ObstaclesDetection::GetRopeLoad() const {
-	return this->_rope_load;
+	return _rope_load;
 }
 
 /// <summary>
@@ -54,7 +51,7 @@ Obstacle ObstaclesDetection::GetRopeLoad() const {
 /// </summary>
 /// <returns></returns>
 cv::Mat ObstaclesDetection::GetCannyFrame() const {
-    return this->_canny_frame;
+    return _canny_frame;
 }
 
 /// <summary>
@@ -62,7 +59,7 @@ cv::Mat ObstaclesDetection::GetCannyFrame() const {
 /// </summary>
 /// <returns></returns>
 cv::Mat ObstaclesDetection::GetBinaryFrame() const {
-    return this->_bin_frame;
+    return _bin_frame;
 }
 
 /// <summary>
@@ -70,21 +67,13 @@ cv::Mat ObstaclesDetection::GetBinaryFrame() const {
 /// </summary>
 /// <returns></returns>
 cv::Mat ObstaclesDetection::GetFrameWithRectangles() {
-	this->_raw_frame.copyTo(this->_raw_frame_w_rects);
-
-	this->_draw_tool = std::make_unique<DrawObstacles>(_raw_frame_w_rects, _obstacles);
-	this->_draw_tool = std::make_unique<DrawObstaclesCorners>(_raw_frame_w_rects, _obstacles);
-	this->_draw_tool = std::make_unique<DrawObstaclesInfos>(_raw_frame_w_rects, _obstacles);
-
-
-	/*this->_obstacles_draw.SetFrame(this->_raw_frame_w_rects);
-	this->_obstacles_draw.Draw(this->_obstacles);
-	this->_obstacles_draw.DrawObstacle(this->_rope_load, cv::Scalar(255, 0, 0));
-	this->_obstacles_draw.DrawRopeLoadArea(this->_rope_load_area);*/
-
-	this->_collide = this->ObstaclesInsideRopeArea();
-
-    return this->_raw_frame_w_rects;
+	_raw_frame.copyTo(_raw_frame_w_rects);
+	_draw_tool = std::make_unique<DrawObstacles>(_raw_frame_w_rects, _obstacles);
+	_draw_tool = std::make_unique<DrawObstaclesCorners>(_raw_frame_w_rects, _obstacles);
+	_draw_tool = std::make_unique<DrawObstaclesInfos>(_raw_frame_w_rects, _obstacles);
+	_draw_tool = std::make_unique<DrawRopeLoadArea>(_raw_frame_w_rects, _rope_load_area);
+	_collide = this->ObstaclesInsideRopeArea();
+    return _raw_frame_w_rects;
 }
 
 /// <summary>
@@ -92,7 +81,7 @@ cv::Mat ObstaclesDetection::GetFrameWithRectangles() {
 /// </summary>
 /// <returns></returns>
 bool ObstaclesDetection::IsCollided() const {
-	return this->_collide;
+	return _collide;
 }
 
 /// <summary>
@@ -116,7 +105,7 @@ void ObstaclesDetection::SetBinaryThreshold(uint threshold) {
 	if (threshold > 255)
 		threshold = 255;
 
-	this->_bin_threshold = threshold;
+	_bin_threshold = threshold;
 }
 
 /// <summary>
@@ -127,7 +116,7 @@ void ObstaclesDetection::SetCannyThreshold(uint threshold) {
 	if (threshold > 255)
 		threshold = 255;
 
-	this->_canny_threshold = threshold;
+	_canny_threshold = threshold;
 }
 
 /// <summary>
@@ -136,18 +125,18 @@ void ObstaclesDetection::SetCannyThreshold(uint threshold) {
 /// <returns>Amount of obstacles detected</returns>
 size_t ObstaclesDetection::Detect(bool print_detect) {
     std::vector<std::vector<cv::Point>> contours = this->FindContoursOnFrame();
-    this->_obstacles = this->RectsToObstacles(this->CalcRotatedRects(contours));
+    _obstacles = this->RectsToObstacles(this->CalcRotatedRects(contours));
 	if(print_detect) 
 		this->PrintDetect();
-    return this->_obstacles.size();
+    return _obstacles.size();
 }
 
 /// <summary>
 /// Print on console the obstacles detection informations
 /// </summary>
 void ObstaclesDetection::PrintDetect() {
-	std::cout << std::endl << this->_obstacles.size() << " obstacles detected." << std::endl;
-	for (auto o = this->_obstacles.begin(); o != this->_obstacles.end(); o++)
+	std::cout << std::endl << _obstacles.size() << " obstacles detected." << std::endl;
+	for (auto o = _obstacles.begin(); o != _obstacles.end(); o++)
 		std::cout << (*o).ToString() << std::endl;
 }
 
@@ -162,7 +151,7 @@ ObstaclesDetection::FindContoursOnFrame(uint min_contour_area) {
     std::vector<std::vector<cv::Point>> contours, contours_filtered;
 
     // Get contours from Binary input
-    cv::findContours(this->_bin_frame, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+    cv::findContours(_bin_frame, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
     // Get obstacles contours
 	for (auto it = contours.begin(); it != contours.end(); it++)
@@ -198,7 +187,7 @@ ObstaclesDetection::RectsToObstacles(std::vector<cv::RotatedRect> rects) {
     std::vector<Obstacle> obstacles;
     for (auto it = rects.begin(); it != rects.end(); it++) {
 		if (this->IsInsideRopeLoadArea(*it))
-			this->_rope_load = Obstacle(*it);
+			_rope_load = Obstacle(*it);
 		else
 			obstacles.push_back(Obstacle((*it)));
 	}
@@ -211,13 +200,13 @@ ObstaclesDetection::RectsToObstacles(std::vector<cv::RotatedRect> rects) {
 /// <param name="rect"></param>
 /// <returns></returns>
 bool ObstaclesDetection::IsInsideRopeLoadArea(cv::RotatedRect rect) {
-	bool x_condition = ((rect.center.x > this->_rope_load_area.X()) && 
-		(rect.center.x < (this->_rope_load_area.X() + this->_rope_load_area.Width())));
-	bool y_condition = ((rect.center.y > this->_rope_load_area.Y()) &&
-		(rect.center.y < (this->_rope_load_area.Y() + this->_rope_load_area.Height())));
+	bool x_condition = ((rect.center.x > _rope_load_area.X()) && 
+		(rect.center.x < (_rope_load_area.X() + _rope_load_area.Width())));
+	bool y_condition = ((rect.center.y > _rope_load_area.Y()) &&
+		(rect.center.y < (_rope_load_area.Y() + _rope_load_area.Height())));
 
-	bool width_condition = (rect.size.width < (this->_rope_load_area.Width() / 2));
-	bool height_condition = (rect.size.height < (this->_rope_load_area.Height() / 2));
+	bool width_condition = (rect.size.width < (_rope_load_area.Width() / 2));
+	bool height_condition = (rect.size.height < (_rope_load_area.Height() / 2));
 
 	return x_condition && y_condition && width_condition && height_condition;
 }
@@ -328,15 +317,16 @@ bool ObstaclesDetection::IsInsideRopeLoadArea(cv::RotatedRect rect) {
 /// <returns></returns>
 bool ObstaclesDetection::ObstaclesInsideRopeArea(void) {
 	bool res = false;
-	int x_origin = this->_rope_load_area.X();
-	int y_origin = this->_rope_load_area.Y();
+	int x_origin = _rope_load_area.X();
+	int y_origin = _rope_load_area.Y();
 
-	for (int y = y_origin; y < (this->_rope_load_area.Height() + y_origin); y++) {
-		for (int x = x_origin; x < (this->_rope_load_area.Width() + x_origin); x++) {
-			cv::Vec3b c = this->_raw_frame_w_rects.at<cv::Vec3b>(y, x);
+	for (int y = y_origin; y < (_rope_load_area.Height() + y_origin); y++) {
+		for (int x = x_origin; x < (_rope_load_area.Width() + x_origin); x++) {
+			cv::Vec3b c = _raw_frame_w_rects.at<cv::Vec3b>(y, x);
 			res |= (c.val[1] >= 240);
 		}
 	}
+
 	return res;
 }
 

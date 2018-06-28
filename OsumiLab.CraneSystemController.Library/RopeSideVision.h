@@ -3,11 +3,15 @@
 
 #include "opencv2\opencv.hpp"
 #include "CameraHelper.h"
+#include "DrawRopeInfos.h"
+#include "DrawHoughLines.h"
 #include <math.h>
+#include <memory>
 
 class RopeSideVision
 {
 public:
+	// Ctor/Dtor
 	RopeSideVision();
 	RopeSideVision(cv::Mat &input);
 	~RopeSideVision();
@@ -15,7 +19,7 @@ public:
 	// Getters / Setters
 	void SetFrame(cv::Mat &m);
 	cv::Mat GetFrame();
-	cv::Mat GetFrameWithLines();
+	cv::Mat GetDecoredFrame();
 	cv::Mat GetCannyFrame();
 	cv::Mat GetBinaryFrame();
 	double GetAngle();
@@ -33,8 +37,9 @@ private:
 	double _angle;
 	std::vector<cv::Vec4i> _lines;
 	cv::Mat _frame;
-	cv::Mat _frame_w_lines;
+	cv::Mat _decored_frame;
 	cv::Mat _canny;
 	cv::Mat _binary;
+	std::unique_ptr<DrawTool> _draw_tool;
 };
 

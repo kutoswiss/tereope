@@ -8,6 +8,7 @@
 #include "DrawObstacles.h"
 #include "DrawObstaclesCorners.h"
 #include "DrawObstaclesInfos.h"
+#include "DrawRopeLoadArea.h"
 #include <VimbaCPP.h>
 #include <VimbaSystem.hpp>
 #include <iostream>

@@ -17,6 +17,7 @@ public:
 	std::vector<StereoObstacle> Match(void);
 	void PrintMatchedObstacles(void);
 
+	// Getter/Setters
 	std::vector<StereoObstacle> GetStereoObstacles();
 
 private:

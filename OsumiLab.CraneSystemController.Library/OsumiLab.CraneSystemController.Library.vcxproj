@@ -145,9 +145,12 @@
     <ClInclude Include="CraneRopeAxis.h" />
     <ClInclude Include="CraneRopeCamera.h" />
     <ClInclude Include="CraneSceneCamera.h" />
+    <ClInclude Include="DrawHoughLines.h" />
     <ClInclude Include="DrawObstacles.h" />
     <ClInclude Include="DrawObstaclesCorners.h" />
     <ClInclude Include="DrawObstaclesInfos.h" />
+    <ClInclude Include="DrawRopeInfos.h" />
+    <ClInclude Include="DrawRopeLoadArea.h" />
     <ClInclude Include="DrawTool.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="ObstaclesCorrespondence.h" />
@@ -173,9 +176,12 @@
     <ClCompile Include="CraneRopeCamera.cpp" />
     <ClCompile Include="CraneSceneCamera.cpp" />
     <ClCompile Include="CraneSettings.cpp" />
+    <ClCompile Include="DrawHoughLines.cpp" />
     <ClCompile Include="DrawObstacles.cpp" />
     <ClCompile Include="DrawObstaclesCorners.cpp" />
     <ClCompile Include="DrawObstaclesInfos.cpp" />
+    <ClCompile Include="DrawRopeInfos.cpp" />
+    <ClCompile Include="DrawRopeLoadArea.cpp" />
     <ClCompile Include="DrawTool.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="ObstaclesCorrespondence.cpp" />
