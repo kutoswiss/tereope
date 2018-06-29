@@ -1,12 +1,19 @@
 #include "stdafx.h"
 #include "DrawObstaclesCorners.h"
 
-
+/// <summary>
+/// 
+/// </summary>
+/// <param name="frame"></param>
+/// <param name="obstacles"></param>
 DrawObstaclesCorners::DrawObstaclesCorners(cv::Mat &frame, std::vector<Obstacle> obstacles) {
 	_obstacles = obstacles;
 	this->SetFrame(frame);
 }
 
+/// <summary>
+/// 
+/// </summary>
 DrawObstaclesCorners::~DrawObstaclesCorners() {
 }
 

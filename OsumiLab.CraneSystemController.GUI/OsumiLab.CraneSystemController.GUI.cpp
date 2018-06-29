@@ -5,7 +5,7 @@
 #include "ObstaclesDetection.h"
 #include "ObstaclesCorrespondence.h"
 #include "Crane.h"
-#include "RopeSideVision.h"
+#include "RopeSwingRegulator.h"
 
 #include <vector>
 #include <iostream>
@@ -28,8 +28,12 @@ void RopeSideVisionDemo();
 void RopeSwingRegulationDemo();
 
 int main() {
+	Crane c;
+	RopeSwingRegulator regulator;
+	regulator.Regulate(std::ref(c));
+
 	//FixedPositionStereoVision();
-	RopeSideVisionDemo();
+	//RopeSideVisionDemo();
 	//StereoCorrespondance(8000);
 	//ObstaclesDetectionDemo();
 	//Crane c;
@@ -102,8 +106,8 @@ void RopeSideVisionDemo() {
 		rvx.Compute(); 
 		rvy.Compute();
 
-		cv::imshow("X", rvx.GetDecoredFrame());
-		cv::imshow("Y", rvy.GetDecoredFrame());
+		cv::imshow("X", rvx.GetDecoratedFrame());
+		cv::imshow("Y", rvy.GetDecoratedFrame());
 
 		if (cv::waitKey(15) >= 0) 
 			break;

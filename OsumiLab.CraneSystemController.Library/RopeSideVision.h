@@ -19,7 +19,7 @@ public:
 	// Getters / Setters
 	void SetFrame(cv::Mat &m);
 	cv::Mat GetFrame();
-	cv::Mat GetDecoredFrame();
+	cv::Mat GetDecoratedFrame();
 	cv::Mat GetCannyFrame();
 	cv::Mat GetBinaryFrame();
 	double GetAngle();
@@ -37,7 +37,7 @@ private:
 	double _angle;
 	std::vector<cv::Vec4i> _lines;
 	cv::Mat _frame;
-	cv::Mat _decored_frame;
+	cv::Mat _decorated_frame;
 	cv::Mat _canny;
 	cv::Mat _binary;
 	std::unique_ptr<DrawTool> _draw_tool;

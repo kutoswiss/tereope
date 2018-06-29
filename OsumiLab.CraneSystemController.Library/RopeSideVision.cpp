@@ -42,10 +42,10 @@ cv::Mat RopeSideVision::GetFrame() {
 /// 
 /// </summary>
 /// <returns></returns>
-cv::Mat RopeSideVision::GetDecoredFrame() {
-	_draw_tool = std::make_unique<DrawRopeInfos>(_decored_frame, _lines.size(), _angle);
-	_draw_tool = std::make_unique<DrawHoughLines>(_decored_frame, _lines);
-	return _decored_frame;
+cv::Mat RopeSideVision::GetDecoratedFrame() {
+	_draw_tool = std::make_unique<DrawRopeInfos>(_decorated_frame, _lines.size(), _angle);
+	_draw_tool = std::make_unique<DrawHoughLines>(_decorated_frame, _lines);
+	return _decorated_frame;
 }
 
 /// <summary>
@@ -77,7 +77,7 @@ double RopeSideVision::GetAngle() {
 /// </summary>
 void RopeSideVision::Compute() {
 	cv::cvtColor(_frame, _frame, CV_RGB2GRAY);
-	cv::cvtColor(_frame, _decored_frame, CV_GRAY2BGR);
+	cv::cvtColor(_frame, _decorated_frame, CV_GRAY2BGR);
 	cv::threshold(_frame, _binary, 50, 255, cv::THRESH_BINARY);
 	cv::Canny(_binary, _canny, 50, 200, 3);
 	this->FindLines();

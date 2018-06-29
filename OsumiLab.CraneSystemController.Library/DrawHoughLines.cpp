@@ -1,13 +1,19 @@
 #include "stdafx.h"
 #include "DrawHoughLines.h"
 
-
+/// <summary>
+/// 
+/// </summary>
+/// <param name="frame"></param>
+/// <param name="lines"></param>
 DrawHoughLines::DrawHoughLines(cv::Mat &frame, std::vector<cv::Vec4i> lines) {
 	_lines = lines;
 	this->SetFrame(frame);
 }
 
-
+/// <summary>
+/// 
+/// </summary>
 DrawHoughLines::~DrawHoughLines() {
 }
 
