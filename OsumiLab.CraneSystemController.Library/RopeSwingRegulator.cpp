@@ -67,7 +67,7 @@ double RopeSwingRegulator::GetYVoltage() const {
 /// <param name="crane"></param>
 void RopeSwingRegulator::Regulate(Crane &crane) {
 	std::ofstream f;
-	f.open("rope-without-regulation.csv");
+	f.open("rope-with-regulation.csv");
 
 	while (true) {
 		_x_vision.SetFrame(crane.XRopeCamera().GetMat(CV_8UC1));
@@ -85,13 +85,12 @@ void RopeSwingRegulator::Regulate(Crane &crane) {
 		cv::imshow("X", _x_vision.GetDecoratedFrame());
 		cv::imshow("Y", _y_vision.GetDecoratedFrame());
 
-		//crane.FineAxis().SetAxisVoltage(Axis::X, this->GetXVoltage());
-		//crane.FineAxis().SetAxisVoltage(Axis::Y, this->GetYVoltage());
-		//f << _x_vision.GetAngle() << ";" << _y_vision.GetAngle() << std::endl;
+		crane.FineAxis().SetAxisVoltage(Axis::X, this->GetXVoltage());
+		crane.FineAxis().SetAxisVoltage(Axis::Y, this->GetYVoltage());
+		f << _x_vision.GetAngle() << ";" << _y_vision.GetAngle() << std::endl;
 		if (cv::waitKey(15) >= 0) break;
 	}
 	f.close();
-
 
 	crane.FineAxis().Stop(Axis::X);
 	crane.FineAxis().Stop(Axis::Y);

@@ -28,10 +28,8 @@ void RopeSideVisionDemo();
 void RopeSwingRegulationDemo();
 
 int main() {
-	Crane c;
-	RopeSwingRegulator regulator;
-	regulator.Regulate(std::ref(c));
-
+	//RopeSwingRegulationDemo();
+	//FixedPositionStereoVision();
 	//FixedPositionStereoVision();
 	//RopeSideVisionDemo();
 	//StereoCorrespondance(8000);
@@ -92,7 +90,9 @@ int main() {
 }
 
 void RopeSwingRegulationDemo() {
-
+	Crane c;
+	RopeSwingRegulator regulator;
+	regulator.Regulate(std::ref(c));
 }
 
 void RopeSideVisionDemo() {
