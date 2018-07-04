@@ -28,6 +28,10 @@ void RopeSideVisionDemo();
 void RopeSwingRegulationDemo();
 
 int main() {
+	ObstaclesDetection od;
+
+	od.SegmentsIntersection(cv::Point(0, 10), cv::Point(2, 0), cv::Point(10, 0), cv::Point(5, 2.5));
+
 	//RopeSwingRegulationDemo();
 	//FixedPositionStereoVision();
 	//FixedPositionStereoVision();

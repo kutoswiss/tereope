@@ -87,7 +87,7 @@ void RopeSwingRegulator::Regulate(Crane &crane) {
 
 		crane.FineAxis().SetAxisVoltage(Axis::X, this->GetXVoltage());
 		crane.FineAxis().SetAxisVoltage(Axis::Y, this->GetYVoltage());
-		f << _x_vision.GetAngle() << ";" << _y_vision.GetAngle() << std::endl;
+		//f << _x_vision.GetAngle() << "," << _y_vision.GetAngle() << "," << this->GetXVoltage() << "," << this->GetYVoltage() << std::endl;
 		if (cv::waitKey(15) >= 0) break;
 	}
 	f.close();

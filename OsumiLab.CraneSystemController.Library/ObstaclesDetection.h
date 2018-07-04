@@ -50,7 +50,8 @@ public:
 	bool IsInsideRopeLoadArea(cv::RotatedRect rect);
 	bool CollideWithRopeLoadArea(Obstacle obstacle);
 	bool LineIntersect(std::tuple<cv::Point, cv::Point> l1, std::tuple<cv::Point, cv::Point> l2);
-	bool LinesIntersect(std::vector<cv::Point> p1, std::vector<cv::Point> p2);
+	//bool LinesIntersect(std::vector<cv::Point> p1, std::vector<cv::Point> p2);
+	bool SegmentsIntersection(cv::Point p, cv::Point pr, cv::Point q, cv::Point qs);
 	std::vector<std::tuple<cv::Point, cv::Point>> GetLines(std::vector<cv::Point> pts);
 
     /// <summary>

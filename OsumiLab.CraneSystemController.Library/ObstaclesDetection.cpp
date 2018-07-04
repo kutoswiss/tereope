@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "ObstaclesDetection.h"
 
 /// <summary>
@@ -328,5 +328,32 @@ bool ObstaclesDetection::ObstaclesInsideRopeArea(void) {
 	}
 
 	return res;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="l1"></param>
+/// <param name="l2"></param>
+/// <returns></returns>
+bool ObstaclesDetection::SegmentsIntersection(cv::Point p, cv::Point pr, cv::Point q, cv::Point qs) {
+	cv::Point cmp(q.x - p.x, q.y - p.y);
+	cv::Point r(pr.x - p.x, pr.y - p.y);
+	cv::Point s(qs.x - q.x, qs.y - q.y);
+	double cmp_xr = cmp.x * r.y - cmp.y * r.x;
+	double cmp_xs = cmp.x * s.y - cmp.y * s.x;
+	double rxs = r.x * s.y - r.y * s.x;
+	float rxsr = 1.0 / rxs;
+	float t = cmp_xs * rxsr;
+	float u = cmp_xr * rxsr;
+
+	if (rxsr == 0)
+		return false;
+
+	if(cmp_xr == 0) 
+		return ((q.x - p.x < 0) != (q.x - pr.x < 0)) 
+		|| ((q.y - p.y < 0) != (q.y - pr.y < 0));
+
+	return (t >= 0) && (t <= 1) && (u >= 0) && (u <= 1);
 }
 
