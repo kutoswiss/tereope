@@ -111,6 +111,9 @@
     <ClInclude Include="DrawHoughLines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ObstacleCollisionArea.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -192,6 +195,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DrawHoughLines.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObstacleCollisionArea.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,5 +1,6 @@
 #pragma once
 #include "opencv2\opencv.hpp"
+#include "ObstacleCollisionArea.h"
 
 class Obstacle
 {
@@ -18,6 +19,7 @@ public:
     uint GetAngle() const;
     cv::Point2f GetCenter() const;
     cv::RotatedRect GetRect() const;
+	ObstacleCollisionArea GetCollisionArea() const;
 	uint GetArea() const;
 
     /// <summary>
@@ -25,12 +27,15 @@ public:
     /// </summary>
     std::string ToString();
     std::vector<cv::Point> ToPoints();
-
+	std::vector<std::tuple<cv::Point, cv::Point>> ToSegments();
+	bool CollideWith(Obstacle obstacle);
+	
 private:
     /// <summary>
     /// Private members
     /// </summary>
     uint _height;
     cv::RotatedRect _rotated_rect;
+	ObstacleCollisionArea _collision_area;
 };
 

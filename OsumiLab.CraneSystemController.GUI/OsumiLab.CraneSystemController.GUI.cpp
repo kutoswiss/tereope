@@ -28,9 +28,9 @@ void RopeSideVisionDemo();
 void RopeSwingRegulationDemo();
 
 int main() {
-	ObstaclesDetection od;
-
-	od.SegmentsIntersection(cv::Point(0, 10), cv::Point(2, 0), cv::Point(10, 0), cv::Point(5, 2.5));
+	ObstaclesDetectionDemo();
+	/*ObstaclesDetection od;
+	od.SegmentsIntersection(cv::Point(0, 10), cv::Point(2, 0), cv::Point(10, 0), cv::Point(5, 2.5));*/
 
 	//RopeSwingRegulationDemo();
 	//FixedPositionStereoVision();
@@ -356,7 +356,7 @@ void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_de
 	const std::string kCannyWinTitle = "Canny frame";
 	const std::string kRawWinTitle = "Raw frame";
 
-
+	std::vector<Obstacle> obstacles;
 	cv::Mat frame_mat;
 	int binary_thr = ObstaclesDetection::kBinaryThresholdValue;
 	int n_obstacles, pre_n_obstacles = 0;
@@ -376,6 +376,11 @@ void SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obstacle_de
 		
 		cv::imshow(kWindowTitle, obstacle_detection.GetFrameWithRectangles());
 		pre_n_obstacles = n_obstacles;
+
+		obstacles = obstacle_detection.GetObstacles();
+		if (obstacle_detection.RopeLoadCollidesWithObstacles())
+			std::cout << "Collision detected" << std::endl;
+			
 		if (cv::waitKey(15) >= 0) 
 			break;
 	}

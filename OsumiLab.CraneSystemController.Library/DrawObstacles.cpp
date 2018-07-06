@@ -31,10 +31,18 @@ void DrawObstacles::Draw() {
 void DrawObstacles::DrawObstaclesOnFrame(std::vector<Obstacle> obstacles, uint tickness) {
 	// Get points from rotated rectangles
 	std::vector<std::vector<cv::Point>> points;
+	std::vector<std::vector<cv::Point>> collision_area_points;
+
 	for (auto it = obstacles.begin(); it != obstacles.end(); it++)
 		points.push_back((*it).ToPoints());
+
+	for (auto it = obstacles.begin(); it != obstacles.end(); it++)
+		collision_area_points.push_back((*it).GetCollisionArea().ToPoints());
 
 	// Draw polylines from points
 	cv::polylines(this->_frame, points,
 		true, kObstaclesPolygonColor, tickness, CV_AA);
+
+	cv::polylines(this->_frame, collision_area_points,
+		true, kCollisionAreaPolygonColor, 1, CV_AA);
 }

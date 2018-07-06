@@ -12,6 +12,11 @@ Obstacle::Obstacle() {
 /// </summary>
 Obstacle::Obstacle(cv::RotatedRect rotated_rect) {
     this->_rotated_rect = rotated_rect;
+	this->_collision_area.SetArea(
+		_rotated_rect.center, 
+		_rotated_rect.angle, 
+		_rotated_rect.size.width + 30,
+		_rotated_rect.size.height + 30);
 }
 
 /// <summary>
@@ -48,6 +53,14 @@ cv::RotatedRect Obstacle::GetRect() const {
 /// 
 /// </summary>
 /// <returns></returns>
+ObstacleCollisionArea Obstacle::GetCollisionArea() const {
+	return _collision_area;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
 uint Obstacle::GetArea() const {
 	return this->_rotated_rect.size.area();
 }
@@ -78,4 +91,34 @@ std::vector<cv::Point> Obstacle::ToPoints() {
         pts.push_back(vertices[i]);
 
     return pts;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+std::vector<std::tuple<cv::Point, cv::Point>> 
+Obstacle::ToSegments() {
+	std::vector<cv::Point> points = this->ToPoints();
+	std::vector<std::tuple<cv::Point, cv::Point>> segments;
+	cv::Point tmp_pt;
+
+	while(points.size() > 1) {
+		tmp_pt = points.back();
+		points.pop_back();
+
+		for (auto p = points.begin(); p != points.end(); p++)
+			segments.push_back(std::make_tuple(tmp_pt, (*p)));
+	}
+
+	return segments;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="obstacle"></param>
+/// <returns></returns>
+bool Obstacle::CollideWith(Obstacle obstacle) {
+	return _collision_area.CollideWith(obstacle.GetCollisionArea());
 }

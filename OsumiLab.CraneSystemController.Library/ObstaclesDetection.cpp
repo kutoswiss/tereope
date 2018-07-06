@@ -126,8 +126,10 @@ void ObstaclesDetection::SetCannyThreshold(uint threshold) {
 size_t ObstaclesDetection::Detect(bool print_detect) {
     std::vector<std::vector<cv::Point>> contours = this->FindContoursOnFrame();
     _obstacles = this->RectsToObstacles(this->CalcRotatedRects(contours));
+	
 	if(print_detect) 
 		this->PrintDetect();
+	
     return _obstacles.size();
 }
 
@@ -350,10 +352,50 @@ bool ObstaclesDetection::SegmentsIntersection(cv::Point p, cv::Point pr, cv::Poi
 	if (rxsr == 0)
 		return false;
 
-	if(cmp_xr == 0) 
+	if (cmp_xr == 0) 
 		return ((q.x - p.x < 0) != (q.x - pr.x < 0)) 
 		|| ((q.y - p.y < 0) != (q.y - pr.y < 0));
 
 	return (t >= 0) && (t <= 1) && (u >= 0) && (u <= 1);
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+bool ObstaclesDetection::CollideWithRopeLoadArea() {
+	auto seg_area = _rope_load.ToSegments();
+	bool res = false;
+
+	for (size_t i = 0; i < _obstacles.size(); i++) {
+		auto seg_obstacles = _obstacles[i].ToSegments();
+		for (size_t j = 0; j < seg_obstacles.size(); j++)
+		{
+			for (size_t k = 0; k < seg_area.size(); k++)
+			{
+				cv::Point p = std::get<0>(seg_obstacles[j]);
+				cv::Point pr = std::get<1>(seg_obstacles[j]);
+				cv::Point q = std::get<0>(seg_area[k]);
+				cv::Point qs = std::get<1>(seg_area[k]);
+
+				res |= this->SegmentsIntersection(p, pr, q, qs);
+			}
+		}
+	}
+
+	return res;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+bool ObstaclesDetection::RopeLoadCollidesWithObstacles() {
+	bool res = false;
+
+	for (auto o = _obstacles.begin(); o != _obstacles.end(); o++)
+		res |= _rope_load.CollideWith(*o);
+
+	return res;
 }
 
