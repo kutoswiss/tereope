@@ -23,7 +23,7 @@ public:
 	double GetYVoltage() const;
 
 	// Public method
-	void Regulate(Crane &crane);
+	void Regulate(Crane &crane, bool *stop);
 
 private:
 	// Private methods

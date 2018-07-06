@@ -19,24 +19,17 @@ using namespace AVT::VmbAPI;
 class ObstaclesDetection
 {
 public:
-    /// <summary>
-    /// Ctor/Dtor
-    /// </summary>
+    // Ctor/Dtor
     ObstaclesDetection();
     ObstaclesDetection(cv::Mat &input);
     ~ObstaclesDetection();
 
-    /// <summary>
-    /// Constants
-    /// </summary>
+    // Constants
     static const uint kDefaultMinContourArea = 200;
     static const uint kBinaryThresholdValue = 45;
 	static const uint kCannyThresholdValue = 255;
 
-    /// <summary>
-    /// Properties
-    /// </summary>
-    /// <returns></returns>
+    // Getters/Setters
     std::vector<Obstacle> GetObstacles() const;
 	Obstacle GetRopeLoad() const;
     cv::Mat GetCannyFrame() const;
@@ -48,25 +41,14 @@ public:
 	void SetCannyThreshold(uint threshold);
 
 	bool IsInsideRopeLoadArea(cv::RotatedRect rect);
-	bool CollideWithRopeLoadArea();
 	bool RopeLoadCollidesWithObstacles();
 
-	bool LineIntersect(std::tuple<cv::Point, cv::Point> l1, std::tuple<cv::Point, cv::Point> l2);
-	//bool LinesIntersect(std::vector<cv::Point> p1, std::vector<cv::Point> p2);
-	bool SegmentsIntersection(cv::Point p, cv::Point pr, cv::Point q, cv::Point qs);
-	std::vector<std::tuple<cv::Point, cv::Point>> GetLines(std::vector<cv::Point> pts);
-
-    /// <summary>
-    /// Public methods
-    /// </summary>
-    /// <returns></returns>
+    // Public methods
     size_t Detect(bool print_detect = false);
 	void PrintDetect();
 
 private:
-    /// <summary>
-    /// Private methods
-    /// </summary>
+    // Private methods
     std::vector<std::vector<cv::Point>>
 		FindContoursOnFrame(uint min_contour_area = kDefaultMinContourArea);
     std::vector<cv::RotatedRect> 
@@ -86,7 +68,6 @@ private:
     std::vector<Obstacle> _obstacles;
 
 	// Rope load area
-	//cv::Rect2d _rope_load_area;
 	RopeLoadArea _rope_load_area;
 	Obstacle _rope_load;
 

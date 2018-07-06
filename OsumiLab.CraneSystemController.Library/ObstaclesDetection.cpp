@@ -212,107 +212,7 @@ bool ObstaclesDetection::IsInsideRopeLoadArea(cv::RotatedRect rect) {
 
 	return x_condition && y_condition && width_condition && height_condition;
 }
-//
-///// <summary>
-///// 
-///// </summary>
-///// <param name="obstacle"></param>
-///// <returns></returns>
-//bool ObstaclesDetection::CollideWithRopeLoadArea(Obstacle obstacle) {
-//	auto pts1 = obstacle.ToPoints();
-//	std::vector<cv::Point> pts2;
-//	pts2.push_back(cv::Point(this->_rope_load_area.x, this->_rope_load_area.y));
-//	pts2.push_back(cv::Point(this->_rope_load_area.x, 
-//		this->_rope_load_area.y + this->_rope_load_area.Height));
-//	pts2.push_back(cv::Point(this->_rope_load_area.x + this->_rope_load_area.Width, 
-//		this->_rope_load_area.y));
-//	pts2.push_back(cv::Point(this->_rope_load_area.x + this->_rope_load_area.Width,
-//		this->_rope_load_area.y + this->_rope_load_area.Height));
-//
-//	return this->LinesIntersect(pts1, pts2);
-//}
-//
-///// <summary>
-///// 
-///// </summary>
-///// <param name="l1"></param>
-///// <param name="l2"></param>
-///// <returns></returns>
-//bool ObstaclesDetection::LineIntersect(std::tuple<cv::Point, cv::Point> l1, std::tuple<cv::Point, cv::Point> l2) {
-//	double x1_0 = std::get<0>(l1).x;
-//	double y1_0 = std::get<0>(l1).y;
-//	double x2_0 = std::get<1>(l1).x;
-//	double y2_0 = std::get<1>(l1).y;
-//
-//	double x1_1 = std::get<0>(l2).x;
-//	double y1_1 = std::get<0>(l2).y;
-//	double x2_1 = std::get<1>(l2).x;
-//	double y2_1 = std::get<1>(l2).y;
-//
-//	double A0 = y2_0 - y1_0;
-//	double B0 = x1_0 - x2_0;
-//	double C0 = A0*x1_0 + B0*y1_0;
-//
-//	double A1 = y2_1 - y1_1;
-//	double B1 = x1_1 - x2_1;
-//	double C1 = A1*x1_1 + B0*y1_1;
-//
-//	double det = A0 * B1 - A1 * B0;
-//
-//	if (det != 0) {
-//		double x_intersect = (B1*C0 - B0*C1) / det;
-//		double y_intersect = (A0*C1 - A1*C0) / det;
-//
-//		bool x_condition = (x_intersect >= (x1_1 - 5)) && (x_intersect <= (x2_1 + 5));
-//			//&& (x_intersect >= (x1_0 - 5)) && (x_intersect <= (x2_0 + 5));
-//
-//		bool y_condition = (y_intersect >= (y1_1 - 5)) && (y_intersect <= (y2_1 + 5));
-//			//&& (y_intersect >= (y1_0 - 5)) && (y_intersect <= (y2_0 + 5));
-//
-//		return (x_condition && y_condition);
-//	} else 
-//		return false;
-//}
-//
-///// <summary>
-///// 
-///// </summary>
-///// <param name="p1"></param>
-///// <param name="p2"></param>
-///// <returns></returns>
-//bool ObstaclesDetection::LinesIntersect(std::vector<cv::Point> p1, std::vector<cv::Point> p2) {
-//	auto lines_1 = this->GetLines(p1);
-//	auto lines_2 = this->GetLines(p2);
-//	bool res = false;
-//
-//	for (auto l1 = lines_1.begin(); l1 < lines_1.end(); l1++) {
-//		for (auto l2 = lines_2.begin(); l2 < lines_2.end(); l2++) {
-//			res |= this->LineIntersect((*l1), (*l2));
-//		}
-//	}
-//	
-//	return res;
-//}
 
-///// <summary>
-///// 
-///// </summary>
-///// <param name="pts"></param>
-///// <returns></returns>
-//std::vector<std::tuple<cv::Point, cv::Point>>
-//ObstaclesDetection::GetLines(std::vector<cv::Point> pts) {
-//	std::vector<std::tuple<cv::Point, cv::Point>> lines;
-//
-//	for (auto p = pts.begin(); p != pts.end(); p++) {
-//		for (auto tmp = pts.begin(); tmp < pts.end(); tmp++) {
-//			if ((*p) != (*tmp))
-//				lines.push_back(std::make_tuple((*p), (*tmp)));
-//		}
-//	}
-//
-//	return lines;
-//}
-//
 /// <summary>
 /// 
 /// </summary>
@@ -335,66 +235,16 @@ bool ObstaclesDetection::ObstaclesInsideRopeArea(void) {
 /// <summary>
 /// 
 /// </summary>
-/// <param name="l1"></param>
-/// <param name="l2"></param>
-/// <returns></returns>
-bool ObstaclesDetection::SegmentsIntersection(cv::Point p, cv::Point pr, cv::Point q, cv::Point qs) {
-	cv::Point cmp(q.x - p.x, q.y - p.y);
-	cv::Point r(pr.x - p.x, pr.y - p.y);
-	cv::Point s(qs.x - q.x, qs.y - q.y);
-	double cmp_xr = cmp.x * r.y - cmp.y * r.x;
-	double cmp_xs = cmp.x * s.y - cmp.y * s.x;
-	double rxs = r.x * s.y - r.y * s.x;
-	float rxsr = 1.0 / rxs;
-	float t = cmp_xs * rxsr;
-	float u = cmp_xr * rxsr;
-
-	if (rxsr == 0)
-		return false;
-
-	if (cmp_xr == 0) 
-		return ((q.x - p.x < 0) != (q.x - pr.x < 0)) 
-		|| ((q.y - p.y < 0) != (q.y - pr.y < 0));
-
-	return (t >= 0) && (t <= 1) && (u >= 0) && (u <= 1);
-}
-
-/// <summary>
-/// 
-/// </summary>
-/// <returns></returns>
-bool ObstaclesDetection::CollideWithRopeLoadArea() {
-	auto seg_area = _rope_load.ToSegments();
-	bool res = false;
-
-	for (size_t i = 0; i < _obstacles.size(); i++) {
-		auto seg_obstacles = _obstacles[i].ToSegments();
-		for (size_t j = 0; j < seg_obstacles.size(); j++)
-		{
-			for (size_t k = 0; k < seg_area.size(); k++)
-			{
-				cv::Point p = std::get<0>(seg_obstacles[j]);
-				cv::Point pr = std::get<1>(seg_obstacles[j]);
-				cv::Point q = std::get<0>(seg_area[k]);
-				cv::Point qs = std::get<1>(seg_area[k]);
-
-				res |= this->SegmentsIntersection(p, pr, q, qs);
-			}
-		}
-	}
-
-	return res;
-}
-
-/// <summary>
-/// 
-/// </summary>
 /// <returns></returns>
 bool ObstaclesDetection::RopeLoadCollidesWithObstacles() {
 	bool res = false;
 
-	for (auto o = _obstacles.begin(); o != _obstacles.end(); o++)
-		res |= _rope_load.CollideWith(*o);
+	for (auto o = _obstacles.begin(); o != _obstacles.end(); o++) {
+		if(_rope_load.CollideWith(*o)) {
+			res = true;
+			break;
+		}
+	}
 
 	return res;
 }
