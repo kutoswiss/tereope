@@ -27,6 +27,9 @@
     <ClInclude Include="Demo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CraneSystemController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -36,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CraneSystemController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
