@@ -6,20 +6,15 @@
 class CraneCoarseMS : public CraneMovementSystem
 {
 public:
+	// Ctor/Dtor
 	CraneCoarseMS(short aio_id, short cnt_id);
 	~CraneCoarseMS();
 
 	// Public methods
-	void X(double voltage);
-	void Y(double voltage);
 	void X(int step, double voltage);
 	void Y(int step, double voltage);
 	void XThread(int step, double voltage);
 	void YThread(int step, double voltage);
-	void XThreadImpl(int &step, double &voltage);
-	void YThreadImpl(int &step, double &voltage);
-	void XJoinThread();
-
 	void HaltX();
 	void HaltY();
 
@@ -36,6 +31,12 @@ private:
 	const int kYAxisCntChannel = CraneSettings::kYCoarseAxisCntChannel;
 	const int kXAxisEnableChannel = 10;
 	const int kYAxisEnableChannel = 9;
+
+	// Private methods
+	void XThreadImpl(int &step, double &voltage);
+	void YThreadImpl(int &step, double &voltage);
+	void XJoinThread();
+	void YJoinThread();
 
 	// Private members
 	std::unique_ptr<std::thread> _x_thread;

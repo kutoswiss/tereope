@@ -6,7 +6,7 @@ class RopeSwingRegulator
 {
 public:
 	// Constants
-	const double kXMaxPeakVoltage = 1.5;
+	const double kXMaxPeakVoltage = 2.0;
 	const double kYMaxPeakVoltage = 2.5;
 	const double kXMinTriggerVoltage = 0.5;
 	const double kYMinTriggerVoltage = 0.5;

@@ -123,6 +123,12 @@
     <ClInclude Include="CraneCoarseMS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CraneFineMS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CraneRopeMS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -216,6 +222,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CraneCoarseMS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CraneFineMS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CraneRopeMS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

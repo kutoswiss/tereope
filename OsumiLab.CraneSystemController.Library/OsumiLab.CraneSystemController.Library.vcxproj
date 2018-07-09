@@ -142,7 +142,9 @@
     <ClInclude Include="CraneCameras.h" />
     <ClInclude Include="CraneCoarseAxis.h" />
     <ClInclude Include="CraneCoarseMS.h" />
+    <ClInclude Include="CraneFineMS.h" />
     <ClInclude Include="CraneMovementSystem.h" />
+    <ClInclude Include="CraneRopeMS.h" />
     <ClInclude Include="CraneSettings.h" />
     <ClInclude Include="CraneFineAxis.h" />
     <ClInclude Include="CraneRopeAxis.h" />
@@ -178,9 +180,11 @@
     <ClCompile Include="CraneCoarseAxis.cpp" />
     <ClCompile Include="CraneCoarseMS.cpp" />
     <ClCompile Include="CraneFineAxis.cpp" />
+    <ClCompile Include="CraneFineMS.cpp" />
     <ClCompile Include="CraneMovementSystem.cpp" />
     <ClCompile Include="CraneRopeAxis.cpp" />
     <ClCompile Include="CraneRopeCamera.cpp" />
+    <ClCompile Include="CraneRopeMS.cpp" />
     <ClCompile Include="CraneSceneCamera.cpp" />
     <ClCompile Include="CraneSettings.cpp" />
     <ClCompile Include="DrawHoughLines.cpp" />

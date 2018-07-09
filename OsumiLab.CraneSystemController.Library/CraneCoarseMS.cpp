@@ -42,35 +42,13 @@ CraneCoarseMS::~CraneCoarseMS() {
 /// <param name="step"></param>
 /// <param name="voltage"></param>
 void CraneCoarseMS::X(int step, double voltage) {
-	double ramp_voltage = 0.0;
-	int ramp_steps = (step / 4) / 10;
-	int stable_steps = step - (ramp_steps * 10 * 2);
-
 	// Positive voltage -> Move on right
 	// Negative voltage -> Move on left
 	voltage = voltage * ((step < 0) ? 1 : -1);
 
 	_axis[this->kXAxisKey]->Enable();
-
-	// Rising time
-	for (int i = 1; i <= 10; i++) {
-		ramp_voltage = (voltage / 10) * i;
-		_axis[this->kXAxisKey]->SetVoltage(ramp_voltage);
-		_axis[this->kXAxisKey]->WaitUntilCounterReach(ramp_steps);
-	}
-
-	// Stable time
 	_axis[this->kXAxisKey]->SetVoltage(voltage);
-	_axis[this->kXAxisKey]->WaitUntilCounterReach(stable_steps);
-
-	// Falling time
-	for (int i = 10; i > 0; i--) {
-		ramp_voltage = (voltage / 10) * i;
-		_axis[this->kXAxisKey]->SetVoltage(ramp_voltage);
-		_axis[this->kXAxisKey]->WaitUntilCounterReach(ramp_steps);
-	}
-
-	// Stop time
+	_axis[this->kXAxisKey]->WaitUntilCounterReach(step);
 	_axis[this->kXAxisKey]->SetVoltage(0.0);
 	_axis[this->kXAxisKey]->Disable();
 }
@@ -81,10 +59,6 @@ void CraneCoarseMS::X(int step, double voltage) {
 /// <param name="step"></param>
 /// <param name="voltage"></param>
 void CraneCoarseMS::Y(int step, double voltage) {
-	double ramp_voltage = 0.0;
-	int ramp_steps = (step / 4) / 10;
-	int stable_steps = step - (ramp_steps * 10 * 2);
-
 	// Positive voltage -> Move on top
 	// Negative voltage -> Move on bottom
 	voltage = voltage * ((step < 0) ? 1 : -1);
@@ -103,7 +77,25 @@ void CraneCoarseMS::Y(int step, double voltage) {
 /// <param name="voltage"></param>
 void CraneCoarseMS::XThread(int step, double voltage) {
 	this->HaltX();
-	_x_thread = std::make_unique<std::thread>(&CraneCoarseMS::XThreadImpl, this, std::ref(step), std::ref(voltage));
+	_x_thread = std::make_unique<std::thread>(
+		&CraneCoarseMS::XThreadImpl, 
+		this, 
+		std::ref(step), 
+		std::ref(voltage));
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="step"></param>
+/// <param name="voltage"></param>
+void CraneCoarseMS::YThread(int step, double voltage) {
+	this->HaltY();
+	_y_thread = std::make_unique<std::thread>(
+		&CraneCoarseMS::YThreadImpl,
+		this,
+		std::ref(step),
+		std::ref(voltage));
 }
 
 /// <summary>
@@ -118,9 +110,26 @@ void CraneCoarseMS::XThreadImpl(int &step, double &voltage) {
 /// <summary>
 /// 
 /// </summary>
+/// <param name="step"></param>
+/// <param name="voltage"></param>
+void CraneCoarseMS::YThreadImpl(int &step, double &voltage) {
+	this->Y(step, voltage);
+}
+
+/// <summary>
+/// 
+/// </summary>
 void CraneCoarseMS::XJoinThread() {
 	if ((_x_thread != nullptr) && _x_thread->joinable())
 		_x_thread->join();
+}
+
+/// <summary>
+/// 
+/// </summary>
+void CraneCoarseMS::YJoinThread() {
+	if ((_y_thread != nullptr) && _y_thread->joinable())
+		_y_thread->join();
 }
 
 /// <summary>
@@ -136,6 +145,7 @@ void CraneCoarseMS::HaltX() {
 /// </summary>
 void CraneCoarseMS::HaltY() {
 	_axis[this->kYAxisKey]->Halt();
+	this->YJoinThread();
 }
 
 /// <summary>

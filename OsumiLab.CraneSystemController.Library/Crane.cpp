@@ -27,10 +27,32 @@ Crane::Crane(char *aio_name, char *cnt_name) {
 	this->InitCameras();
 
 	_corse_ms = std::make_shared<CraneCoarseMS>(_aio_id, _cnt_id);
+	_fine_ms = std::make_shared<CraneFineMS>(_aio_id, _cnt_id);
+	_rope_ms = std::make_shared<CraneRopeMS>(_aio_id, _cnt_id);
 }
 
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
 std::shared_ptr<CraneCoarseMS> Crane::Coarse() {
 	return _corse_ms;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+std::shared_ptr<CraneFineMS> Crane::Fine() {
+	return _fine_ms;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+std::shared_ptr<CraneRopeMS> Crane::RopeMS() {
+	return _rope_ms;
 }
 
 /// <summary>
