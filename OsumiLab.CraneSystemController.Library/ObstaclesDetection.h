@@ -39,6 +39,7 @@ public:
 	void SetRawFrame(cv::Mat &frame);
 	void SetBinaryThreshold(uint threshold);
 	void SetCannyThreshold(uint threshold);
+	void SetRopeLoadAreaOrigin(cv::Point origin);
 
 	bool IsInsideRopeLoadArea(cv::RotatedRect rect);
 	bool RopeLoadCollidesWithObstacles();

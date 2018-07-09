@@ -16,7 +16,7 @@ void Demo::SingleCameraStereoCorrespondance(int steps) {
 	obstacle_detection.Detect();
 	std::vector<Obstacle> o1 = obstacle_detection.GetObstacles();
 	cv::imshow("1", obstacle_detection.GetFrameWithRectangles());
-	crane.CoarseAxis().Move(Axis::X, steps, 0.2);
+	//crane.CoarseAxis().Move(Axis::X, steps, 0.2);
 
 	cv::Mat m2 = crane.RightSceneCamera().GetMat(CV_8UC1);
 	obstacle_detection.SetRawFrame(m2);

@@ -16,6 +16,9 @@ CraneRopeMS::CraneRopeMS(short aio_id, short cnt_id) {
 			this->kZAxisAioChannel,
 			this->kZAxisCntChannel,
 			this->kZAxisEnableChannel));
+
+	// Modify the max voltage of the axis
+	_axis[this->kZAxisKey]->SetMaxVoltage(kMaxVoltage);
 }
 
 /// <summary>

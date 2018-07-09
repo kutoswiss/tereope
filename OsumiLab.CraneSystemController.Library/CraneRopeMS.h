@@ -28,4 +28,5 @@ private:
 	const int kZAxisAioChannel = CraneSettings::kZRopeAxisAioChannel;
 	const int kZAxisCntChannel = CraneSettings::kZRopeAxisCntChannel;
 	const int kZAxisEnableChannel = 11;
+	const double kMaxVoltage = 4.0;
 };

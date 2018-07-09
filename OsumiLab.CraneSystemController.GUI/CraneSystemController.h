@@ -14,19 +14,22 @@
 class CraneSystemController
 {
 public:
+	// Ctor/Dtor
 	CraneSystemController();
 	~CraneSystemController();
 
+	// Public method
 	void Execute();
 
 private:
+	// Private method
 	void CommandTask(Crane &c);
 	void CollisionDetectionTask(Crane &c);
 	void RopeSwingingRegulationTask(Crane &c);
 
+	// Private members
 	std::unique_ptr<std::thread> _cmd_task;
 	std::unique_ptr<std::thread> _rope_regulation_task;
 	std::unique_ptr<std::thread> _collision_detection_task;
 	bool _general_stop_signal;
 };
-

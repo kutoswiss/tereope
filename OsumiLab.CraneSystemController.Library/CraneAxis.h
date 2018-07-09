@@ -16,6 +16,7 @@ public:
 	void Enable();
 	void Disable();
 	void SetVoltage(double voltage);
+	void SetMaxVoltage(double voltage);
 	void Halt();
 	void WaitUntilCounterReach(int step);
 
@@ -23,7 +24,7 @@ private:
 	// Private constants
 	const double kEnableVoltage = 5.0;
 	const double kDisableVoltage = 0.0;
-	const double kMaxVoltage = 2.0;
+	const double kDefaultMaxVoltage = 2.5;
 
 	// Private methods
 	double TrimVoltage(double voltage);
@@ -38,6 +39,7 @@ private:
 	DWORD _current_cnt_value;
 	DWORD _initial_cnt_value;
 
+	double _max_voltage;
 	bool _cnt_halt_signal = false;
 };
 

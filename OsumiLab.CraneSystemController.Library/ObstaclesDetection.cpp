@@ -120,6 +120,14 @@ void ObstaclesDetection::SetCannyThreshold(uint threshold) {
 }
 
 /// <summary>
+/// 
+/// </summary>
+/// <param name="origin"></param>
+void ObstaclesDetection::SetRopeLoadAreaOrigin(cv::Point origin) {
+	_rope_load_area.Set(100, 100, origin);
+}
+
+/// <summary>
 /// Method to run the detection process
 /// </summary>
 /// <returns>Amount of obstacles detected</returns>

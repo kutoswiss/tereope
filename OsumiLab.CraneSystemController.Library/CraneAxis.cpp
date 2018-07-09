@@ -13,6 +13,7 @@ CraneAxis::CraneAxis(short aio_id, short cnt_id, short aio_ch, short cnt_ch, sho
 	_aio_channel = aio_ch;
 	_cnt_channel = cnt_ch;
 	_enable_channel = enable_ch;
+	this->SetMaxVoltage(kDefaultMaxVoltage);
 }
 
 /// <summary>
@@ -44,6 +45,14 @@ void CraneAxis::Disable() {
 void CraneAxis::SetVoltage(double voltage) {
 	voltage = this->TrimVoltage(voltage);
 	AioSingleAoEx(_aio_id, _aio_channel, voltage);
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="voltage"></param>
+void CraneAxis::SetMaxVoltage(double voltage) {
+	_max_voltage = voltage;
 }
 
 /// <summary>
@@ -89,11 +98,11 @@ void CraneAxis::WaitUntilCounterReach(int step) {
 double CraneAxis::TrimVoltage(double voltage) {
 	double v = voltage;
 
-	if (v > this->kMaxVoltage)
-		v = this->kMaxVoltage;
+	if (v > _max_voltage)
+		v = _max_voltage;
 
-	if (v < (this->kMaxVoltage * -1.0))
-		v = this->kMaxVoltage * -1.0;
+	if (v < (_max_voltage * -1.0))
+		v = _max_voltage * -1.0;
 
 	return v;
 }

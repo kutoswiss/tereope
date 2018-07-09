@@ -18,17 +18,16 @@ Crane::Crane(char *aio_name, char *cnt_name) {
 	this->InitCnt(cnt_name);
 
 	// Initialize all axis
-	this->SetCoarseAxis();
-	this->SetFineAxis();
-	this->SetRopeAxis();
+	this->InitAxis();
+	//this->SetCoarseAxis();
+	//this->SetFineAxis();
+	//this->SetRopeAxis();
 
 	// Initialize Vimba system and cameras
 	this->VimbaSystemStartup();
 	this->InitCameras();
 
-	_corse_ms = std::make_shared<CraneCoarseMS>(_aio_id, _cnt_id);
-	_fine_ms = std::make_shared<CraneFineMS>(_aio_id, _cnt_id);
-	_rope_ms = std::make_shared<CraneRopeMS>(_aio_id, _cnt_id);
+	
 }
 
 /// <summary>
@@ -70,28 +69,37 @@ Crane::~Crane() {
 }
 
 /// <summary>
-/// Method that returns the coarse axis object
-/// </summary>
-/// <returns></returns>
-CraneCoarseAxis& Crane::CoarseAxis() {
-	return std::ref(this->_coarse_axis);
-}
-
-/// <summary>
 /// 
 /// </summary>
-/// <returns></returns>
-CraneFineAxis& Crane::FineAxis() {
-	return this->_fine_axis;
+void Crane::InitAxis(void) {
+	_corse_ms = std::make_shared<CraneCoarseMS>(_aio_id, _cnt_id);
+	_fine_ms = std::make_shared<CraneFineMS>(_aio_id, _cnt_id);
+	_rope_ms = std::make_shared<CraneRopeMS>(_aio_id, _cnt_id);
 }
 
-/// <summary>
-/// 
-/// </summary>
-/// <returns></returns>
-CraneRopeAxis& Crane::Rope() {
-	return this->_rope;
-}
+///// <summary>
+///// Method that returns the coarse axis object
+///// </summary>
+///// <returns></returns>
+//CraneCoarseAxis& Crane::CoarseAxis() {
+//	return std::ref(this->_coarse_axis);
+//}
+//
+///// <summary>
+///// 
+///// </summary>
+///// <returns></returns>
+//CraneFineAxis& Crane::FineAxis() {
+//	return this->_fine_axis;
+//}
+//
+///// <summary>
+///// 
+///// </summary>
+///// <returns></returns>
+//CraneRopeAxis& Crane::Rope() {
+//	return this->_rope;
+//}
 
 /// <summary>
 /// 
@@ -196,45 +204,45 @@ void Crane::InitCameras(void) {
 	this->_cam_rope_y = std::make_unique<CraneRopeCamera>
 		(this->_vimbasystem, CraneSettings::kPikeYCameraPID);
 }
-
-/// <summary>
-/// Method to setup the coarse axis
-/// </summary>
-void Crane::SetCoarseAxis(void) {
-	this->_coarse_axis.SetAioCntIDs(this->_aio_id, this->_cnt_id);
-	this->_coarse_axis.SetAioChannels(
-		CraneSettings::kXCoarseAxisAioChannel,
-		CraneSettings::kYCoarseAxisAioChannel,
-		-1);
-	this->_coarse_axis.SetCntChannels(
-		CraneSettings::kXCoarseAxisCntChannel,
-		CraneSettings::kYCoarseAxisCntChannel,
-		-1);
-}
-
-/// <summary>
-/// Method to setup the fine axis
-/// </summary>
-void Crane::SetFineAxis(void) {
-	this->_fine_axis.SetAioCntIDs(this->_aio_id, this->_cnt_id);
-	this->_fine_axis.SetAioChannels(
-		CraneSettings::kXFineAxisAioChannel,
-		CraneSettings::kYFineAxisAioChannel,
-		-1);
-	this->_fine_axis.SetCntChannels(
-		CraneSettings::kXFineAxisCntChannel,
-		CraneSettings::kYFineAxisCntChannel,
-		-1);
-}
-
-/// <summary>
-/// Method to setup the rope axis
-/// </summary>
-void Crane::SetRopeAxis(void) {
-	this->_rope.SetAioCntIDs(this->_aio_id, this->_cnt_id);
-	this->_rope.SetAioChannels(-1, -1, CraneSettings::kZRopeAxisAioChannel);
-	this->_rope.SetCntChannels(-1, -1, CraneSettings::kZRopeAxisCntChannel);
-}
+//
+///// <summary>
+///// Method to setup the coarse axis
+///// </summary>
+//void Crane::SetCoarseAxis(void) {
+//	this->_coarse_axis.SetAioCntIDs(this->_aio_id, this->_cnt_id);
+//	this->_coarse_axis.SetAioChannels(
+//		CraneSettings::kXCoarseAxisAioChannel,
+//		CraneSettings::kYCoarseAxisAioChannel,
+//		-1);
+//	this->_coarse_axis.SetCntChannels(
+//		CraneSettings::kXCoarseAxisCntChannel,
+//		CraneSettings::kYCoarseAxisCntChannel,
+//		-1);
+//}
+//
+///// <summary>
+///// Method to setup the fine axis
+///// </summary>
+//void Crane::SetFineAxis(void) {
+//	this->_fine_axis.SetAioCntIDs(this->_aio_id, this->_cnt_id);
+//	this->_fine_axis.SetAioChannels(
+//		CraneSettings::kXFineAxisAioChannel,
+//		CraneSettings::kYFineAxisAioChannel,
+//		-1);
+//	this->_fine_axis.SetCntChannels(
+//		CraneSettings::kXFineAxisCntChannel,
+//		CraneSettings::kYFineAxisCntChannel,
+//		-1);
+//}
+//
+///// <summary>
+///// Method to setup the rope axis
+///// </summary>
+//void Crane::SetRopeAxis(void) {
+//	this->_rope.SetAioCntIDs(this->_aio_id, this->_cnt_id);
+//	this->_rope.SetAioChannels(-1, -1, CraneSettings::kZRopeAxisAioChannel);
+//	this->_rope.SetCntChannels(-1, -1, CraneSettings::kZRopeAxisCntChannel);
+//}
 
 /// <summary>
 /// 

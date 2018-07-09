@@ -34,17 +34,16 @@ public:
 	/// Getters
 	/// </summary>
 	/// <returns></returns>
-	CraneCoarseAxis& CoarseAxis();
-	CraneFineAxis& FineAxis();
-	CraneRopeAxis& Rope();
+	//CraneCoarseAxis& CoarseAxis();
+	//CraneFineAxis& FineAxis();
+	//CraneRopeAxis& Rope();
+	std::shared_ptr<CraneCoarseMS> Coarse();
+	std::shared_ptr<CraneFineMS> Fine();
+	std::shared_ptr<CraneRopeMS> RopeMS();
 	CraneSceneCamera& LeftSceneCamera() const;
 	CraneSceneCamera& RightSceneCamera() const;
 	CraneRopeCamera& XRopeCamera() const;
 	CraneRopeCamera& YRopeCamera() const;
-
-	std::shared_ptr<CraneCoarseMS> Coarse();
-	std::shared_ptr<CraneFineMS> Fine();
-	std::shared_ptr<CraneRopeMS> RopeMS();
 
 	/// <summary>
 	/// Public methods
@@ -58,18 +57,19 @@ private:
 	short _aio_id;
 	short _cnt_id;
 	float _aio_data[kAioMaxChannel];
-	CraneCoarseAxis _coarse_axis;
+	/*CraneCoarseAxis _coarse_axis;
 	CraneFineAxis _fine_axis;
-	CraneRopeAxis _rope;
+	CraneRopeAxis _rope;*/
+	std::shared_ptr<CraneCoarseMS> _corse_ms;
+	std::shared_ptr<CraneFineMS> _fine_ms;
+	std::shared_ptr<CraneRopeMS> _rope_ms;
 	VimbaSystem &_vimbasystem = VimbaSystem::GetInstance();
 	CraneSceneCameraPtr _cam_scene_left;
 	CraneSceneCameraPtr _cam_scene_right;
 	CraneRopeCameraPtr _cam_rope_x;
 	CraneRopeCameraPtr _cam_rope_y;
 
-	std::shared_ptr<CraneCoarseMS> _corse_ms;
-	std::shared_ptr<CraneFineMS> _fine_ms;
-	std::shared_ptr<CraneRopeMS> _rope_ms;
+	
 
 	/// <summary>
 	/// Private members
@@ -77,9 +77,10 @@ private:
 	void InitAio(char *device_name);
 	void InitCnt(char *device_name);
 	void InitCameras(void);
-	void SetCoarseAxis(void);
-	void SetFineAxis(void);
-	void SetRopeAxis(void);
+	void InitAxis(void);
+	//void SetCoarseAxis(void);
+	//void SetFineAxis(void);
+	//void SetRopeAxis(void);
 	void VimbaSystemStartup(void);
 	void VimbaSystemShutdown(void);
 };
