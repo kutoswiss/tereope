@@ -21,10 +21,14 @@ void CraneSystemController::Execute() {
 	Crane c;
 
 	_cmd_task = std::make_unique<std::thread>(
-		&CraneSystemController::CommandTask, this, std::ref(c));
+		&CraneSystemController::CommandTask,
+		this, 
+		std::ref(c));
 
 	_rope_regulation_task = std::make_unique<std::thread>(
-		&CraneSystemController::RopeSwingingRegulationTask, this, std::ref(c));
+		&CraneSystemController::RopeSwingingRegulationTask, 
+		this, 
+		std::ref(c));
 	
 	_cmd_task->join();
 	_rope_regulation_task->join();
@@ -65,10 +69,23 @@ void CraneSystemController::CommandTask(Crane &c) {
 			std::cin >> x_val;
 			c.CoarseAxis().MoveThread(Axis::X, x_val, 0.5);
 		}
+		else if (input == "newx") {
+			std::cout << "> Enter X value: ";
+			std::cin >> x_val;
+			c.Coarse()->XThread(x_val, 0.5);
+		}
 		else if (input == "y") {
 			std::cout << "> Enter Y value: ";
 			std::cin >> y_val;
 			c.CoarseAxis().MoveThread(Axis::Y, y_val, 0.5);
+		}
+		else if (input == "newy") {
+			std::cout << "> Enter Y value: ";
+			std::cin >> y_val;
+			c.Coarse()->Y(y_val, 0.2);
+		}
+		else if (input == "halty") {
+			c.Coarse()->HaltY();
 		}
 		else if (input == "xy") {
 			std::cout << "> Enter X value: ";
@@ -82,7 +99,6 @@ void CraneSystemController::CommandTask(Crane &c) {
 			c.CoarseAxis().Stop(Axis::X);
 			c.CoarseAxis().Stop(Axis::Y);
 			std::cout << c.CoarseAxis().GetCntValue(Axis::X) << std::endl;
-
 		}
 		else if (input == "quit") {
 			_general_stop_signal = true;

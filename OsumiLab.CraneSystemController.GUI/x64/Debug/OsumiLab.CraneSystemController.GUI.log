@@ -1,13 +1,2 @@
-﻿  OsumiLab.CraneSystemController.GUI.cpp
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\abstractcraneaxis.h(19): warning C4091: 'typedef ': ignored on left of 'Axis' when no variable is declared
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\cranecoarseaxis.h(8): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.h(9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.h(10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  CraneSystemController.cpp
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\abstractcraneaxis.h(19): warning C4091: 'typedef ': ignored on left of 'Axis' when no variable is declared
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\cranecoarseaxis.h(8): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.h(9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.h(10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  Generating Code...
-  OsumiLab.CraneSystemController.GUI.vcxproj -> C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\x64\Debug\OsumiLab.CraneSystemController.GUI.exe
+﻿  OsumiLab.CraneSystemController.GUI.vcxproj -> C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\x64\Debug\OsumiLab.CraneSystemController.GUI.exe
   OsumiLab.CraneSystemController.GUI.vcxproj -> C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\x64\Debug\OsumiLab.CraneSystemController.GUI.pdb (Full PDB)

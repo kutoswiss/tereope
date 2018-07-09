@@ -9,6 +9,7 @@
 #include "CraneSceneCamera.h"
 #include "CraneRopeCamera.h"
 #include "CraneSettings.h"
+#include "CraneCoarseMS.h"
 
 class Crane
 {
@@ -38,6 +39,8 @@ public:
 	CraneRopeCamera& XRopeCamera() const;
 	CraneRopeCamera& YRopeCamera() const;
 
+	std::shared_ptr<CraneCoarseMS> Coarse();
+
 	/// <summary>
 	/// Public methods
 	/// </summary>
@@ -58,6 +61,8 @@ private:
 	CraneSceneCameraPtr _cam_scene_right;
 	CraneRopeCameraPtr _cam_rope_x;
 	CraneRopeCameraPtr _cam_rope_y;
+
+	std::shared_ptr<CraneCoarseMS> _corse_ms;
 
 	/// <summary>
 	/// Private members

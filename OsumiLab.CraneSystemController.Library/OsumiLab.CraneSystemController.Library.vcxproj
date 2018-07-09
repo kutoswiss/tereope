@@ -132,6 +132,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CraneAxis.h" />
     <ClInclude Include="CraneCamera.h" />
     <ClInclude Include="Caio.h" />
     <ClInclude Include="CameraHelper.h" />
@@ -140,6 +141,8 @@
     <ClInclude Include="AbstractCraneAxis.h" />
     <ClInclude Include="CraneCameras.h" />
     <ClInclude Include="CraneCoarseAxis.h" />
+    <ClInclude Include="CraneCoarseMS.h" />
+    <ClInclude Include="CraneMovementSystem.h" />
     <ClInclude Include="CraneSettings.h" />
     <ClInclude Include="CraneFineAxis.h" />
     <ClInclude Include="CraneRopeAxis.h" />
@@ -167,12 +170,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractCraneAxis.cpp" />
+    <ClCompile Include="CraneAxis.cpp" />
     <ClCompile Include="CraneCamera.cpp" />
     <ClCompile Include="CameraHelper.cpp" />
     <ClCompile Include="Crane.cpp" />
     <ClCompile Include="CraneCameras.cpp" />
     <ClCompile Include="CraneCoarseAxis.cpp" />
+    <ClCompile Include="CraneCoarseMS.cpp" />
     <ClCompile Include="CraneFineAxis.cpp" />
+    <ClCompile Include="CraneMovementSystem.cpp" />
     <ClCompile Include="CraneRopeAxis.cpp" />
     <ClCompile Include="CraneRopeCamera.cpp" />
     <ClCompile Include="CraneSceneCamera.cpp" />

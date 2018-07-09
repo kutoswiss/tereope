@@ -25,6 +25,12 @@ Crane::Crane(char *aio_name, char *cnt_name) {
 	// Initialize Vimba system and cameras
 	this->VimbaSystemStartup();
 	this->InitCameras();
+
+	_corse_ms = std::make_shared<CraneCoarseMS>(_aio_id, _cnt_id);
+}
+
+std::shared_ptr<CraneCoarseMS> Crane::Coarse() {
+	return _corse_ms;
 }
 
 /// <summary>
