@@ -40,7 +40,6 @@ void CraneSystemController::Execute() {
 	_collision_detection_task->join();
 }
 
-
 /// <summary>
 /// 
 /// </summary>
@@ -51,6 +50,7 @@ void CraneSystemController::CollisionDetectionTask(Crane &c) {
 	cv::Mat left, right;
 
 	left_detector.SetRopeLoadAreaOrigin(cv::Point(350, 325));
+	std::unique_lock<std::mutex> lock(_mtx_collide);
 
 	while(true) {
 		left = c.LeftSceneCamera().GetMat(CV_8UC1);
@@ -62,13 +62,16 @@ void CraneSystemController::CollisionDetectionTask(Crane &c) {
 		left_detector.Detect();
 		right_detector.Detect();
 
-		if ((left_detector.RopeLoadCollidesWithObstacles()) || (right_detector.RopeLoadCollidesWithObstacles()))
+		if ((left_detector.RopeLoadCollidesWithObstacles()) || (right_detector.RopeLoadCollidesWithObstacles())) {
 			c.Coarse()->Halt();
+			//_cv_collide.notify_one();
+		}
 
 		cv::imshow("Left scene camera", left_detector.GetFrameWithRectangles());
 		cv::imshow("Right scene camera", right_detector.GetFrameWithRectangles());
 
-		if ((cv::waitKey(15) >= 0) || (_general_stop_signal)) break;
+		if ((cv::waitKey(15) >= 0) || (_general_stop_signal)) 
+			break;
 	}
 }
 
@@ -78,7 +81,13 @@ void CraneSystemController::CollisionDetectionTask(Crane &c) {
 /// <param name="c"></param>
 void CraneSystemController::RopeSwingingRegulationTask(Crane &c) {
 	RopeSwingRegulator regulator;
-	//regulator.Regulate(std::ref(c), &_general_stop_signal);
+	regulator.Regulate(std::ref(c), &_general_stop_signal);
+}
+
+void CraneSystemController::ObstacleAvoidanceTask(Crane &c) {
+	std::unique_lock<std::mutex> lock(_mtx_avoided);
+	_cv_collide.wait(lock);
+	std::cout << "Hello mdr" << std::endl;
 }
 
 /// <summary>
@@ -97,13 +106,13 @@ void CraneSystemController::CommandTask(Crane &c) {
 		if (input == "x") {
 			std::cout << "> Enter X value: ";
 			std::cin >> x_val;
-			c.Fine()->X(x_val, 1);
+			c.Coarse()->X(x_val, 0.3);
 			//c.CoarseAxis().MoveThread(Axis::X, x_val, 0.5);
 		}
 		else if (input == "y") {
 			std::cout << "> Enter Y value: ";
 			std::cin >> y_val;
-			c.Fine()->Y(y_val, 1);
+			c.Coarse()->Y(y_val, 0.3);
 			//c.CoarseAxis().MoveThread(Axis::Y, y_val, 0.5);
 		}
 		else if (input == "xt") {

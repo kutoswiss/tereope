@@ -3,15 +3,14 @@ c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller
 c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\cranecoarseaxis.h(8): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
 c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.h(9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.h(10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.cpp(100): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.cpp(106): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.cpp(112): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.cpp(117): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.cpp(124): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.cpp(125): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.cpp(109): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.cpp(115): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.cpp(121): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.cpp(126): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.cpp(133): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.gui\cranesystemcontroller.cpp(134): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
   Generating Code...
   Skipping... (no relevant changes detected)
   OsumiLab.CraneSystemController.GUI.cpp
-  Demo.cpp
   OsumiLab.CraneSystemController.GUI.vcxproj -> C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\x64\Debug\OsumiLab.CraneSystemController.GUI.exe
   OsumiLab.CraneSystemController.GUI.vcxproj -> C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\x64\Debug\OsumiLab.CraneSystemController.GUI.pdb (Full PDB)

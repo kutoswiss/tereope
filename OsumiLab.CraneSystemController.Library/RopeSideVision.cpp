@@ -122,5 +122,8 @@ void RopeSideVision::CalculateAngle() {
 		_angle += std::atan(dx / dy);
 	}
 
-	_angle = (_angle / _lines.size()) * 180 / M_PI;
+	if (_lines.size() > 0)
+		_angle = (_angle / _lines.size()) * 180 / M_PI;
+	else
+		_angle = 0;
 }

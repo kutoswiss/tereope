@@ -136,5 +136,5 @@ void Demo::RopeSwingRegulation() {
 	Crane c;
 	RopeSwingRegulator regulator;
 	bool stop = false;
-	regulator.Regulate(std::ref(c), &stop);
+	//regulator.Regulate(std::ref(c), &stop);
 }
