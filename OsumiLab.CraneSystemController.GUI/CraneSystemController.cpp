@@ -30,15 +30,15 @@ void CraneSystemController::Execute() {
 	//	this, 
 	//	std::ref(c));
 
-	//_leftcam_collision_detection_task = std::make_unique<std::thread>(
-	//	&CraneSystemController::LeftCamCollisionDetectionTask,
-	//	this,
-	//	std::ref(c));
+	_leftcam_collision_detection_task = std::make_unique<std::thread>(
+		&CraneSystemController::LeftCamCollisionDetectionTask,
+		this,
+		std::ref(c));
 
-	//_rightcam_collision_detection_task = std::make_unique<std::thread>(
-	//	&CraneSystemController::RightCamCollisionDetectionTask,
-	//	this,
-	//	std::ref(c));
+	_rightcam_collision_detection_task = std::make_unique<std::thread>(
+		&CraneSystemController::RightCamCollisionDetectionTask,
+		this,
+		std::ref(c));
 
 	//_collision_detection_task = std::make_unique<std::thread>(
 	//	&CraneSystemController::CollisionDetectionTask,
@@ -59,8 +59,8 @@ void CraneSystemController::Execute() {
 	//_collision_detection_task->join();
 	_xrope_regulation_task->join();
 	_yrope_regulation_task->join();
-	//_leftcam_collision_detection_task->join();
-	//_rightcam_collision_detection_task->join();
+	_leftcam_collision_detection_task->join();
+	_rightcam_collision_detection_task->join();
 	//_rope_regulation_task->join();
 }
 
