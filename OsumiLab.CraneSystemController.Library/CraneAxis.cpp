@@ -28,8 +28,11 @@ CraneAxis::~CraneAxis() {
 /// 
 /// </summary>
 void CraneAxis::Enable() {
-	AioSingleAoEx(_aio_id, _enable_channel, -10.0);
-	AioSingleAoEx(_aio_id, _enable_channel, this->kEnableVoltage);
+	if(_enable == false) {
+		AioSingleAoEx(_aio_id, _enable_channel, -10.0);
+		AioSingleAoEx(_aio_id, _enable_channel, this->kEnableVoltage);
+		_enable = true;
+	}
 }
 
 /// <summary>
@@ -37,6 +40,7 @@ void CraneAxis::Enable() {
 /// </summary>
 void CraneAxis::Disable() {
 	AioSingleAoEx(_aio_id, _enable_channel, this->kDisableVoltage);
+	_enable = false;
 }
 
 /// <summary>

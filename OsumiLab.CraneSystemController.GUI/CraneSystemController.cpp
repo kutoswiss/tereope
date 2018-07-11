@@ -30,19 +30,37 @@ void CraneSystemController::Execute() {
 	//	this, 
 	//	std::ref(c));
 
-	_leftcam_collision_detection_task = std::make_unique<std::thread>(
-		&CraneSystemController::LeftCamCollisionDetectionTask,
+	//_leftcam_collision_detection_task = std::make_unique<std::thread>(
+	//	&CraneSystemController::LeftCamCollisionDetectionTask,
+	//	this,
+	//	std::ref(c));
+
+	//_rightcam_collision_detection_task = std::make_unique<std::thread>(
+	//	&CraneSystemController::RightCamCollisionDetectionTask,
+	//	this,
+	//	std::ref(c));
+
+	//_collision_detection_task = std::make_unique<std::thread>(
+	//	&CraneSystemController::CollisionDetectionTask,
+	//	this,
+	//	std::ref(c));
+
+	_xrope_regulation_task = std::make_unique<std::thread>(
+		&CraneSystemController::XRopeSwingingRegulationTask, 
+		this, 
+		std::ref(c));
+
+	_yrope_regulation_task = std::make_unique<std::thread>(
+		&CraneSystemController::YRopeSwingingRegulationTask,
 		this,
 		std::ref(c));
 
-	_rightcam_collision_detection_task = std::make_unique<std::thread>(
-		&CraneSystemController::RightCamCollisionDetectionTask,
-		this,
-		std::ref(c));
-	
 	_cmd_task->join();
-	_leftcam_collision_detection_task->join();
-	_rightcam_collision_detection_task->join();
+	//_collision_detection_task->join();
+	_xrope_regulation_task->join();
+	_yrope_regulation_task->join();
+	//_leftcam_collision_detection_task->join();
+	//_rightcam_collision_detection_task->join();
 	//_rope_regulation_task->join();
 }
 
@@ -52,6 +70,7 @@ void CraneSystemController::LeftCamCollisionDetectionTask(Crane &c) {
 
 	while (true) {
 		_leftcam = c.LeftSceneCamera().GetMat(CV_8UC1);
+
 		left_detector.SetRawFrame(_leftcam);
 		left_detector.Detect();
 
@@ -80,6 +99,7 @@ void CraneSystemController::RightCamCollisionDetectionTask(Crane &c) {
 
 	while (true) {
 		_rightcam = c.RightSceneCamera().GetMat(CV_8UC1);
+
 		right_detector.SetRawFrame(_rightcam);
 		right_detector.Detect();
 
@@ -95,29 +115,61 @@ void CraneSystemController::RightCamCollisionDetectionTask(Crane &c) {
 	}
 }
 
+void CraneSystemController::CollisionDetectionTask(Crane &c) {
+	ObstaclesDetection left_detector, right_detector;
+	ObstaclesCorrespondence correspondence;
+
+	left_detector.SetRopeLoadAreaOrigin(cv::Point(350, 325));
+	short i = 0;
+
+	while (true) {
+		_leftcam = c.LeftSceneCamera().GetMat(CV_8UC1);
+		_rightcam = c.RightSceneCamera().GetMat(CV_8UC1);
+
+		left_detector.SetRawFrame(_leftcam);
+		right_detector.SetRawFrame(_rightcam);
+
+		left_detector.Detect();
+		right_detector.Detect();
+
+		if (right_detector.RopeLoadCollidesWithObstacles() || left_detector.RopeLoadCollidesWithObstacles()) {
+			c.Coarse()->Halt();
+		}
+
+		cv::imshow("Left scene camera", left_detector.GetFrameWithRectangles());
+		cv::imshow("Right scene camera", right_detector.GetFrameWithRectangles());
+
+		if ((cv::waitKey(15) >= 0) || (_general_stop_signal)) {
+			break;
+		}
+	}
+
+	cv::destroyAllWindows();
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="c"></param>
+void CraneSystemController::XRopeSwingingRegulationTask(Crane &c) {
+	_regulator.RegulateX(c, &_general_stop_signal);
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="c"></param>
+void CraneSystemController::YRopeSwingingRegulationTask(Crane &c) {
+	_regulator.RegulateY(c, &_general_stop_signal);
+}
+
 /// <summary>
 /// 
 /// </summary>
 /// <param name="c"></param>
 void CraneSystemController::RopeSwingingRegulationTask(Crane &c) {
 	RopeSwingRegulator regulator;
-	//std::unique_lock<std::mutex> lock(_m);
-
-	while (true) {
-		//_cv_collisiondetection_done.wait(lock);
-		std::cout << "RS Regulator task STARED" << std::endl;
-
-		regulator.SetFrames(c.XRopeCamera().GetMat(CV_8UC1), c.YRopeCamera().GetMat(CV_8UC1));
-		regulator.Compute();
-		c.Fine()->X(regulator.GetXVoltage());
-		c.Fine()->Y(regulator.GetYVoltage());
-
-		//_cv_ropeswinging_done.notify_one();
-		std::cout << "RS Regulator task DONE" << std::endl;
-		if ((cv::waitKey(15) >= 0) || (_general_stop_signal))
-			break;
-	}
-	//regulator.Regulate(std::ref(c), &_general_stop_signal);
+	regulator.Regulate(std::ref(c), &_general_stop_signal);
 }
 
 /// <summary>

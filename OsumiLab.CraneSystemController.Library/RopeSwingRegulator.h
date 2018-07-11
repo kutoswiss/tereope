@@ -25,6 +25,8 @@ public:
 
 	// Public method
 	void Regulate(Crane &crane, bool *stop);
+	void RegulateX(Crane &crane, bool *stop);
+	void RegulateY(Crane &crane, bool *stop);
 	void Compute();
 
 private:

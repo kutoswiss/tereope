@@ -28,13 +28,19 @@ private:
 	void ObstacleAvoidanceTask(Crane &c);
 	void LeftCamCollisionDetectionTask(Crane &c);
 	void RightCamCollisionDetectionTask(Crane &c);
+	void CollisionDetectionTask(Crane &c);
+	void XRopeSwingingRegulationTask(Crane &c);
+	void YRopeSwingingRegulationTask(Crane &c);
 
 	// Private members
 	std::unique_ptr<std::thread> _cmd_task;
 	std::unique_ptr<std::thread> _rope_regulation_task;
 	std::unique_ptr<std::thread> _leftcam_collision_detection_task;
 	std::unique_ptr<std::thread> _rightcam_collision_detection_task;
+	std::unique_ptr<std::thread> _collision_detection_task;
 	std::unique_ptr<std::thread> _obstacle_avoidance_task;
+	std::unique_ptr<std::thread> _xrope_regulation_task;
+	std::unique_ptr<std::thread> _yrope_regulation_task;
 
 	std::mutex _m;
 	std::condition_variable _cv_collisiondetection_done;
@@ -45,5 +51,6 @@ private:
 	cv::Mat _xcam; // mdr
 	cv::Mat _ycam;
 
+	RopeSwingRegulator _regulator;
 	bool _general_stop_signal;
 };

@@ -40,11 +40,9 @@ FramePtr CraneCamera::GetFrame(void) {
 /// </summary>
 /// <param name="frame"></param>
 void CraneCamera::GetFrame(FramePtr frame) {
-	//this->_camera->StartCapture();
 	auto e = this->_camera->AcquireSingleImage(frame, this->kAcquireFrameTimeout);
 	if (e != VmbErrorSuccess)
 		std::cout << "Unable to retrieve single frame from camera." << std::endl;
-	//this->_camera->EndCapture();
 }
 
 /// <summary>

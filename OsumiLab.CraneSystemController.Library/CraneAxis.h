@@ -47,6 +47,7 @@ private:
 
 	double _max_voltage;
 	bool _cnt_halt_signal = false;
+	bool _enable = false;
 
 	std::unique_ptr<std::thread> _task;
 };
