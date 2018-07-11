@@ -26,6 +26,9 @@ public:
 	/// </summary>
 	CameraPtr GetCamera(void);
 	FramePtr GetFrame(void); 
+	void GetFrame(FramePtr frame);
+	FramePtrVector GetFrames(void);
+
 	cv::Mat GetMat(int type);
 	void Open(void);
 	void Close(void);

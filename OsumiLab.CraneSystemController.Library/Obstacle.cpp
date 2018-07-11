@@ -15,12 +15,12 @@ Obstacle::Obstacle(cv::RotatedRect rotated_rect) {
 	this->_collision_area.SetArea(
 		_rotated_rect.center, 
 		_rotated_rect.angle, 
-		_rotated_rect.size.width + 30,
-		_rotated_rect.size.height + 30);
+		_rotated_rect.size.width + 40,
+		_rotated_rect.size.height + 40);
 }
 
 /// <summary>
-/// 
+//s/ 
 /// </summary>
 Obstacle::~Obstacle() {
 }

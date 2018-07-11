@@ -29,9 +29,34 @@ CameraPtr CraneCamera::GetCamera(void) {
 /// <returns></returns>
 FramePtr CraneCamera::GetFrame(void) {
 	FramePtr frame;
-	if(this->_camera->AcquireSingleImage(frame, this->kAcquireFrameTimeout) != VmbErrorSuccess)
-		std::cout << "Unable to retrieve frame from camera." << std::endl;
+	auto e = this->_camera->AcquireSingleImage(frame, this->kAcquireFrameTimeout);
+	if(e != VmbErrorSuccess)
+		std::cout << "Unable to retrieve single frame from camera." << std::endl;
 	return frame;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="frame"></param>
+void CraneCamera::GetFrame(FramePtr frame) {
+	//this->_camera->StartCapture();
+	auto e = this->_camera->AcquireSingleImage(frame, this->kAcquireFrameTimeout);
+	if (e != VmbErrorSuccess)
+		std::cout << "Unable to retrieve single frame from camera." << std::endl;
+	//this->_camera->EndCapture();
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+FramePtrVector CraneCamera::GetFrames(void) {
+	FramePtrVector frames;
+	auto e = this->_camera->AcquireMultipleImages(frames, this->kAcquireFrameTimeout);
+	if (e != VmbErrorSuccess)
+		std::cout << "Unable to retrieve mulitple frame from camera." << std::endl;
+	return frames;
 }
 
 /// <summary>

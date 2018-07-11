@@ -18,6 +18,16 @@ RopeSwingRegulator::~RopeSwingRegulator() {
 /// <summary>
 /// 
 /// </summary>
+/// <param name="xframe"></param>
+/// <param name="yframe"></param>
+void RopeSwingRegulator::SetFrames(cv::Mat &xframe, cv::Mat &yframe) {
+	_x_vision.SetFrame(xframe);
+	_y_vision.SetFrame(yframe);
+}
+
+/// <summary>
+/// 
+/// </summary>
 /// <param name="v"></param>
 void RopeSwingRegulator::SetXVoltage(double v) {
 	_x_voltage = this->TrimVoltage(v, this->kXMaxPeakVoltage, this->kXMaxPeakVoltage * -1);
@@ -90,6 +100,20 @@ void RopeSwingRegulator::Regulate(Crane &crane, bool *stop) {
 	}
 	f.close();
 	crane.Fine()->Halt();
+}
+
+/// <summary>
+/// 
+/// </summary>
+void RopeSwingRegulator::Compute() {
+	_x_vision.Compute();
+	_y_vision.Compute();
+
+	this->SetXVoltage(this->AngleToXVoltage(_x_vision.GetAngle()));
+	this->SetYVoltage(this->AngleToYVoltage(_y_vision.GetAngle()));
+
+	cv::imshow("X", _x_vision.GetDecoratedFrame());
+	cv::imshow("Y", _y_vision.GetDecoratedFrame());
 }
 
 /// <summary>

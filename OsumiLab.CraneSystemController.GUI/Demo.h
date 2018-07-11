@@ -27,5 +27,8 @@ public:
 
 	// Rope demos
 	static void RopeSwingRegulation();
+
+	// Cameras
+	static void PrintCamerasRetrievedTime();
 };
 

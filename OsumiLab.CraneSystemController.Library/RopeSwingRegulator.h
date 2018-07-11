@@ -17,6 +17,7 @@ public:
 	~RopeSwingRegulator();
 
 	// Getters/Setters
+	void SetFrames(cv::Mat &xframe, cv::Mat &yframe);
 	void SetXVoltage(double v);
 	void SetYVoltage(double v);
 	double GetXVoltage() const;
@@ -24,6 +25,7 @@ public:
 
 	// Public method
 	void Regulate(Crane &crane, bool *stop);
+	void Compute();
 
 private:
 	// Private methods

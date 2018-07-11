@@ -136,5 +136,40 @@ void Demo::RopeSwingRegulation() {
 	Crane c;
 	RopeSwingRegulator regulator;
 	bool stop = false;
-	//regulator.Regulate(std::ref(c), &stop);
+	regulator.Regulate(std::ref(c), &stop);
+}
+
+/// <summary>
+/// 
+/// </summary>
+void Demo::PrintCamerasRetrievedTime() {
+	Crane c;
+	FramePtr f;
+	auto start = std::chrono::system_clock::now();
+	//c.LeftSceneCamera().GetMat(CV_8UC1);
+	//c.LeftSceneCamera().GetFrames();
+	auto end = std::chrono::system_clock::now();
+	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	std::cout << "Left camera retrieve time: " << elapsed.count() << " ms" << std::endl;
+
+	start = std::chrono::system_clock::now();
+	c.RightSceneCamera().GetMat(CV_8UC1);
+	end = std::chrono::system_clock::now();
+	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	std::cout << "Right camera retrieve time: " << elapsed.count() << " ms" << std::endl;
+
+	start = std::chrono::system_clock::now();
+	c.XRopeCamera().GetMat(CV_8UC1);
+	end = std::chrono::system_clock::now();
+	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	std::cout << "XRope camera retrieve time: " << elapsed.count() << " ms" << std::endl;
+
+	start = std::chrono::system_clock::now();
+	c.YRopeCamera().GetMat(CV_8UC1);
+	end = std::chrono::system_clock::now();
+	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	std::cout << "YRope camera retrieve time: " << elapsed.count() << " ms" << std::endl;
+
+	std::cout << "Press any key to quit";
+	std::cin.get();
 }
