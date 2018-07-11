@@ -1,6 +1,8 @@
 #pragma once
 #include <windows.h>
 #include <cstdlib>
+#include <memory>
+#include <thread>
 #include "Caio.h"
 #include "CCnt.h"
 #include "CraneSettings.h"
@@ -18,6 +20,9 @@ public:
 	void SetVoltage(double voltage);
 	void SetMaxVoltage(double voltage);
 	void Halt();
+	void Move(int step, double voltage);
+	void MoveThread(int step, double voltage);
+	void MoveJoinThread();
 	void WaitUntilCounterReach(int step);
 
 private:
@@ -28,6 +33,7 @@ private:
 
 	// Private methods
 	double TrimVoltage(double voltage);
+	void MoveThreadImpl(int &step, double &voltage);
 
 	// Private members
 	short _aio_id;
@@ -41,5 +47,7 @@ private:
 
 	double _max_voltage;
 	bool _cnt_halt_signal = false;
+
+	std::unique_ptr<std::thread> _task;
 };
 

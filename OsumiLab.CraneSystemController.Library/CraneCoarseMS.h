@@ -11,15 +11,14 @@ public:
 	~CraneCoarseMS();
 
 	// Public methods
+	void X(double voltage);
+	void Y(double voltage);
 	void X(int step, double voltage);
 	void Y(int step, double voltage);
 	void XThread(int step, double voltage);
 	void YThread(int step, double voltage);
 	void HaltX();
 	void HaltY();
-
-protected:
-	void Move(char *axis_key, int step, double voltage = 0);
 
 private:
 	// Private constants
@@ -33,13 +32,7 @@ private:
 	const int kYAxisEnableChannel = 9;
 
 	// Private methods
-	void XThreadImpl(int &step, double &voltage);
-	void YThreadImpl(int &step, double &voltage);
 	void XJoinThread();
 	void YJoinThread();
-
-	// Private members
-	std::unique_ptr<std::thread> _x_thread;
-	std::unique_ptr<std::thread> _y_thread;
 };
 

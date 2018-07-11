@@ -20,7 +20,8 @@ CraneAxis::CraneAxis(short aio_id, short cnt_id, short aio_ch, short cnt_ch, sho
 /// 
 /// </summary>
 CraneAxis::~CraneAxis() {
-	// No code
+	this->Halt();
+	_task.reset();
 }
 
 /// <summary>
@@ -62,6 +63,51 @@ void CraneAxis::Halt() {
 	_cnt_halt_signal = true;
 	this->SetVoltage(0.0);
 	this->Disable();
+	this->MoveJoinThread();
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="step"></param>
+/// <param name="voltage"></param>
+void CraneAxis::Move(int step, double voltage) {
+	this->Enable();
+	this->SetVoltage(voltage);
+	this->WaitUntilCounterReach(step);
+	this->SetVoltage(0.0);
+	this->Disable();
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="step"></param>
+/// <param name="voltage"></param>
+void CraneAxis::MoveThread(int step, double voltage) {
+	this->Halt();
+	_task = std::make_unique<std::thread>(
+		&CraneAxis::MoveThreadImpl,
+		this,
+		std::ref(step),
+		std::ref(voltage));
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="step"></param>
+/// <param name="voltage"></param>
+void CraneAxis::MoveThreadImpl(int &step, double &voltage) {
+	this->Move(step, voltage);
+}
+
+/// <summary>
+/// 
+/// </summary>
+void CraneAxis::MoveJoinThread() {
+	if ((_task != nullptr) && _task->joinable())
+		_task->join();
 }
 
 /// <summary>

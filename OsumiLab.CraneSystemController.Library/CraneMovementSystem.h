@@ -6,16 +6,13 @@
 class CraneMovementSystem
 {
 public:
-	// Virtual methods
-	virtual ~CraneMovementSystem() {};
+	CraneMovementSystem(short aio_id, short cnt_id);
+	~CraneMovementSystem();
 	
 	// Public methods
 	void Halt();
 
 protected:
-	// Virtual methods
-	virtual void Move(char *axis_key, int step, double voltage = 0) = 0;
-
 	// Protected methods
 	void SetAxis(char *key, std::shared_ptr<CraneAxis> axis);
 

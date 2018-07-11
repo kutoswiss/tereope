@@ -11,11 +11,10 @@ public:
 	// Public method
 	void X(double voltage);
 	void Y(double voltage);
+	void X(int step, double voltage);
+	void Y(int step, double voltage);
 	void HaltX();
 	void HaltY();
-
-protected:
-	void Move(char *axis_key, int step, double voltage = 0);
 
 private:
 	// Private constants

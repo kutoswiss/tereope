@@ -14,13 +14,11 @@ public:
 
 	// Public methods
 	void CalibratePresetValue();
+	void Move(char *axis_key, int step, double voltage = 0);
 	void MoveTo(int step, double voltage);
 	void Elevate(double meter, double voltage);
 	void ElevateTo(double meter, double voltage);
 	void ToGround(double voltage);
-
-protected:
-	void Move(char *axis_key, int step, double voltage = 0);
 
 private:
 	// Private constants

@@ -6,10 +6,7 @@
 /// </summary>
 /// <param name="aio_id"></param>
 /// <param name="cnt_id"></param>
-CraneRopeMS::CraneRopeMS(short aio_id, short cnt_id) {
-	_aio_id = aio_id;
-	_cnt_id = cnt_id;
-
+CraneRopeMS::CraneRopeMS(short aio_id, short cnt_id) : CraneMovementSystem(aio_id, cnt_id) {
 	// Setup the Z axis
 	this->SetAxis(this->kZAxisKey,
 		std::make_shared<CraneAxis>(_aio_id, _cnt_id,

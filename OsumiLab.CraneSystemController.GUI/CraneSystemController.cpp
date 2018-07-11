@@ -78,7 +78,7 @@ void CraneSystemController::CollisionDetectionTask(Crane &c) {
 /// <param name="c"></param>
 void CraneSystemController::RopeSwingingRegulationTask(Crane &c) {
 	RopeSwingRegulator regulator;
-	regulator.Regulate(std::ref(c), &_general_stop_signal);
+	//regulator.Regulate(std::ref(c), &_general_stop_signal);
 }
 
 /// <summary>
@@ -97,19 +97,21 @@ void CraneSystemController::CommandTask(Crane &c) {
 		if (input == "x") {
 			std::cout << "> Enter X value: ";
 			std::cin >> x_val;
+			c.Coarse()->X(x_val, 0.3);
 			//c.CoarseAxis().MoveThread(Axis::X, x_val, 0.5);
 		}
 		else if (input == "y") {
 			std::cout << "> Enter Y value: ";
 			std::cin >> y_val;
+			c.Coarse()->Y(y_val, 0.3);
 			//c.CoarseAxis().MoveThread(Axis::Y, y_val, 0.5);
 		}
-		else if (input == "newx") {
+		else if (input == "xt") {
 			std::cout << "> Enter X value: ";
 			std::cin >> x_val;
 			c.Coarse()->XThread(x_val, 0.3);
 		}
-		else if (input == "newy") {
+		else if (input == "yt") {
 			std::cout << "> Enter Y value: ";
 			std::cin >> y_val;
 			c.Coarse()->YThread(y_val, 0.3);
