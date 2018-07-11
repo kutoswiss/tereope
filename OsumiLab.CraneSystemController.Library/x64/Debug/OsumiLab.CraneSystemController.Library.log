@@ -1,4 +1,17 @@
-﻿  CraneCoarseMS.cpp
+﻿  CraneFineMS.cpp
+  CraneCoarseMS.cpp
+  Generating Code...
+  Compiling...
+  Crane.cpp
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\abstractcraneaxis.h(19): warning C4091: 'typedef ': ignored on left of 'Axis' when no variable is declared
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\cranecoarseaxis.h(8): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\crane.cpp(141): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\crane.cpp(158): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\osumi\documents\visual studio 2015\projects\osumilab.cranesyscontroller\osumilab.cranesystemcontroller.library\crane.cpp(171): warning C4267: 'argument': conversion from 'size_t' to 'short', possible loss of data
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  RopeSwingRegulator.cpp
+  CraneRopeMS.cpp
 CCNT.lib(CCNT.DLL) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR already defined in caio.lib(CAIO.DLL); second definition ignored
 CCNT.lib(CCNT.DLL) : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
   OsumiLab.CraneSystemController.Library.vcxproj -> C:\Users\osumi\Documents\Visual Studio 2015\Projects\OsumiLab.CraneSysController\x64\Debug\OsumiLab.CraneSystemController.Library.lib

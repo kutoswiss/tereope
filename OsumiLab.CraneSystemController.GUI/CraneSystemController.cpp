@@ -97,13 +97,13 @@ void CraneSystemController::CommandTask(Crane &c) {
 		if (input == "x") {
 			std::cout << "> Enter X value: ";
 			std::cin >> x_val;
-			c.Coarse()->X(x_val, 0.3);
+			c.Fine()->X(x_val, 1);
 			//c.CoarseAxis().MoveThread(Axis::X, x_val, 0.5);
 		}
 		else if (input == "y") {
 			std::cout << "> Enter Y value: ";
 			std::cin >> y_val;
-			c.Coarse()->Y(y_val, 0.3);
+			c.Fine()->Y(y_val, 1);
 			//c.CoarseAxis().MoveThread(Axis::Y, y_val, 0.5);
 		}
 		else if (input == "xt") {

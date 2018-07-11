@@ -47,7 +47,6 @@ void CraneFineMS::Y(double voltage) {
 	// Positive voltage -> Move on top
 	// Negative voltage -> Move on bottom
 	voltage *= -1;
-
 	_axis[this->kYAxisKey]->Enable();
 	_axis[this->kYAxisKey]->SetVoltage(voltage);
 }
@@ -60,6 +59,7 @@ void CraneFineMS::Y(double voltage) {
 void CraneFineMS::X(int step, double voltage) {
 	// Positive voltage -> Move on right
 	// Negative voltage -> Move on left
+	voltage = voltage * ((step > 0) ? 1 : -1);
 	_axis[this->kXAxisKey]->Move(step, voltage);
 }
 
@@ -71,7 +71,7 @@ void CraneFineMS::X(int step, double voltage) {
 void CraneFineMS::Y(int step, double voltage) {
 	// Positive voltage -> Move on top
 	// Negative voltage -> Move on bottom
-	voltage *= -1;
+	voltage = voltage * ((step < 0) ? 1 : -1);
 	_axis[this->kYAxisKey]->Move(step, voltage);
 }
 
