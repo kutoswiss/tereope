@@ -4,40 +4,29 @@
 #include "stdafx.h"
 #include "CraneSystemController.h"
 //#include "Demo.h"
-
-void LeftFrameGrabber(Crane &c){
-	FramePtr f;
-	while (true)
-	{
-		f = c.LeftSceneCamera().GetFrame();
-		cv::imshow("Left", CameraHelper::FrameToCVMat(f, CV_8UC1));
-		if (cv::waitKey(15) >= 0)
-			break;
-	}
-}
-
-void RightFrameGrabber(Crane &c) {
-	FramePtr f;
-	while (true)
-	{
-		f = c.RightSceneCamera().GetFrame();
-		cv::imshow("Right", CameraHelper::FrameToCVMat(f, CV_8UC1));
-		if (cv::waitKey(15) >= 0)
-			break;
-	}
-}
+#include "CraneCameras.h"
 
 int main() {
 	CraneSystemController controller;
 	controller.Execute();
-	//Demo::PrintCamerasRetrievedTime();
-
+	//bool _general_stop_signal = false;
 	//Crane c;
-	//std::thread leftcam_thread(LeftFrameGrabber, std::ref(c));
-	//std::thread rightcam_thread(RightFrameGrabber, std::ref(c));
+	//RopeSwingRegulator regulator;
+	//regulator.Regulate(std::ref(c), &_general_stop_signal);
+	//Crane c;
 
-	//leftcam_thread.join();
-	//rightcam_thread.join();
+	//while (true)
+	//{
+	//	cv::imshow("0", c.LeftSceneCamera().GetMat(CV_8UC1));
+	//	cv::imshow("1", c.RightSceneCamera().GetMat(CV_8UC1));
+	//	cv::imshow("2", c.XRopeCamera().GetMat(CV_8UC1));
+	//	cv::imshow("3", c.YRopeCamera().GetMat(CV_8UC1));
+
+	//	if (cv::waitKey(15) >= 0)
+	//		break;
+	//}
+	//cv::destroyAllWindows();
+
 
     return 0;
 }

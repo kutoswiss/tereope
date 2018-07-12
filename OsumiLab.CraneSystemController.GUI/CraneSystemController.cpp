@@ -25,11 +25,6 @@ void CraneSystemController::Execute() {
 		this, 
 		std::ref(c));
 
-	//_rope_regulation_task = std::make_unique<std::thread>(
-	//	&CraneSystemController::RopeSwingingRegulationTask, 
-	//	this, 
-	//	std::ref(c));
-
 	_leftcam_collision_detection_task = std::make_unique<std::thread>(
 		&CraneSystemController::LeftCamCollisionDetectionTask,
 		this,
@@ -40,30 +35,33 @@ void CraneSystemController::Execute() {
 		this,
 		std::ref(c));
 
-	//_collision_detection_task = std::make_unique<std::thread>(
-	//	&CraneSystemController::CollisionDetectionTask,
+	//_rope_regulation_task = std::make_unique<std::thread>(
+	//	&CraneSystemController::RopeSwingingRegulationTask,
 	//	this,
 	//	std::ref(c));
 
-	_xrope_regulation_task = std::make_unique<std::thread>(
-		&CraneSystemController::XRopeSwingingRegulationTask, 
-		this, 
-		std::ref(c));
+	//_yrope_regulation_task = std::make_unique<std::thread>(
+	//	&CraneSystemController::YRopeSwingingRegulationTask,
+	//	this,
+	//	std::ref(c));
 
-	_yrope_regulation_task = std::make_unique<std::thread>(
-		&CraneSystemController::YRopeSwingingRegulationTask,
-		this,
-		std::ref(c));
+	//_xrope_regulation_task = std::make_unique<std::thread>(
+	//	&CraneSystemController::XRopeSwingingRegulationTask, 
+	//	this, 
+	//	std::ref(c));
 
 	_cmd_task->join();
-	//_collision_detection_task->join();
-	_xrope_regulation_task->join();
-	_yrope_regulation_task->join();
+	//_rope_regulation_task->join();
 	_leftcam_collision_detection_task->join();
 	_rightcam_collision_detection_task->join();
-	//_rope_regulation_task->join();
+	//_yrope_regulation_task->join();
+	//_xrope_regulation_task->join();
 }
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="c"></param>
 void CraneSystemController::LeftCamCollisionDetectionTask(Crane &c) {
 	ObstaclesDetection left_detector;
 	left_detector.SetRopeLoadAreaOrigin(cv::Point(350, 325));
@@ -76,11 +74,13 @@ void CraneSystemController::LeftCamCollisionDetectionTask(Crane &c) {
 
 		if (left_detector.RopeLoadCollidesWithObstacles()) {
 			c.Coarse()->Halt();
+			std::cout << "cnt(X) = " << c.Coarse()->GetXCntValue() << std::endl;
+			std::cout << "cnt(Y) = " << c.Coarse()->GetYCntValue() << std::endl;
 		}
 
 		cv::imshow("Left scene camera", left_detector.GetFrameWithRectangles());
 
-		if ((cv::waitKey(15) >= 0) || (_general_stop_signal)) {
+		if ((cv::waitKey(50) >= 0) || (_general_stop_signal)) {
 			break;
 		}
 	}
@@ -105,16 +105,22 @@ void CraneSystemController::RightCamCollisionDetectionTask(Crane &c) {
 
 		if (right_detector.RopeLoadCollidesWithObstacles()) {
 			c.Coarse()->Halt();
+			std::cout << "cnt(X) = " << c.Coarse()->GetXCntValue() << std::endl;
+			std::cout << "cnt(Y) = " << c.Coarse()->GetYCntValue() << std::endl;
 		}
 
 		cv::imshow("Right scene camera", right_detector.GetFrameWithRectangles());
 
-		if ((cv::waitKey(15) >= 0) || (_general_stop_signal)) {
+		if ((cv::waitKey(50) >= 0) || (_general_stop_signal)) {
 			break;
 		}
 	}
 }
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="c"></param>
 void CraneSystemController::CollisionDetectionTask(Crane &c) {
 	ObstaclesDetection left_detector, right_detector;
 	ObstaclesCorrespondence correspondence;
@@ -139,7 +145,7 @@ void CraneSystemController::CollisionDetectionTask(Crane &c) {
 		cv::imshow("Left scene camera", left_detector.GetFrameWithRectangles());
 		cv::imshow("Right scene camera", right_detector.GetFrameWithRectangles());
 
-		if ((cv::waitKey(15) >= 0) || (_general_stop_signal)) {
+		if ((cv::waitKey(50) >= 0) || (_general_stop_signal)) {
 			break;
 		}
 	}

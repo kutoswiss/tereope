@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "CraneCamera.h"
 
+
+std::mutex CraneCamera::mtx_capture;
+
 /// <summary>
 /// 
 /// </summary>
@@ -29,8 +32,10 @@ CameraPtr CraneCamera::GetCamera(void) {
 /// <returns></returns>
 FramePtr CraneCamera::GetFrame(void) {
 	FramePtr frame;
+	//CraneCamera::mtx_capture.lock();
 	auto e = this->_camera->AcquireSingleImage(frame, this->kAcquireFrameTimeout);
-	if(e != VmbErrorSuccess)
+	//CraneCamera::mtx_capture.unlock();
+	if (e != VmbErrorSuccess)
 		std::cout << "Unable to retrieve single frame from camera." << std::endl;
 	return frame;
 }
@@ -41,6 +46,7 @@ FramePtr CraneCamera::GetFrame(void) {
 /// <param name="frame"></param>
 void CraneCamera::GetFrame(FramePtr frame) {
 	auto e = this->_camera->AcquireSingleImage(frame, this->kAcquireFrameTimeout);
+
 	if (e != VmbErrorSuccess)
 		std::cout << "Unable to retrieve single frame from camera." << std::endl;
 }

@@ -19,6 +19,8 @@ public:
 	void YThread(int step, double voltage);
 	void HaltX();
 	void HaltY();
+	int GetXCntValue();
+	int GetYCntValue();
 
 private:
 	// Private constants

@@ -155,6 +155,7 @@
     <ClInclude Include="DrawObstaclesCorners.h" />
     <ClInclude Include="DrawObstaclesInfos.h" />
     <ClInclude Include="DrawRopeInfos.h" />
+    <ClInclude Include="DrawRopeLoad.h" />
     <ClInclude Include="DrawRopeLoadArea.h" />
     <ClInclude Include="DrawTool.h" />
     <ClInclude Include="Obstacle.h" />
@@ -192,6 +193,7 @@
     <ClCompile Include="DrawObstaclesCorners.cpp" />
     <ClCompile Include="DrawObstaclesInfos.cpp" />
     <ClCompile Include="DrawRopeInfos.cpp" />
+    <ClCompile Include="DrawRopeLoad.cpp" />
     <ClCompile Include="DrawRopeLoadArea.cpp" />
     <ClCompile Include="DrawTool.cpp" />
     <ClCompile Include="Obstacle.cpp" />

@@ -11,7 +11,7 @@ cv::Mat CameraHelper::FrameToCVMat(FramePtr frame, int type) {
 	VmbUchar_t *image = NULL;
 	VmbUint32_t width = 0;
 	VmbUint32_t height = 0;
-
+	
 	if (VmbErrorSuccess != frame->GetWidth(width))
 		std::cout << "FAILED to aquire width of frame!" << std::endl;
 

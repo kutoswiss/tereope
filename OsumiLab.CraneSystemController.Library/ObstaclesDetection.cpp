@@ -72,6 +72,8 @@ cv::Mat ObstaclesDetection::GetFrameWithRectangles() {
 	_draw_tool = std::make_unique<DrawObstaclesCorners>(_raw_frame_w_rects, _obstacles);
 	_draw_tool = std::make_unique<DrawObstaclesInfos>(_raw_frame_w_rects, _obstacles);
 	_draw_tool = std::make_unique<DrawRopeLoadArea>(_raw_frame_w_rects, _rope_load_area);
+	_draw_tool = std::make_unique<DrawRopeLoad>(_raw_frame_w_rects, _rope_load);
+
 	_collide = this->ObstaclesInsideRopeArea();
     return _raw_frame_w_rects;
 }

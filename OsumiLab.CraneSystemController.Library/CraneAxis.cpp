@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "CraneAxis.h"
 
+std::mutex CraneAxis::mtx_move;
+
 /// <summary>
 /// 
 /// </summary>
@@ -49,7 +51,12 @@ void CraneAxis::Disable() {
 /// <param name="voltage"></param>
 void CraneAxis::SetVoltage(double voltage) {
 	voltage = this->TrimVoltage(voltage);
-	AioSingleAoEx(_aio_id, _aio_channel, voltage);
+	if(voltage != _previous_voltage){
+		CraneAxis::mtx_move.lock();
+		AioSingleAoEx(_aio_id, _aio_channel, voltage);
+		_previous_voltage = voltage;
+		CraneAxis::mtx_move.unlock();
+	}
 }
 
 /// <summary>
@@ -138,6 +145,14 @@ void CraneAxis::WaitUntilCounterReach(int step) {
 
 	_cnt_halt_signal = false;
 	CntStopCount(this->_cnt_id, &_cnt_channel, 1);
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+int CraneAxis::GetCntValue() {
+	return std::abs(static_cast<int>(_current_cnt_value - _initial_cnt_value));
 }
 
 /// <summary>

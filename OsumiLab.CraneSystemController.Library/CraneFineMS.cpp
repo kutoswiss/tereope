@@ -20,7 +20,6 @@ CraneFineMS::CraneFineMS(short aio_id, short cnt_id) : CraneMovementSystem(aio_i
 			this->kYAxisAioChannel,
 			this->kYAxisCntChannel,
 			this->kYAxisEnableChannel));
-
 }
 
 /// <summary>

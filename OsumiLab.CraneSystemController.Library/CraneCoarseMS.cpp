@@ -127,3 +127,19 @@ void CraneCoarseMS::HaltX() {
 void CraneCoarseMS::HaltY() {
 	_axis[this->kYAxisKey]->Halt();
 }
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+int CraneCoarseMS::GetXCntValue() {
+	return _axis[this->kXAxisKey]->GetCntValue();
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+int CraneCoarseMS::GetYCntValue() {
+	return _axis[this->kYAxisKey]->GetCntValue();
+}

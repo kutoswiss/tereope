@@ -5,6 +5,8 @@
 class RopeSwingRegulator
 {
 public:
+	static std::mutex mtx_capture;
+
 	// Constants
 	const double kXMaxPeakVoltage = 2.0;
 	const double kYMaxPeakVoltage = 2.5;

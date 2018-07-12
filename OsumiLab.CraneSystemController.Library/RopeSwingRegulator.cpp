@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "RopeSwingRegulator.h"
 
+std::mutex RopeSwingRegulator::mtx_capture;
+
 /// <summary>
 /// 
 /// </summary>
@@ -81,19 +83,22 @@ void RopeSwingRegulator::Regulate(Crane &crane, bool *stop) {
 
 	while (true) {
 		_x_vision.SetFrame(crane.XRopeCamera().GetMat(CV_8UC1));
-		_y_vision.SetFrame(crane.YRopeCamera().GetMat(CV_8UC1));
+		cv::imshow("X", _x_vision.GetFrame());
 
-		_x_vision.Compute();
+		_y_vision.SetFrame(crane.YRopeCamera().GetMat(CV_8UC1));
+		cv::imshow("Y", _y_vision.GetFrame());
+
+		/*_x_vision.Compute();
 		_y_vision.Compute();
 
 		this->SetXVoltage(this->AngleToXVoltage(_x_vision.GetAngle()));
 		this->SetYVoltage(this->AngleToYVoltage(_y_vision.GetAngle()));
 
 		cv::imshow("X", _x_vision.GetDecoratedFrame());
-		cv::imshow("Y", _y_vision.GetDecoratedFrame());
+		cv::imshow("Y", _y_vision.GetDecoratedFrame());*/
 
-		crane.Fine()->X(this->GetXVoltage());
-		crane.Fine()->Y(this->GetYVoltage());
+		//crane.Fine()->X(this->GetXVoltage());
+		//crane.Fine()->Y(this->GetYVoltage());
 
 		if ((cv::waitKey(15) >= 0) || (*stop)) 
 			break;
@@ -109,14 +114,19 @@ void RopeSwingRegulator::Regulate(Crane &crane, bool *stop) {
 /// <param name="stop"></param>
 void RopeSwingRegulator::RegulateX(Crane &crane, bool *stop) {
 	while (true) {
+		RopeSwingRegulator::mtx_capture.lock();
 		_x_vision.SetFrame(crane.XRopeCamera().GetMat(CV_8UC1));
-		_x_vision.Compute();
-		this->SetXVoltage(this->AngleToXVoltage(_x_vision.GetAngle()));
-		cv::imshow("X", _x_vision.GetDecoratedFrame());
-		crane.Fine()->X(this->GetXVoltage());
+		//_x_vision.Compute();
+		//this->SetXVoltage(this->AngleToXVoltage(_x_vision.GetAngle()));
+		cv::imshow("X", _x_vision.GetFrame());
+		//crane.Fine()->X(this->GetXVoltage());
 
 		if ((cv::waitKey(15) >= 0) || (*stop))
+		{
+			RopeSwingRegulator::mtx_capture.unlock();
 			break;
+		}
+		RopeSwingRegulator::mtx_capture.unlock();
 	}
 
 	crane.Fine()->HaltX();
@@ -130,10 +140,10 @@ void RopeSwingRegulator::RegulateX(Crane &crane, bool *stop) {
 void RopeSwingRegulator::RegulateY(Crane &crane, bool *stop) {
 	while (true) {
 		_y_vision.SetFrame(crane.YRopeCamera().GetMat(CV_8UC1));
-		_y_vision.Compute();
-		this->SetYVoltage(this->AngleToYVoltage(_y_vision.GetAngle()));
-		cv::imshow("Y", _y_vision.GetDecoratedFrame());
-		crane.Fine()->Y(this->GetYVoltage());
+		//_y_vision.Compute();
+		//this->SetYVoltage(this->AngleToYVoltage(_y_vision.GetAngle()));
+		cv::imshow("Y", _y_vision.GetFrame());
+		//crane.Fine()->Y(this->GetYVoltage());
 
 		if ((cv::waitKey(15) >= 0) || (*stop))
 			break;

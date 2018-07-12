@@ -129,6 +129,9 @@
     <ClInclude Include="CraneRopeMS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DrawRopeLoad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -228,6 +231,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CraneRopeMS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawRopeLoad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

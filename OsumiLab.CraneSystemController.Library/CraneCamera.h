@@ -8,13 +8,15 @@
 #include <iostream>
 #include <string>
 #include <memory>
-
+#include <mutex>
 
 using namespace AVT::VmbAPI;
 
 class CraneCamera
 {
 public:
+	static std::mutex mtx_capture;
+
 	/// <summary>
 	/// Ctor/Dtor
 	/// </summary>

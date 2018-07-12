@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <memory>
 #include <thread>
+#include <mutex>
 #include "Caio.h"
 #include "CCnt.h"
 #include "CraneSettings.h"
@@ -10,6 +11,9 @@
 class CraneAxis
 {
 public:
+	// Public static members
+	static std::mutex mtx_move;
+
 	// Ctor/Dtor
 	CraneAxis(short aio_id, short cnt_id, short aio_ch, short cnt_ch, short enable_ch);
 	~CraneAxis();
@@ -24,6 +28,7 @@ public:
 	void MoveThread(int step, double voltage);
 	void MoveJoinThread();
 	void WaitUntilCounterReach(int step);
+	int GetCntValue();
 
 private:
 	// Private constants
@@ -46,6 +51,7 @@ private:
 	DWORD _initial_cnt_value;
 
 	double _max_voltage;
+	double _previous_voltage = 9999;
 	bool _cnt_halt_signal = false;
 	bool _enable = false;
 
