@@ -198,12 +198,27 @@ std::vector<Obstacle>
 ObstaclesDetection::RectsToObstacles(std::vector<cv::RotatedRect> rects) {
     std::vector<Obstacle> obstacles;
     for (auto it = rects.begin(); it != rects.end(); it++) {
-		if (this->IsInsideRopeLoadArea(*it))
+		if (this->IsInsideRopeLoadArea(*it) || this->TrackPreviousRL(*it))
 			_rope_load = Obstacle(*it);
 		else
 			obstacles.push_back(Obstacle((*it)));
 	}
     return obstacles;
+}
+
+bool ObstaclesDetection::TrackPreviousRL(cv::RotatedRect rect) {
+	bool res = true;
+	int delta_area = std::abs(_rope_load.GetArea() - rect.size.area());
+	if (delta_area >= 100)
+		res = false;
+
+	if (std::abs(_rope_load.GetCenter().x - rect.center.x) >= 100)
+		res = false;
+
+	if (std::abs(_rope_load.GetCenter().y - rect.center.y) >= 100)
+		res = false;
+
+	return res;
 }
 
 /// <summary>

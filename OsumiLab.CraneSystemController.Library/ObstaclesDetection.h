@@ -58,6 +58,7 @@ private:
     std::vector<Obstacle>
 		RectsToObstacles(std::vector<cv::RotatedRect> rects);
 	bool ObstaclesInsideRopeArea(void);
+	bool TrackPreviousRL(cv::RotatedRect rect);
 
 
     /// <summary>

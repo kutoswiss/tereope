@@ -7,8 +7,13 @@
 #include "CraneCameras.h"
 
 int main() {
+
+	//Crane c;
+	//c.RopeMS()->Move("Z", 2000, 4);
+	//c.RopeMS()->CalibratePresetValue();
 	CraneSystemController controller;
 	controller.Execute();
+
 	//bool _general_stop_signal = false;
 	//Crane c;
 	//RopeSwingRegulator regulator;
@@ -26,7 +31,5 @@ int main() {
 	//		break;
 	//}
 	//cv::destroyAllWindows();
-
-
     return 0;
 }
