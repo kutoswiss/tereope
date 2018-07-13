@@ -15,12 +15,14 @@ public:
 	void Y(double voltage);
 	void X(int step, double voltage);
 	void Y(int step, double voltage);
-	void XThread(int step, double voltage);
-	void YThread(int step, double voltage);
-	void HaltX();
-	void HaltY();
 	int GetXCntValue();
 	int GetYCntValue();
+	void XThread(int step, double voltage);
+	void YThread(int step, double voltage);
+	void XJoinThread();
+	void YJoinThread();
+	void HaltX();
+	void HaltY();
 
 private:
 	// Private constants
@@ -32,9 +34,5 @@ private:
 	const int kYAxisCntChannel = CraneSettings::kYCoarseAxisCntChannel;
 	const int kXAxisEnableChannel = 10;
 	const int kYAxisEnableChannel = 9;
-
-	// Private methods
-	void XJoinThread();
-	void YJoinThread();
 };
 

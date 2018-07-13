@@ -1,4 +1,6 @@
 #pragma once
+#include "ObstacleCollisionArea.h"
+
 class RopeLoadArea
 {
 public:
@@ -14,6 +16,7 @@ public:
 	double Height() const;
 	cv::Point Center() const;
 	void Set(double width, double height, cv::Point center);
+	ObstacleCollisionArea GetCollisionArea();
 
 	// Public methods
 	std::vector<cv::Point> ToPoints();

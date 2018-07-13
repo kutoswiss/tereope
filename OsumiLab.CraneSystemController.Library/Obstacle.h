@@ -21,6 +21,8 @@ public:
     cv::RotatedRect GetRect() const;
 	ObstacleCollisionArea GetCollisionArea() const;
 	uint GetArea() const;
+	uint GetHeight() const;
+	uint GetWidth() const;
 
     /// <summary>
     /// Public methods
@@ -29,7 +31,8 @@ public:
     std::vector<cv::Point> ToPoints();
 	std::vector<std::tuple<cv::Point, cv::Point>> ToSegments();
 	bool CollideWith(Obstacle obstacle);
-	
+	bool CollideWith(ObstacleCollisionArea area);
+
 private:
     /// <summary>
     /// Private members

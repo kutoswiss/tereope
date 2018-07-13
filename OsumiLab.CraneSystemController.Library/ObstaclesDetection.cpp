@@ -198,7 +198,7 @@ std::vector<Obstacle>
 ObstaclesDetection::RectsToObstacles(std::vector<cv::RotatedRect> rects) {
     std::vector<Obstacle> obstacles;
     for (auto it = rects.begin(); it != rects.end(); it++) {
-		if (this->IsInsideRopeLoadArea(*it) || this->TrackPreviousRL(*it))
+		if (this->IsInsideRopeLoadArea(*it) || this->TrackRopeLoad(*it))
 			_rope_load = Obstacle(*it);
 		else
 			obstacles.push_back(Obstacle((*it)));
@@ -206,16 +206,19 @@ ObstaclesDetection::RectsToObstacles(std::vector<cv::RotatedRect> rects) {
     return obstacles;
 }
 
-bool ObstaclesDetection::TrackPreviousRL(cv::RotatedRect rect) {
+bool ObstaclesDetection::TrackRopeLoad(cv::RotatedRect rect) {
 	bool res = true;
-	int delta_area = std::abs(_rope_load.GetArea() - rect.size.area());
-	if (delta_area >= 100)
+
+	if (std::abs(_rope_load.GetHeight() - rect.size.height) >= 10)
 		res = false;
 
-	if (std::abs(_rope_load.GetCenter().x - rect.center.x) >= 100)
+	if (std::abs(_rope_load.GetWidth() - rect.size.width) >= 10)
 		res = false;
 
-	if (std::abs(_rope_load.GetCenter().y - rect.center.y) >= 100)
+	if (std::abs(_rope_load.GetCenter().x - rect.center.x) >= 150)
+		res = false;
+
+	if (std::abs(_rope_load.GetCenter().y - rect.center.y) >= 150)
 		res = false;
 
 	return res;
@@ -266,6 +269,25 @@ bool ObstaclesDetection::RopeLoadCollidesWithObstacles() {
 
 	for (auto o = _obstacles.begin(); o != _obstacles.end(); o++) {
 		if(_rope_load.CollideWith(*o)) {
+			res = true;
+			break;
+		}
+	}
+
+	return res;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+bool ObstaclesDetection::RopeAreaCollidesWithObstacles() {
+	bool res = false;
+	ObstacleCollisionArea area = _rope_load_area.GetCollisionArea();
+	std::vector<Obstacle> tmp = _obstacles;
+
+	for (auto o = tmp.begin(); o != tmp.end(); o++) {
+		if ((*o).CollideWith(area)) {
 			res = true;
 			break;
 		}

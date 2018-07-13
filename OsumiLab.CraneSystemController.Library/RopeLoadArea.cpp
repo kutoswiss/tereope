@@ -80,6 +80,16 @@ void RopeLoadArea::Set(double width, double height, cv::Point center) {
 /// 
 /// </summary>
 /// <returns></returns>
+ObstacleCollisionArea RopeLoadArea::GetCollisionArea() {
+	ObstacleCollisionArea area;
+	area.SetArea(this->Center(), 0, this->Width(), this->Height());
+	return area;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
 std::vector<cv::Point> RopeLoadArea::ToPoints() {
 	const uint kVerticesSize = 4;
 	cv::Point2f vertices[kVerticesSize];

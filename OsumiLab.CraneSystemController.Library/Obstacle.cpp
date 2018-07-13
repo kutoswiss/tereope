@@ -69,6 +69,22 @@ uint Obstacle::GetArea() const {
 /// 
 /// </summary>
 /// <returns></returns>
+uint Obstacle::GetHeight() const {
+	return this->_rotated_rect.size.height;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+uint Obstacle::GetWidth() const {
+	return this->_rotated_rect.size.width;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
 std::string Obstacle::ToString() {
     std::stringstream ss;
     ss << "Origin: " << (int)this->_rotated_rect.center.x
@@ -121,4 +137,13 @@ Obstacle::ToSegments() {
 /// <returns></returns>
 bool Obstacle::CollideWith(Obstacle obstacle) {
 	return _collision_area.CollideWith(obstacle.GetCollisionArea());
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="rect"></param>
+/// <returns></returns>
+bool Obstacle::CollideWith(ObstacleCollisionArea area) {
+	return _collision_area.CollideWith(area);
 }

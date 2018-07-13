@@ -7,7 +7,7 @@
 CraneSystemController::CraneSystemController() {
 	_general_stop_signal = false;
 	_left_detector.SetRopeLoadAreaOrigin(cv::Point(350, 325));
-	_state = State::STOP;
+	_state = State::MOVING;
 }
 
 /// <summary>
@@ -70,21 +70,21 @@ void CraneSystemController::Execute() {
 /// <param name="c"></param>
 void CraneSystemController::LeftCamCollisionDetectionTask(Crane &c) {
 	while (_general_stop_signal == false) {
-		if (_state == State::STOP) {
-			_leftcam = c.LeftSceneCamera().GetMat(CV_8UC1);
-			_left_detector.SetRawFrame(_leftcam);
-			_left_detector.Detect();
+		_leftcam = c.LeftSceneCamera().GetMat(CV_8UC1);
+		_left_detector.SetRawFrame(_leftcam);
+		_left_detector.Detect();
 
-			if (_left_detector.RopeLoadCollidesWithObstacles()) {
-				//c.Coarse()->Halt();
-				//_cv_obstacle_detected.notify_one();
-			}
-
-			cv::imshow("Left scene camera", _left_detector.GetFrameWithRectangles());
-			if (cv::waitKey(50) >= 0)
-				break;
+		if ((_state == State::MOVING) && _left_detector.RopeLoadCollidesWithObstacles()) {
+			c.Coarse()->Halt();
+			_cv_obstacle_detected.notify_one();
 		}
+
+		cv::imshow("Left scene camera", _left_detector.GetFrameWithRectangles());
+		if (cv::waitKey(50) >= 0)
+			break;
 	}
+	_cv_obstacle_detected.notify_one();
+	cv::destroyAllWindows();
 }
 
 /// <summary>
@@ -93,21 +93,22 @@ void CraneSystemController::LeftCamCollisionDetectionTask(Crane &c) {
 /// <param name="c"></param>
 void CraneSystemController::RightCamCollisionDetectionTask(Crane &c) {
 	while (_general_stop_signal == false) {
-		if (_state == State::STOP) {
-			_rightcam = c.RightSceneCamera().GetMat(CV_8UC1);
-			_right_detector.SetRawFrame(_rightcam);
-			_right_detector.Detect();
+		_rightcam = c.RightSceneCamera().GetMat(CV_8UC1);
+		_right_detector.SetRawFrame(_rightcam);
+		_right_detector.Detect();
 
-			if (_right_detector.RopeLoadCollidesWithObstacles()) {
-				//c.Coarse()->Halt();
-				//_cv_obstacle_detected.notify_one();
-			}
-
-			cv::imshow("Right scene camera", _right_detector.GetFrameWithRectangles());
-			if (cv::waitKey(50) >= 0)
-				break;
+		if ((_state == State::MOVING) && _right_detector.RopeLoadCollidesWithObstacles()) {
+			c.Coarse()->Halt();
+			_cv_obstacle_detected.notify_one();
 		}
+
+		cv::imshow("Right scene camera", _right_detector.GetFrameWithRectangles());
+		if (cv::waitKey(50) >= 0)
+			break;
 	}
+
+	_cv_obstacle_detected.notify_one();
+	cv::destroyAllWindows();
 }
 
 /// <summary>
@@ -177,14 +178,15 @@ void CraneSystemController::RopeSwingingRegulationTask(Crane &c) {
 /// <param name="c"></param>
 void CraneSystemController::ObstacleAvoidanceTask(Crane &c) {
 	std::unique_lock<std::mutex> lock(_m);
-	_cv_obstacle_detected.wait(lock);
-	_state = State::AVOIDING_OBSTACLES;
-	if (_general_stop_signal == false)
-	{
+	while (_general_stop_signal == false) {
+		_cv_obstacle_detected.wait(lock);
+		_state = State::AVOIDING_OBSTACLES;
+		if (_general_stop_signal == true)
+			break;
+
 		this->RetrieveStereoObstacles();
 		this->AvoidObstacles();
 		_cv_avoidance_done.notify_all();
-		_state = State::MOVING;
 	}
 }
 
@@ -201,18 +203,17 @@ void CraneSystemController::CommandTask(Crane &c) {
 		std::cin >> input;
 		_x_distance = 0;
 		_y_distance = 0;
+		_rope_height = 0.0;
 
 		if (input == "x") {
 			std::cout << "> Enter X value: ";
 			std::cin >> _x_distance;
 			c.Coarse()->X(_x_distance, 0.3);
-			//c.CoarseAxis().MoveThread(Axis::X, x_val, 0.5);
 		}
 		else if (input == "y") {
 			std::cout << "> Enter Y value: ";
 			std::cin >> _y_distance;
 			c.Coarse()->Y(_y_distance, 0.3);
-			//c.CoarseAxis().MoveThread(Axis::Y, y_val, 0.5);
 		}
 		else if (input == "xt") {
 			std::cout << "> Enter X value: ";
@@ -238,21 +239,17 @@ void CraneSystemController::CommandTask(Crane &c) {
 			std::cin >> _x_distance;
 			std::cout << "> Enter Y value: ";
 			std::cin >> _y_distance;
-			/*		c.CoarseAxis().MoveThread(Axis::X, x_val, 0.5);
-					c.CoarseAxis().MoveThread(Axis::Y, y_val, 0.5);*/
 		}
 		else if (input == "rope") {
-			/*std::cout << "> Enter Z value in meter: ";
-			std::cin >> z_val;
-			c.RopeMS()->Elevate(z_val, 2.0);*/
+			std::cout << "> Enter rope height: ";
+			std::cin >> _rope_height;
+			c.RopeMS()->Move("Z", _rope_height, 4.0);
+		}
+		else if (input == "calibrate") {
 			c.RopeMS()->CalibratePresetValue();
-			c.RopeMS()->ElevateTo(0.6, 4.0);
-			c.RopeMS()->ToGround(4.0);
+			std::cout << "Reference position has been updated" << std::endl;
 		}
 		else if (input == "stop") {
-			//c.CoarseAxis().Stop(Axis::X);
-			//c.CoarseAxis().Stop(Axis::Y);
-			//std::cout << c.CoarseAxis().GetCntValue(Axis::X) << std::endl;
 			c.Coarse()->HaltX();
 			c.Coarse()->HaltY();
 			c.Fine()->HaltX();
@@ -265,8 +262,7 @@ void CraneSystemController::CommandTask(Crane &c) {
 			_cv_collisiondetection_done.notify_all();
 			break;
 		}
-		else if (input == "drop")
-		{
+		else if (input == "drop") {
 			_crane.RopeMS()->ToGround(4.0);
 		}
 		else if (_general_stop_signal == true) {
@@ -291,8 +287,8 @@ void CraneSystemController::RetrieveStereoObstacles() {
 /// </summary>
 void CraneSystemController::AvoidObstacles() {
 	double height = 0;
-	double x_remaining_dist = 0;
-	double y_remaining_dist = 0;
+	int x_remaining_dist = 0;
+	int y_remaining_dist = 0;
 	
 	if(_x_distance > 0)
 		x_remaining_dist = _x_distance - _crane.Coarse()->GetXCntValue();
@@ -311,47 +307,55 @@ void CraneSystemController::AvoidObstacles() {
 
 	std::cout << height << std::endl;
 
-	_crane.RopeMS()->ElevateTo(height, 4.0);
-	this->Overpass();
-	_crane.RopeMS()->ToGround(4.0);
-	_crane.RopeMS()->CalibratePresetValue();
+	//_crane.RopeMS()->ElevateTo(height, 4.0);
+	this->Overpass(x_remaining_dist, y_remaining_dist);
+	//_crane.RopeMS()->ToGround(4.0);
+	//_crane.RopeMS()->CalibratePresetValue();
+	_state = State::MOVING;
+	_cv_avoidance_done.notify_all();
 }
 
-void CraneSystemController::Overpass() {
-	if(_x_distance > 0)
-		_crane.Coarse()->X(0.3);
+void CraneSystemController::Overpass(int x_steps, int y_steps) {
+	/*if(_x_distance > 0)
+		_crane.Coarse()->X(x_steps, 0.3);
 	else if (_x_distance < 0)
-		_crane.Coarse()->X(-0.3);
+		_crane.Coarse()->X(x_steps * -1, 0.3);
 
 	if (_y_distance > 0)
-		_crane.Coarse()->Y(0.3);
+		_crane.Coarse()->Y(y_steps, 0.3);
 	else if (_y_distance < 0)
-		_crane.Coarse()->Y(-0.3);
-
+		_crane.Coarse()->Y(y_steps * -1, 0.3);*/
+	_x_distance = 1;
+	std::cout << "Started" << std::endl;
 	if ((_x_distance != 0) || (_y_distance != 0)) {
-		while (true) {
-			_leftcam = _crane.LeftSceneCamera().GetMat(CV_8UC1);
-			_rightcam = _crane.RightSceneCamera().GetMat(CV_8UC1);
-
-			_left_detector.SetRawFrame(_leftcam);
-			_right_detector.SetRawFrame(_rightcam);
-
-			_left_detector.Detect();
-			_right_detector.Detect();
-
-			if (!_left_detector.RopeLoadCollidesWithObstacles() && !_right_detector.RopeLoadCollidesWithObstacles())
+		while (true)
+		{
+			if (_left_detector.RopeAreaCollidesWithObstacles() == false)
 				break;
 
-			cv::imshow("1", _left_detector.GetFrameWithRectangles());
-			cv::imshow("2", _right_detector.GetFrameWithRectangles());
-
-			if ((cv::waitKey(50) >= 0) || (_general_stop_signal)) {
+			if (_right_detector.RopeAreaCollidesWithObstacles() == false)
 				break;
-			}
+
+			if (_general_stop_signal)
+				break;
 		}
-
-		_crane.Coarse()->Halt();
-		cv::destroyAllWindows();
 	}
+	std::cout << "End" << std::endl;
+
+	//_crane.Coarse()->Halt();
+
+	//if ((_x_distance != 0) || (_y_distance != 0)) {
+	//	while (true) {
+	//		if (!_left_detector.RopeLoadCollidesWithObstacles() && !_right_detector.RopeLoadCollidesWithObstacles())
+	//			break;
+
+	//		if ((cv::waitKey(50) >= 0) || (_general_stop_signal)) {
+	//			break;
+	//		}
+	//	}
+
+	//	_crane.Coarse()->Halt();
+	//	cv::destroyAllWindows();
+	//}
 	
 }

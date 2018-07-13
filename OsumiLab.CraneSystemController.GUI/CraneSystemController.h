@@ -41,7 +41,7 @@ private:
 
 	void RetrieveStereoObstacles();
 	void AvoidObstacles();
-	void Overpass();
+	void Overpass(int x_steps, int y_steps);
 
 	// Private members
 	std::unique_ptr<std::thread> _cmd_task;
@@ -75,6 +75,7 @@ private:
 
 	int _x_distance = 0;
 	int _y_distance = 0;
+	double _rope_height = 0;
 
 	RopeSwingRegulator _regulator;
 	bool _general_stop_signal;

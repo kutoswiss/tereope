@@ -44,6 +44,7 @@ public:
 
 	bool IsInsideRopeLoadArea(cv::RotatedRect rect);
 	bool RopeLoadCollidesWithObstacles();
+	bool RopeAreaCollidesWithObstacles();
 
     // Public methods
     size_t Detect(bool print_detect = false);
@@ -58,7 +59,7 @@ private:
     std::vector<Obstacle>
 		RectsToObstacles(std::vector<cv::RotatedRect> rects);
 	bool ObstaclesInsideRopeArea(void);
-	bool TrackPreviousRL(cv::RotatedRect rect);
+	bool TrackRopeLoad(cv::RotatedRect rect);
 
 
     /// <summary>

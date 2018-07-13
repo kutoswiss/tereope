@@ -7,6 +7,9 @@
 #include "CraneCameras.h"
 
 int main() {
+	//Crane c;
+	//c.RopeMS()->Move("Z", 1000, 4);
+	//c.RopeMS()->CalibratePresetValue();
 
 	//Crane c;
 	//c.RopeMS()->Move("Z", 2000, 4);
