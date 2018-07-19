@@ -14,7 +14,7 @@ ObstaclesDetection::ObstaclesDetection() {
 	_draw_tool = std::unique_ptr<DrawTool>();
 
 	// Define rope load area
-	_rope_load_area.Set(100, 100, cv::Point(300, 325));
+	_rope_load_area.Set(150, 150, cv::Point(300, 330));
 }
 
 /// <summary>
@@ -66,11 +66,19 @@ cv::Mat ObstaclesDetection::GetBinaryFrame() const {
 /// 
 /// </summary>
 /// <returns></returns>
+cv::Mat ObstaclesDetection::GetOpenFrame() const {
+	return _open_frame;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
 cv::Mat ObstaclesDetection::GetFrameWithRectangles() {
 	_raw_frame.copyTo(_raw_frame_w_rects);
 	_draw_tool = std::make_unique<DrawObstacles>(_raw_frame_w_rects, _obstacles);
 	_draw_tool = std::make_unique<DrawObstaclesCorners>(_raw_frame_w_rects, _obstacles);
-	_draw_tool = std::make_unique<DrawObstaclesInfos>(_raw_frame_w_rects, _obstacles);
+	//_draw_tool = std::make_unique<DrawObstaclesInfos>(_raw_frame_w_rects, _obstacles);
 	_draw_tool = std::make_unique<DrawRopeLoadArea>(_raw_frame_w_rects, _rope_load_area);
 	_draw_tool = std::make_unique<DrawRopeLoad>(_raw_frame_w_rects, _rope_load);
 
@@ -92,8 +100,8 @@ bool ObstaclesDetection::IsCollided() const {
 /// <param name="frame"></param>
 void ObstaclesDetection::SetRawFrame(cv::Mat &frame) {
     _raw_frame = frame;
-	cv::morphologyEx(_raw_frame, _bin_frame, cv::MORPH_OPEN, _kernel10);
-    cv::threshold(_bin_frame, _bin_frame, _bin_threshold, 255, cv::THRESH_BINARY);
+	cv::morphologyEx(_raw_frame, _open_frame, cv::MORPH_OPEN, _kernel10);
+    cv::threshold(_open_frame, _bin_frame, _bin_threshold, 255, cv::THRESH_BINARY);
 	cv::dilate(_bin_frame, _bin_frame, _kernel3);
     cv::cvtColor(_bin_frame, _bin_frame, CV_RGB2GRAY);
     cv::Canny(_bin_frame, _canny_frame, _canny_threshold, 255);
@@ -126,7 +134,7 @@ void ObstaclesDetection::SetCannyThreshold(uint threshold) {
 /// </summary>
 /// <param name="origin"></param>
 void ObstaclesDetection::SetRopeLoadAreaOrigin(cv::Point origin) {
-	_rope_load_area.Set(100, 100, origin);
+	_rope_load_area.Set(150, 150, origin);
 }
 
 /// <summary>
@@ -281,18 +289,19 @@ bool ObstaclesDetection::RopeLoadCollidesWithObstacles() {
 /// 
 /// </summary>
 /// <returns></returns>
-bool ObstaclesDetection::RopeAreaCollidesWithObstacles() {
+int ObstaclesDetection::RopeAreaCollidesWithObstacles() {
 	bool res = false;
+	uint amount = 0;
 	ObstacleCollisionArea area = _rope_load_area.GetCollisionArea();
 	std::vector<Obstacle> tmp = _obstacles;
 
 	for (auto o = tmp.begin(); o != tmp.end(); o++) {
 		if ((*o).CollideWith(area)) {
 			res = true;
-			break;
+			amount += 1;
 		}
 	}
 
-	return res;
+	return amount;
 }
 

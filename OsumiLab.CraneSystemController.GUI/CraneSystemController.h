@@ -35,13 +35,13 @@ private:
 	void ObstacleAvoidanceTask(Crane &c);
 	void LeftCamCollisionDetectionTask(Crane &c);
 	void RightCamCollisionDetectionTask(Crane &c);
-	void CollisionDetectionTask(Crane &c);
 	void XRopeSwingingRegulationTask(Crane &c);
 	void YRopeSwingingRegulationTask(Crane &c);
 
 	void RetrieveStereoObstacles();
 	void AvoidObstacles();
 	void Overpass(int x_steps, int y_steps);
+	double GetHeighestObstacleValue();
 
 	// Private members
 	std::unique_ptr<std::thread> _cmd_task;
@@ -79,4 +79,7 @@ private:
 
 	RopeSwingRegulator _regulator;
 	bool _general_stop_signal;
+
+	int _left_ropearea_collide = 0;
+	int _right_ropearea_collide = 0;
 };

@@ -35,6 +35,7 @@ public:
 	Obstacle GetRopeLoad() const;
     cv::Mat GetCannyFrame() const;
     cv::Mat GetBinaryFrame() const;
+	cv::Mat GetOpenFrame() const;
     cv::Mat GetFrameWithRectangles();
 	bool IsCollided() const;
 	void SetRawFrame(cv::Mat &frame);
@@ -44,7 +45,7 @@ public:
 
 	bool IsInsideRopeLoadArea(cv::RotatedRect rect);
 	bool RopeLoadCollidesWithObstacles();
-	bool RopeAreaCollidesWithObstacles();
+	int RopeAreaCollidesWithObstacles();
 
     // Public methods
     size_t Detect(bool print_detect = false);
@@ -80,6 +81,7 @@ private:
     cv::Mat _raw_frame_w_rects;
     cv::Mat _canny_frame;
     cv::Mat _bin_frame;
+	cv::Mat _open_frame;
 
 	// Kernels
 	cv::Mat _kernel3;

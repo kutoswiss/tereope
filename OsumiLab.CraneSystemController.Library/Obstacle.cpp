@@ -115,7 +115,7 @@ std::vector<cv::Point> Obstacle::ToPoints() {
 /// <returns></returns>
 std::vector<std::tuple<cv::Point, cv::Point>> 
 Obstacle::ToSegments() {
-	std::vector<cv::Point> points = this->ToPoints();
+	/*std::vector<cv::Point> points = this->ToPoints();
 	std::vector<std::tuple<cv::Point, cv::Point>> segments;
 	cv::Point tmp_pt;
 
@@ -127,7 +127,18 @@ Obstacle::ToSegments() {
 			segments.push_back(std::make_tuple(tmp_pt, (*p)));
 	}
 
+	return segments;*/
+
+	std::vector<cv::Point> points = this->ToPoints();
+	std::vector<std::tuple<cv::Point, cv::Point>> segments;
+
+	segments.push_back(std::make_tuple(points[0], points[1]));
+	segments.push_back(std::make_tuple(points[1], points[2]));
+	segments.push_back(std::make_tuple(points[2], points[3]));
+	segments.push_back(std::make_tuple(points[3], points[0]));
+
 	return segments;
+
 }
 
 /// <summary>
