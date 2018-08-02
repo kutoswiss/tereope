@@ -41,6 +41,7 @@ private:
 	void RetrieveStereoObstacles();
 	void AvoidObstacles();
 	void Overpass(int x_steps, int y_steps);
+	double GetHeighestCollidedObstacleValue();
 	double GetHeighestObstacleValue();
 
 	// Private members
@@ -82,4 +83,5 @@ private:
 
 	int _left_ropearea_collide = 0;
 	int _right_ropearea_collide = 0;
+	double _rope_meter = 0;
 };

@@ -41,5 +41,6 @@ private:
 	cv::Mat _canny;
 	cv::Mat _binary;
 	std::unique_ptr<DrawTool> _draw_tool;
+	cv::Mat _kernel;
 };
 

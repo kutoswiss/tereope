@@ -65,3 +65,11 @@ double StereoObstacle::EvaluateHeight() {
 	this->_height = kCameraHeight - z;
 	return this->_height;
 }
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+bool StereoObstacle::IsCollided() {
+	return _left.collide || _right.collide;
+}

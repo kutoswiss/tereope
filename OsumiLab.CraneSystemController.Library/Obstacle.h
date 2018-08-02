@@ -33,6 +33,8 @@ public:
 	bool CollideWith(Obstacle obstacle);
 	bool CollideWith(ObstacleCollisionArea area);
 
+	bool collide = false;
+
 private:
     /// <summary>
     /// Private members

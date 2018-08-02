@@ -7,7 +7,8 @@ class DrawObstacles : public DrawTool
 public:
 	// Constants
 	const cv::Scalar kObstaclesPolygonColor = cv::Scalar(0, 255, 0);
-	const cv::Scalar kCollisionAreaPolygonColor = cv::Scalar(0, 0, 255);
+	const cv::Scalar kCollidedAreaPolygonColor = cv::Scalar(0, 0, 255);
+	const cv::Scalar kUncollidedAreaPolygonColor = cv::Scalar(255, 255, 0);
 
 
 	// Ctor/Dtor

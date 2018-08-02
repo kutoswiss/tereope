@@ -157,7 +157,7 @@ size_t ObstaclesDetection::Detect(bool print_detect) {
 void ObstaclesDetection::PrintDetect() {
 	std::cout << std::endl << _obstacles.size() << " obstacles detected." << std::endl;
 	for (auto o = _obstacles.begin(); o != _obstacles.end(); o++)
-		std::cout << (*o).ToString() << std::endl;
+		std::cout << (*o).ToString() << ((*o).collide ? " | collision detected" : "") << std::endl;
 }
 
 /// <summary>
@@ -278,8 +278,10 @@ bool ObstaclesDetection::RopeLoadCollidesWithObstacles() {
 	for (auto o = _obstacles.begin(); o != _obstacles.end(); o++) {
 		if(_rope_load.CollideWith(*o)) {
 			res = true;
-			break;
+			(*o).collide = true;
 		}
+		else
+			(*o).collide = false;
 	}
 
 	return res;

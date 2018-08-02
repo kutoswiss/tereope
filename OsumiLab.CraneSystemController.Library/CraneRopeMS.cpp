@@ -111,6 +111,11 @@ void CraneRopeMS::Elevate(double meter, double voltage) {
 /// <param name="meter"></param>
 /// <param name="voltage"></param>
 void CraneRopeMS::ElevateTo(double meter, double voltage) {
+	if (meter > 1.0)
+		meter = 1;
+	else if (meter < 0.0)
+		meter = 0;
+
 	double m = CraneRopeMS::MeterToEncoderStep(meter);
 	this->MoveTo(m, voltage);
 }
@@ -120,7 +125,7 @@ void CraneRopeMS::ElevateTo(double meter, double voltage) {
 /// </summary>
 /// <param name="voltage"></param>
 void CraneRopeMS::ToGround(double voltage) {
-	this->MoveTo(500, voltage);
+	this->MoveTo(1000, voltage);
 	//this->Move(this->kZAxisKey, 500, 4);
 	this->CalibratePresetValue();
 }

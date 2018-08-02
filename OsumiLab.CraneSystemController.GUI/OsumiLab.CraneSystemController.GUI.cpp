@@ -4,59 +4,36 @@
 #include "stdafx.h"
 #include "CraneSystemController.h"
 //#include "Demo.h"
-#include "CraneCameras.h"
 
 int main() {
+	CraneSystemController ctrl;
+	ctrl.Execute();
 
-	CraneSystemController controller;
-	controller.Execute();
-	
-	/*ObstaclesDetection detector;
-	cv::Mat scene;
-	detector.SetRopeLoadAreaOrigin(cv::Point(347, 330));
-	while (true)
-	{
-		scene = c.LeftSceneCamera().GetMat(CV_8UC1);
-		detector.SetRawFrame(scene);
-		detector.Detect();
+	//Crane crane;
+	//cv::Mat right = crane.RightSceneCamera().GetMat(CV_8UC1);
+	//cv::Mat left = crane.LeftSceneCamera().GetMat(CV_8UC1);
 
-		cv::imshow("left", scene);
-		cv::imshow("open", detector.GetOpenFrame());
-		cv::imshow("binary", detector.GetBinaryFrame());
-		cv::imshow("canny", detector.GetCannyFrame());
-		cv::imshow("detected", detector.GetFrameWithRectangles());
-		if (cv::waitKey(15) >= 0)
-			break;
-	}
-	cv::destroyAllWindows();*/
-	//Crane c;
-	//c.RopeMS()->Move("Z", 1000, 4);
-	//c.RopeMS()->CalibratePresetValue();
+	//ObstaclesDetection left_det, right_det;
 
-	//Crane c;
-	//c.RopeMS()->Move("Z", 2000, 4);
-	//c.RopeMS()->CalibratePresetValue();
-	/*CraneSystemController controller;
-	controller.Execute();*/
+	//left_det.SetRawFrame(left);
+	//left_det.Detect();
 
-/*	Crane c;
-	c.Coarse()->Y(-4000, 0.5)*/;
-	//bool _general_stop_signal = false;
-	//Crane c;
-	//RopeSwingRegulator regulator;
-	//regulator.Regulate(std::ref(c), &_general_stop_signal);
-	//Crane c;
+	//right_det.SetRawFrame(right);
+	//right_det.Detect();
 
-	//while (true)
-	//{
-	//	cv::imshow("0", c.LeftSceneCamera().GetMat(CV_8UC1));
-	//	cv::imshow("1", c.RightSceneCamera().GetMat(CV_8UC1));
-	//	cv::imshow("2", c.XRopeCamera().GetMat(CV_8UC1));
-	//	cv::imshow("3", c.YRopeCamera().GetMat(CV_8UC1));
+	//std::vector<Obstacle> right_obs = right_det.GetObstacles();
+	//std::vector<Obstacle> left_obs = left_det.GetObstacles();
 
-	//	if (cv::waitKey(15) >= 0)
-	//		break;
-	//}
-	//cv::destroyAllWindows();
+	//ObstaclesCorrespondence correspondence;
+	//correspondence.SetSamples(left_obs, right_obs);
+	//correspondence.Match();
+	//std::vector<StereoObstacle> so = correspondence.GetStereoObstacles();
+	//correspondence.PrintMatchedObstacles();
+
+
+	//cv::imshow("Left", left_det.GetFrameWithRectangles());
+	//cv::imshow("Right", right_det.GetFrameWithRectangles());
+
+	//cv::waitKey();
     return 0;
 }

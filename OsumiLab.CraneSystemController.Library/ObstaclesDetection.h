@@ -27,7 +27,7 @@ public:
 
     // Constants
     static const uint kDefaultMinContourArea = 200;
-    static const uint kBinaryThresholdValue = 45;
+    static const uint kBinaryThresholdValue = 50;
 	static const uint kCannyThresholdValue = 255;
 
     // Getters/Setters

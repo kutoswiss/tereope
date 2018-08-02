@@ -14,6 +14,7 @@ public:
 	Obstacle GetRightObstacle() const;
 	double GetHeight() const;
 	double EvaluateHeight();
+	bool IsCollided();
 
 private:
 	// Private members

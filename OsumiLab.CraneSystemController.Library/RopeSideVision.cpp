@@ -6,6 +6,7 @@
 /// </summary>
 RopeSideVision::RopeSideVision() {
 	_draw_tool = std::unique_ptr<DrawTool>();
+	_kernel = CameraHelper::GetOnesKernel(19);
 }
 
 /// <summary>
@@ -79,6 +80,9 @@ void RopeSideVision::Compute() {
 	cv::cvtColor(_frame, _frame, CV_RGB2GRAY);
 	cv::cvtColor(_frame, _decorated_frame, CV_GRAY2BGR);
 	cv::threshold(_frame, _binary, 50, 255, cv::THRESH_BINARY);
+
+	cv::morphologyEx(_binary, _binary, cv::MORPH_CLOSE, _kernel);
+
 	cv::Canny(_binary, _canny, 50, 200, 3);
 	this->FindLines();
 	this->CalculateAngle();

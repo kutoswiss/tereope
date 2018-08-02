@@ -85,8 +85,7 @@ void Demo::SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obsta
 	std::vector<Obstacle> obstacles;
 	cv::Mat frame_mat;
 	int binary_thr = ObstaclesDetection::kBinaryThresholdValue;
-	int n_obstacles, pre_n_obstacles = 0;
-	cv::namedWindow(kWindowTitle, cv::WINDOW_AUTOSIZE);
+	int n_obstacles = 0, pre_n_obstacles = 0;
 
 	cv::createTrackbar("Binary Thr.", kWindowTitle, &binary_thr, 255, NULL);
 	int i = 0;
@@ -94,18 +93,16 @@ void Demo::SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obsta
 	while (1) {
 		frame_mat = camera.GetMat(CV_8UC1);
 		obstacle_detection.SetRawFrame(frame_mat);
-		obstacle_detection.SetBinaryThreshold(binary_thr);
+		obstacle_detection.SetBinaryThreshold(70);
 
 		n_obstacles = obstacle_detection.Detect();
-		if (n_obstacles != pre_n_obstacles)
+		obstacle_detection.RopeLoadCollidesWithObstacles();
+		if(n_obstacles != pre_n_obstacles)
 			obstacle_detection.PrintDetect();
 
+		cv::imshow(kRawWinTitle, frame_mat);
 		cv::imshow(kWindowTitle, obstacle_detection.GetFrameWithRectangles());
 		pre_n_obstacles = n_obstacles;
-
-		obstacles = obstacle_detection.GetObstacles();
-		if (obstacle_detection.RopeLoadCollidesWithObstacles())
-			std::cout << "Collision detected" << std::endl;
 
 		if (cv::waitKey(15) >= 0)
 			break;
@@ -120,7 +117,7 @@ void Demo::SceneCameraThread(CraneSceneCamera &camera, ObstaclesDetection &obsta
 void Demo::SingleCameraObstaclesDetection() {
 	Crane crane;
 	ObstaclesDetection obstacle_detection;
-	obstacle_detection.SetBinaryThreshold(35);
+	obstacle_detection.SetBinaryThreshold(50);
 
 	std::thread scene_cam_thread(
 		SceneCameraThread,
