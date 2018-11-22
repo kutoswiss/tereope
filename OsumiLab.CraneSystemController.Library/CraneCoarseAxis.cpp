@@ -144,8 +144,8 @@ void CraneCoarseAxis::MoveX(int step, double voltage) {
 	this->SetVoltage(voltage);
 	double v = this->_voltage * ((step < 0) ? 1 : -1);
 
-	this->Enable(Axis::X);
-	ramp_steps = (step / 4) / 10;
+	this->Enable(Axis::X); 
+	ramp_steps = (step / 4) / 10; 
 	stable_steps = step - (ramp_steps * 10 * 2);
 	for (int i = 1; i <= 10; i++) {
 		ramp_voltage = (v / 10) * i;

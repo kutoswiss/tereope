@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OsumiLab.CraneSystemController.Library", "OsumiLab.CraneSystemController.Library\OsumiLab.CraneSystemController.Library.vcxproj", "{09AF05FC-1ED7-4663-9CC4-330C3BA089BC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OsumiLab.CraneSystemController.GUI", "OsumiLab.CraneSystemController.GUI\OsumiLab.CraneSystemController.GUI.vcxproj", "{F9B4AB6F-A6F2-4DB9-A4E7-B601D39F7393}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OsumiLab.CraneSystemController.CLI", "OsumiLab.CraneSystemController.CLI\OsumiLab.CraneSystemController.CLI.vcxproj", "{F9B4AB6F-A6F2-4DB9-A4E7-B601D39F7393}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
